@@ -157,6 +157,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="bg.cpp" />
+    <ClCompile Include="block3D.cpp" />
     <ClCompile Include="button2D.cpp" />
     <ClCompile Include="button3D.cpp" />
     <ClCompile Include="camera.cpp" />
@@ -203,6 +204,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bg.h" />
+    <ClInclude Include="block3D.h" />
     <ClInclude Include="button2D.h" />
     <ClInclude Include="button3D.h" />
     <ClInclude Include="camera.h" />

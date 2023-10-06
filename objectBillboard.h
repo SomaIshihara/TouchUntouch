@@ -34,7 +34,7 @@ public:
 	D3DXVECTOR3 GetPos(void) { return m_pos; }
 	D3DXVECTOR3 GetRot(void) { return m_rot; }
 	float GetWidth(void) { return m_fWidth; }
-	float GetHeight(void) { return CManager::FLT_ZERO; }
+	//float GetHeight(void) { return CManager::FLT_ZERO; }
 	float GetDepth(void) { return m_fDepth; }
 
 	//設定
@@ -42,6 +42,9 @@ public:
 	void SetRot(const D3DXVECTOR3 rot) { m_rot = rot; };	//向き
 	HRESULT SetCol(const D3DXCOLOR col);	//色
 	void SetSize(const float fWidth, const float fDepth);
+
+	//除外
+	virtual void Exclusion(void){}
 
 private:
 	int m_nIdxTexture;					//テクスチャ番号

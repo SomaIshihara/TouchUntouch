@@ -44,6 +44,9 @@ public:
 	void Add(const int nAdd);	//スコア加算
 	void BindTexture(const int nIdx);	//テクスチャ設定（数字オブジェクトすべてに適用）
 
+	//除外（必要なし）
+	void Exclusion(void){}
+
 private:
 	//関数
 	void CutNumber(void);				//数字分割

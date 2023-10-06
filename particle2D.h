@@ -49,11 +49,14 @@ public:
 
 	//取得（純粋仮想関数の関係上実装しているが、こいつにサイズやらはいらないのですべて0を返す）
 	D3DXVECTOR3 GetPos(void) { return m_particle.pos; }
-	D3DXVECTOR3 GetRot(void) { return CManager::VEC3_ZERO; }
-	float GetWidth(void) { return CManager::FLT_ZERO; }
-	float GetHeight(void) { return CManager::FLT_ZERO; }
-	float GetDepth(void) { return CManager::FLT_ZERO; }
+	//D3DXVECTOR3 GetRot(void) { return CManager::VEC3_ZERO; }
+	//float GetWidth(void) { return CManager::FLT_ZERO; }
+	//float GetHeight(void) { return CManager::FLT_ZERO; }
+	//float GetDepth(void) { return CManager::FLT_ZERO; }
 	int GetModelIdx(void) { return -1; }
+
+	//除外（必要なし）
+	void Exclusion(void){}
 
 private:
 	Particle m_particle;	//パーティクル構造体

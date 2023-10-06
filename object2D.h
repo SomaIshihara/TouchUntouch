@@ -43,7 +43,7 @@ public:
 	D3DXVECTOR3 GetRot(void) { return m_rot; }
 	float GetWidth(void) { return m_fWidth; }
 	float GetHeight(void) { return m_fHeight; }
-	float GetDepth(void) { return CManager::FLT_ZERO; }
+	//float GetDepth(void) { return CManager::FLT_ZERO; }
 	float GetLength(void) { return m_fLength; }
 	int GetIdxTexture(void) { return m_nIdxTexture; }
 
@@ -53,6 +53,9 @@ public:
 	HRESULT SetCol(const D3DXCOLOR col);	//色
 	HRESULT SetTex(const D3DXVECTOR2 tex0, const D3DXVECTOR2 tex3);	//テクスチャ座標
 	HRESULT SetSize(const float fWidth, const float fHeight);		//サイズ
+
+	//除外
+	virtual void Exclusion(void){}
 
 private:
 	//頂点位置設定

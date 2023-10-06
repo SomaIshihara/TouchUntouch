@@ -196,7 +196,7 @@ CObjectX* CObjectX::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, CXModel
 //========================
 //オブジェクト単位除外処理
 //========================
-void CObjectX::Delete(CXModel * pTarget)
+void CObjectX::Delete(CXModel* pTarget)
 {
 	CObjectX* pObject = m_pTop;	//先頭を入れる
 
@@ -297,36 +297,24 @@ CObjectX::LOADRESULT CObjectX::LoadData(const char * pPath)
 //========================
 void CObjectX::Exclusion(void)
 {
-	CObjectX* pObject = m_pTop;	//先頭を入れる
-
-	while (pObject != nullptr)
-	{//最後尾まで回し続ける
-		CObjectX* pObjectNext = pObject->m_pNext;	//次のオブジェ保存
-
-		if (pObject->m_bExclusion == true)
-		{//死亡フラグが立ってる
-			if (pObject->m_pPrev != nullptr)
-			{//前にオブジェがいる
-				pObject->m_pPrev->m_pNext = pObject->m_pNext;	//前のオブジェの次のオブジェは自分の次のオブジェ
-			}
-			if (pObject->m_pNext != nullptr)
-			{
-				pObject->m_pNext->m_pPrev = pObject->m_pPrev;	//次のオブジェの前のオブジェは自分の前のオブジェ
-			}
-
-			if (m_pCur == pObject)
-			{//最後尾でした
-				m_pCur = pObject->m_pPrev;	//最後尾を自分の前のオブジェにする
-			}
-			if (m_pTop == pObject)
-			{
-				m_pTop = pObject->m_pNext;	//先頭を自分の次のオブジェにする
-			}
-
-			//成仏
-			m_nNumAll--;	//総数減らす
-		}
-
-		pObject = pObjectNext;	//次を入れる
+	if (m_pPrev != nullptr)
+	{//前にオブジェがいる
+		m_pPrev->m_pNext = m_pNext;	//前のオブジェの次のオブジェは自分の次のオブジェ
 	}
+	if (m_pNext != nullptr)
+	{
+		m_pNext->m_pPrev = m_pPrev;	//次のオブジェの前のオブジェは自分の前のオブジェ
+	}
+
+	if (m_pCur == this)
+	{//最後尾でした
+		m_pCur = m_pPrev;	//最後尾を自分の前のオブジェにする
+	}
+	if (m_pTop == this)
+	{
+		m_pTop = m_pNext;	//先頭を自分の次のオブジェにする
+	}
+
+	//成仏
+	m_nNumAll--;	//総数減らす
 }

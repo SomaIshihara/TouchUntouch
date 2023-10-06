@@ -40,9 +40,9 @@ public:
 	//取得（純粋仮想関数の関係上実装しているが、こいつにサイズやらはいらないのですべて0を返す）
 	D3DXVECTOR3 GetPos(void) { return m_pos; }
 	D3DXVECTOR3 GetRot(void) { return m_rot; }
-	float GetWidth(void) { return CManager::FLT_ZERO; }
-	float GetHeight(void) { return CManager::FLT_ZERO; }
-	float GetDepth(void) { return CManager::FLT_ZERO; }
+	//float GetWidth(void) { return CManager::FLT_ZERO; }
+	//float GetHeight(void) { return CManager::FLT_ZERO; }
+	//float GetDepth(void) { return CManager::FLT_ZERO; }
 	int GetModelIdx(void) { return -1; }
 	int GetTime(void) { return m_nTime; }
 
@@ -51,6 +51,9 @@ public:
 	void Start(void) { m_shouldCount = true; }
 	void Stop(void) { m_shouldCount = false; }
 	void BindTexture(const int nIdx);	//テクスチャ設定（数字オブジェクトすべてに適用）
+
+	//除外（必要なし）
+	void Exclusion(void){}
 
 private:
 	void CutNumber(void);				//数字分割

@@ -58,11 +58,14 @@ public:
 	CObject* GetNext(void) { return m_pNext; }
 
 	//純粋仮想取得
-	virtual D3DXVECTOR3 GetPos(void) = 0;
-	virtual D3DXVECTOR3 GetRot(void) = 0;
-	virtual float GetWidth(void) = 0;
-	virtual float GetHeight(void) = 0;
-	virtual float GetDepth(void) = 0;
+	//virtual D3DXVECTOR3 GetPos(void) = 0;
+	//virtual D3DXVECTOR3 GetRot(void) = 0;
+	//virtual float GetWidth(void) = 0;
+	//virtual float GetHeight(void) = 0;
+	//virtual float GetDepth(void) = 0;
+
+	//除外（リスト実装ありの場合）
+	virtual void Exclusion(void) = 0;
 
 	//死亡フラグが立っているオブジェを殺す
 	static void Death(void);

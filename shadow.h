@@ -32,6 +32,10 @@ public:
 
 	//設定
 	void Set(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot);
+
+	//除外
+	void Exclusion(void) { CObject3D::Exclusion(); }
+
 private:
 	int m_nIdxTexture;	//テクスチャ番号
 };

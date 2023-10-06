@@ -43,6 +43,9 @@ public:
 	float GetDepth(void) { return CManager::FLT_ZERO; }
 	int GetIdxTexture(void) { return m_nIdxTexture; }
 	int GetModelIdx(void) { return -1; }
+
+	//除外（必要なし）
+	void Exclusion(void){}
 private:
 	//関数
 	WORD* SetIdxSwaingField(int nCntWidth, WORD *pIdx);

@@ -71,14 +71,11 @@ public:
 	static CObjectX* GetTop(void) { return m_pTop; }
 	CObjectX* GetNext(void) { return m_pNext; }
 	CXModel* GetModel(void) { return m_pModel; }
-	bool GetBreakable(void) { return m_bBreakale; }
-	bool GetStateKoban(void) { return m_bKoban; }
 
 	//設定
 	void SetPos(D3DXVECTOR3 pos) { m_pos = pos; }
 	void SetRot(D3DXVECTOR3 rot) { m_rot = rot; }
-	void SetBreakable(bool bFrag) { m_bBreakale = bFrag; }
-	void SetStateKoban(bool bFrag) { m_bKoban = bFrag; }
+	void SetModel(CXModel* pModel) { m_pModel = pModel; }
 
 	//使用モデル単位で消す
 	static void Delete(CXModel* pTarget);
@@ -86,8 +83,8 @@ public:
 	//読み込み
 	static LOADRESULT LoadData(const char* pPath);
 
-	//死亡フラグが立っているオブジェを殺す
-	static void Exclusion(void);
+	//リスト除外
+	virtual void Exclusion(void);
 
 private:
 	//モデル
@@ -100,10 +97,6 @@ private:
 	float m_fWidth;		//幅
 	float m_fHeight;	//高さ
 	float m_fDepth;		//奥行
-
-	//状態
-	bool m_bBreakale;	//破壊可能設定
-	bool m_bKoban;		//交番設定
 
 	//リスト
 	static CObjectX* m_pTop;	//先頭オブジェクト

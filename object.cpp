@@ -151,7 +151,10 @@ void CObject::Death(void)
 					m_apTop[cnt] = pObject->m_pNext;	//先頭を自分の次のオブジェにする
 				}
 
-				//成仏	
+				//リスト使用しているクラスの除外
+				pObject->Exclusion();
+
+				//成仏
 				delete pObject;	//自分自身破棄
 				m_nNumAll--;	//総数減らす
 			}
