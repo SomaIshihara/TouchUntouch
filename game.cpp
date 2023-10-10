@@ -20,6 +20,7 @@
 #include "bg.h"
 #include "sound.h"
 #include "block3D.h"
+#include "character.h"
 
 //ê√ìIÉÅÉìÉoïœêî
 const int CGame::CDSTART_TIME = MAX_FPS;
@@ -44,7 +45,8 @@ CGame::~CGame()
 //=================================
 HRESULT CGame::Init(void)
 {
-	CBlock3D::Create(CManager::VEC3_ZERO, CBlock3D::TYPE_NORMAL);
+	CBlock3D::Create(D3DXVECTOR3(0.0f,-70.0f,0.0f), CBlock3D::TYPE_NORMAL);
+	CCharacter::Create(CCharacter::TYPE_A);
 	return S_OK;
 }
 

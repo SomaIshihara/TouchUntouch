@@ -121,7 +121,12 @@
     <ClCompile Include="particle2D.cpp">
       <Filter>Base\Derivation\2D_Using</Filter>
     </ClCompile>
-    <ClCompile Include="block3D.cpp" />
+    <ClCompile Include="block3D.cpp">
+      <Filter>Added</Filter>
+    </ClCompile>
+    <ClCompile Include="character.cpp">
+      <Filter>Added</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="collision.h">
@@ -247,7 +252,12 @@
     <ClInclude Include="particle2D.h">
       <Filter>Base\Derivation\2D_Using</Filter>
     </ClInclude>
-    <ClInclude Include="block3D.h" />
+    <ClInclude Include="block3D.h">
+      <Filter>Added</Filter>
+    </ClInclude>
+    <ClInclude Include="character.h">
+      <Filter>Added</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Base">

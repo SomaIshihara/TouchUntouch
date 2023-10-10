@@ -40,12 +40,22 @@ public:
 
 	//リスト除外
 	virtual void Exclusion(void);
+
+	//取得
+	static CBlock3D* GetTop(void) { return m_pTop; }
+	CBlock3D* GetNext(void) { return m_pNext; }
+	float GetWidth(void) { return m_fWidth; }
+	float GetHeight(void) { return m_fHeight; }
+	float GetDepth(void) { return m_fDepth; }
 private:
 	//リスト
 	static CBlock3D* m_pTop;	//リストの最初
 	static CBlock3D* m_pCur;	//リストの終端
 	CBlock3D* m_pNext;			//次
 	CBlock3D* m_pPrev;			//前
+
+	//サイズ
+	float m_fWidth, m_fHeight, m_fDepth;
 
 	//個数
 	static int m_nNumAll;

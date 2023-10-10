@@ -7,7 +7,7 @@
 #include "manager.h"
 #include "renderer.h"
 #include "input.h"
-#include "sound.h"
+//#include "sound.h"
 #include "debugproc.h"
 #include "camera.h"
 #include "light.h"
@@ -76,7 +76,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	//生成
 	m_pInputKeyboard = new CInputKeyboard;
 	m_pInputMouse = new CInputMouse;
-	m_pSound = new CSound;
+	//m_pSound = new CSound;
 	m_pRenderer = new CRenderer;
 	m_pDebProc = new CDebugProc;
 	m_pCamera = new CCamera;
@@ -102,10 +102,10 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	}
 
 	//サウンド初期化
-	if (FAILED(m_pSound->Init(hWnd)))
+	/*if (FAILED(m_pSound->Init(hWnd)))
 	{
 		return E_FAIL;
-	}
+	}*/
 
 	//デバッグ初期化
 	m_pDebProc->Init();
@@ -183,12 +183,12 @@ void CManager::Uninit(void)
 	}
 
 	//サウンド破棄
-	if (m_pSound != nullptr)
-	{//サウンド終了
-		m_pSound->Uninit();
-		delete m_pSound;
-		m_pSound = nullptr;
-	}
+	//if (m_pSound != nullptr)
+	//{//サウンド終了
+	//	m_pSound->Uninit();
+	//	delete m_pSound;
+	//	m_pSound = nullptr;
+	//}
 
 	//マウス破棄
 	if (m_pInputMouse != nullptr)
@@ -270,7 +270,7 @@ void CManager::CheckFPS(DWORD dwCurrentTime, DWORD dwExecLastTime)
 void CManager::SetMode(CScene::MODE mode)
 {
 	//音止める
-	m_pSound->Stop();
+	//m_pSound->Stop();
 
 	//現在のモード破棄
 	if (m_pScene != nullptr)

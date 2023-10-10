@@ -20,6 +20,9 @@ CBlock3D::CBlock3D()
 	//クリア
 	CObjectX::SetPos(CManager::VEC3_ZERO);
 	CObjectX::SetRot(CManager::VEC3_ZERO);
+	m_fWidth = CManager::FLT_ZERO;
+	m_fHeight = CManager::FLT_ZERO;
+	m_fDepth = CManager::FLT_ZERO;
 
 	if (m_pCur == nullptr)
 	{//最後尾がいない（すなわち先頭もいない）
@@ -95,7 +98,15 @@ CBlock3D* CBlock3D::Create(const D3DXVECTOR3 pos, const TYPE type)
 		//データ設定
 		pBlock->SetPos(pos);
 		pBlock->m_type = type;
-		pBlock->SetModel(CXModel::Load("data\\MODEL\\OBJECT\\block_univ.x"));
+
+		CXModel* pModel = CXModel::Load("data\\MODEL\\OBJECT\\block_univ.x");
+		pBlock->SetModel(pModel);
+
+		D3DXVECTOR3 vtxMin, vtxMax;
+		pModel->GetCollision().GetVtx(&vtxMin, &vtxMax);
+		pBlock->m_fWidth = vtxMax.x - vtxMin.x;
+		pBlock->m_fHeight = vtxMax.y - vtxMin.y;
+		pBlock->m_fDepth = vtxMax.z - vtxMin.z;
 
 		return pBlock;
 	}

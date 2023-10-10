@@ -161,6 +161,7 @@
     <ClCompile Include="button2D.cpp" />
     <ClCompile Include="button3D.cpp" />
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="character.cpp" />
     <ClCompile Include="collision.cpp" />
     <ClCompile Include="Culc.cpp" />
     <ClCompile Include="debugproc.cpp" />
@@ -208,6 +209,7 @@
     <ClInclude Include="button2D.h" />
     <ClInclude Include="button3D.h" />
     <ClInclude Include="camera.h" />
+    <ClInclude Include="character.h" />
     <ClInclude Include="collision.h" />
     <ClInclude Include="Culc.h" />
     <ClInclude Include="debugproc.h" />

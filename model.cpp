@@ -93,10 +93,6 @@ void CModel::Draw(void)
 	//ワールドマトリックス初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
 
-	//拡縮を反映
-	//D3DXMatrixScaling(&mtxScall, FENCE_SCALE, FENCE_SCALE, FENCE_SCALE);
-	//D3DXMatrixMultiply(&g_aFence[nCount].mtxWorld, &g_aFence[nCount].mtxWorld, &mtxScall);
-
 	//向きを反映
 	D3DXMatrixRotationYawPitchRoll(&mtxRot, m_rotMotioned.y, m_rotMotioned.x, m_rotMotioned.z);
 	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxRot);
@@ -126,22 +122,8 @@ void CModel::Draw(void)
 
 	for (int nCntMat = 0; nCntMat < (int)m_dwNumMatModel; nCntMat++)
 	{
-		//マテリアル変更
-		D3DMATERIAL9 changeMat = pMat[nCntMat].MatD3D;
-
-		if (m_bChangeColor == true)
-		{//色を変更する場合
-			//メイン色変更
-			changeMat.Diffuse = m_changeMainColor;
-
-			//サブ色変更
-			changeMat.Diffuse.r = 1.0f * m_changeSubColor.r + changeMat.Diffuse.r * (1.0f - m_changeSubColor.r);
-			changeMat.Diffuse.g = 1.0f * m_changeSubColor.g + changeMat.Diffuse.g * (1.0f - m_changeSubColor.g);
-			changeMat.Diffuse.b = 1.0f * m_changeSubColor.b + changeMat.Diffuse.b * (1.0f - m_changeSubColor.b);
-		}
-
 		//マテリアル設定
-		pDevice->SetMaterial(&changeMat);
+		pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
 
 		//テクスチャ設定
 		pDevice->SetTexture(0, pTexture->GetAddress(m_pIdxtexture[nCntMat]));
@@ -188,7 +170,6 @@ HRESULT CModel::Load(const char* pPath)
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();	//デバイス取得
 	CTexture* pTexture = CManager::GetTexture();						//テクスチャオブジェクト取得
 	m_pIdxtexture = nullptr;											//テクスチャ番号ポインタをnullptrにする
-	m_bChangeColor = false;												//色変更フラグをオフ
 
 	if (SUCCEEDED(D3DXLoadMeshFromX(
 		pPath,
