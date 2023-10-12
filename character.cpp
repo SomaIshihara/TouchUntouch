@@ -90,13 +90,16 @@ void CCharacter::Update(void)
 	CInputKeyboard* pKeyboard = CManager::GetInputKeyboard();
 	D3DXVECTOR3 pos = m_pos;
 
-	if (pKeyboard->GetPress(DIK_A))
+	if (m_controllInterface->GetType() == m_type)
 	{
-		m_move.x -= 2.0f;
-	}
-	else if (pKeyboard->GetPress(DIK_D))
-	{
-		m_move.x += 2.0f;
+		if (m_controllInterface->GetPress() == DIK_A)
+		{
+			m_move.x -= 2.0f;
+		}
+		else if (m_controllInterface->GetPress() == DIK_D)
+		{
+			m_move.x += 2.0f;
+		}
 	}
 
 	//ジャンプカウンタ増やす
@@ -130,7 +133,7 @@ void CCharacter::Update(void)
 	{//着地した
 		m_bJump = false;
 		//ジャンプ
-		if (pKeyboard->GetRepeate(DIK_SPACE))
+		if (m_controllInterface->GetType() == m_type && pKeyboard->GetRepeate(DIK_SPACE))
 		{//ジャンプ処理
 			m_bJump = true;
 			m_nCounterJumpTime = 0;
@@ -141,7 +144,7 @@ void CCharacter::Update(void)
 	{//着地した
 		m_bJump = false;
 		//ジャンプ
-		if (pKeyboard->GetRepeate(DIK_SPACE))
+		if (m_controllInterface->GetType() == m_type && pKeyboard->GetRepeate(DIK_SPACE))
 		{//ジャンプ処理
 			m_bJump = true;
 			m_nCounterJumpTime = 0;
@@ -150,7 +153,6 @@ void CCharacter::Update(void)
 	}
 
 	m_pos = pos;
-
 
 	//移動量減衰
 	m_move.x = CManager::FLT_ZERO;
@@ -204,7 +206,7 @@ void CCharacter::Draw(void)
 //=================================
 //生成
 //=================================
-CCharacter* CCharacter::Create(const TYPE type)
+CCharacter* CCharacter::Create(const D3DXVECTOR3 pos, const TYPE type, IControllStat* player)
 {
 	if (m_aChara[type] == nullptr)
 	{
@@ -215,11 +217,13 @@ CCharacter* CCharacter::Create(const TYPE type)
 			//オブジェクト2Dの生成
 			pChara = new CCharacter;
 
-			//初期化
-			pChara->Init();
-
 			//データ設定
 			pChara->m_type = type;
+			pChara->m_pos = pos;
+			pChara->m_controllInterface = player;
+
+			//初期化
+			pChara->Init();
 
 			//いるよ
 			m_aChara[type] = pChara;
@@ -503,7 +507,18 @@ void CCharacter::SetModel(void)
 	m_pMotion->Init();
 
 	//モーションビューアのファイルを読み込み
-	LoadMotionViewerFile("data\\motion_exithuman.txt", &m_ppModel, m_pMotion, &m_nNumModel);
+	if (m_type == TYPE_A)
+	{
+		LoadMotionViewerFile("data\\motion_kei.txt", &m_ppModel, m_pMotion, &m_nNumModel);
+	}
+	else if (m_type == TYPE_B)
+	{
+		LoadMotionViewerFile("data\\motion_rei.txt", &m_ppModel, m_pMotion, &m_nNumModel);
+	}
+
+	m_fWidth = 100.0f;
+	m_fHeight = 100.0f;
+	m_fDepth = 100.0f;
 
 	//モーション設定
 	m_pMotion->Set(0);

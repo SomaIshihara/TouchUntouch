@@ -10,13 +10,6 @@
 
 //前方宣言
 class CPlayer;
-class CMeshField;
-class CPause;
-class CResult;
-class CTimer;
-class CScore;
-class CMeshSky;
-class CBG;
 
 //タイトルクラス
 class CGame : public CScene
@@ -36,7 +29,7 @@ public:
 	void Draw(void);
 
 private:
-	
+	CPlayer* m_pPlayer;	//プレイヤーポインタ
 };
 
 #endif // !_GAME_H_

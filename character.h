@@ -9,6 +9,7 @@
 
 //必要なのインクルード
 #include "object.h"
+#include "interface.h"
 
 //前方宣言
 class CModel;
@@ -45,7 +46,7 @@ public:
 	void Draw(void);
 
 	//生成
-	static CCharacter* Create(const TYPE type);
+	static CCharacter* Create(const D3DXVECTOR3 pos ,const TYPE type, IControllStat* player);
 
 	//取得
 	D3DXVECTOR3 GetPos(void) { return m_pos; }
@@ -81,6 +82,8 @@ private:
 
 	//CShadow* m_pShadow;			//影オブジェクトポインタ
 	TYPE m_type;				//種類
+
+	IControllStat* m_controllInterface;	//操作状況のインターフェース
 };
 
 #endif // !_CHARACTER_H_

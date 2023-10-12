@@ -187,6 +187,7 @@
     <ClCompile Include="particle2D.cpp" />
     <ClCompile Include="particleBillboard.cpp" />
     <ClCompile Include="pause.cpp" />
+    <ClCompile Include="player.cpp" />
     <ClCompile Include="precompile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">precompile.h</PrecompiledHeaderFile>
@@ -220,6 +221,7 @@
     <ClInclude Include="file.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="input.h" />
+    <ClInclude Include="interface.h" />
     <ClInclude Include="light.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="manager.h" />
@@ -236,6 +238,7 @@
     <ClInclude Include="particle2D.h" />
     <ClInclude Include="particleBillboard.h" />
     <ClInclude Include="pause.h" />
+    <ClInclude Include="player.h" />
     <ClInclude Include="precompile.h" />
     <ClInclude Include="ranking.h" />
     <ClInclude Include="renderer.h" />

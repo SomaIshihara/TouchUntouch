@@ -23,6 +23,7 @@
 #include "character.h"
 #include "xmodel.h"
 #include "switch.h"
+#include "player.h"
 
 //静的メンバ変数
 const int CGame::CDSTART_TIME = MAX_FPS;
@@ -47,9 +48,17 @@ CGame::~CGame()
 //=================================
 HRESULT CGame::Init(void)
 {
+	if (m_pPlayer == nullptr)
+	{
+		m_pPlayer = new CPlayer;
+		m_pPlayer->Init();
+	}
+
+	CManager::GetCamera()->ResetPos();
 	CBlock3D::Create(D3DXVECTOR3(0.0f,-70.0f,0.0f), CBlock3D::TYPE_NORMAL);
 	CSwitch::Create(CSwitch::TYPE_A);
-	CCharacter::Create(CCharacter::TYPE_A);
+	CCharacter::Create(D3DXVECTOR3(20.0f,50.0f,0.0f),CCharacter::TYPE_A, m_pPlayer);
+	CCharacter::Create(D3DXVECTOR3(-20.0f, 50.0f, 0.0f),CCharacter::TYPE_B, m_pPlayer);
 	return S_OK;
 }
 
@@ -60,6 +69,13 @@ void CGame::Uninit(void)
 {
 	CObject::ReleaseAll();
 	CManager::GetSound()->Stop();
+
+	if (m_pPlayer != nullptr)
+	{
+		m_pPlayer->Uninit();
+		delete m_pPlayer;
+		m_pPlayer = nullptr;
+	}
 }
 
 //=================================
@@ -69,7 +85,10 @@ void CGame::Update(void)
 {
 	CInputKeyboard* pKeyboard = CManager::GetInputKeyboard();	//キーボード取得
 
-	
+	if (m_pPlayer != nullptr)
+	{
+		m_pPlayer->Update();
+	}
 }
 
 //=================================

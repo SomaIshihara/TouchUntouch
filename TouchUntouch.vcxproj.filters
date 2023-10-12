@@ -130,6 +130,9 @@
     <ClCompile Include="switch.cpp">
       <Filter>Added</Filter>
     </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>Added</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="collision.h">
@@ -262,6 +265,12 @@
       <Filter>Added</Filter>
     </ClInclude>
     <ClInclude Include="switch.h">
+      <Filter>Added</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>Added</Filter>
+    </ClInclude>
+    <ClInclude Include="interface.h">
       <Filter>Added</Filter>
     </ClInclude>
   </ItemGroup>
