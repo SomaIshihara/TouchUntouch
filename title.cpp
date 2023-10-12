@@ -10,14 +10,7 @@
 #include "fade.h"
 #include "input.h"
 #include "camera.h"
-#include "button3D.h"
 #include "sound.h"
-#include "objectX.h"
-#include "meshsky.h"
-#include "meshField.h"
-
-//マクロ
-#define TITLE_CAMERA_ROT	(CAMERA_MOU_ROT_SPEED * 0.15f)
 
 //静的メンバ変数
 
@@ -57,7 +50,10 @@ void CTitle::Uninit(void)
 //=================================
 void CTitle::Update(void)
 {
-	
+	if (m_pFade == nullptr && CManager::GetInputKeyboard()->GetTrigger(DIK_SPACE))
+	{//スペース押された
+		m_pFade = CFade::Create(CScene::MODE_GAME);
+	}
 }
 
 //=================================

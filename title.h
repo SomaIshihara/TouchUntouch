@@ -9,6 +9,7 @@
 #include "manager.h"
 
 //前方宣言
+class CFade;
 
 //タイトルクラス
 class CTitle : public CScene
@@ -25,7 +26,7 @@ public:
 	void Draw(void);
 
 private:
-
+	CFade* m_pFade;	//フェードオブジェクト
 };
 
 #endif // !_TITLE_H_
