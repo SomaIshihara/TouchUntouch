@@ -58,6 +58,7 @@ public:
 
 	//“–‚½‚è”»’è
 	bool CollisionBlock(D3DXVECTOR3* pPos);
+	bool CollisionSwitch(D3DXVECTOR3* pPos);
 
 private:
 	void SetModel(void);

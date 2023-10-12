@@ -11,20 +11,6 @@
 #define MAX_OBJ				(256)	//オブジェクト最大数
 #define DEATH_LIFE			(0)		//死亡体力
 
-//優先順位参考表
-typedef enum
-{
-	PRIORITY_BG = 0,		//BG
-	PRIORITY_01,		//未定義
-	PRIORITY_02,		//未定義
-	PRIORITY_DEFAULT,		//デフォルト
-	PRIORITY_04,		//未定義
-	PRIORITY_UI,			//UI
-	PRIORITY_PAUSE,			//ポーズ
-	PRIORITY_FADE,			//フェード
-	PRIORITY_MAX			//最大優先順位（これで足りるらしい）
-} PRIORITY;
-
 //オブジェクトクラス
 class CObject
 {
@@ -35,6 +21,20 @@ public:
 		TYPE_NONE = 0,
 		TYPE_MAX
 	} TYPE;
+
+	//優先順位参考表
+	typedef enum
+	{
+		PRIORITY_BG = 0,		//BG
+		PRIORITY_01,		//未定義
+		PRIORITY_02,		//未定義
+		PRIORITY_DEFAULT,		//デフォルト
+		PRIORITY_04,		//未定義
+		PRIORITY_UI,			//UI
+		PRIORITY_PAUSE,			//ポーズ
+		PRIORITY_FADE,			//フェード
+		PRIORITY_MAX			//最大優先順位（これで足りるらしい）
+	} PRIORITY;
 
 	//コンストラクタ・デストラクタ
 	CObject(int nPriority = PRIORITY_DEFAULT);
