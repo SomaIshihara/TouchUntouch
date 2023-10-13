@@ -12,6 +12,7 @@ __interface IControllStat
 {
 	int GetType(void) = 0;		//操作中のキャラタイプ
 	int GetPress(void) = 0;		//操作状況
+	bool IsJump(void) = 0;		//ジャンプするか
 };
 
 #endif // !_INTERFACE_H_

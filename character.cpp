@@ -105,6 +105,34 @@ void CCharacter::Update(void)
 	//ジャンプカウンタ増やす
 	m_nCounterJumpTime++;
 
+	//当たり判定
+	pos.x += m_move.x;
+	pos.y += m_move.y - (ACCELERATION_GRAVITY * m_nCounterJumpTime / MAX_FPS);
+	pos.z += m_move.z;
+
+	if (CollisionBlock(&pos))
+	{//着地した
+		m_bJump = false;
+	}
+	if(CollisionSwitch(&pos))
+	{//着地した
+		m_bJump = false;
+	}
+
+	//ジャンプ
+	if (m_bJump == false && m_controllInterface->GetType() == m_type && m_controllInterface->IsJump() == true)
+	{//ジャンプ処理
+		m_bJump = true;
+		m_nCounterJumpTime = 0;
+		m_move.y = 5.0f;
+	}
+
+	m_pos = pos;
+
+	//移動量減衰
+	m_move.x = CManager::FLT_ZERO;
+	m_move.z = CManager::FLT_ZERO;
+
 	//モデル設定
 	if (m_ppModel != nullptr)
 	{
@@ -123,40 +151,6 @@ void CCharacter::Update(void)
 		//モーション更新
 		m_pMotion->Update();
 	}
-
-	//当たり判定
-	pos.x += m_move.x;
-	pos.y += m_move.y - (ACCELERATION_GRAVITY * m_nCounterJumpTime / MAX_FPS);
-	pos.z += m_move.z;
-
-	if (CollisionBlock(&pos))
-	{//着地した
-		m_bJump = false;
-		//ジャンプ
-		if (m_controllInterface->GetType() == m_type && pKeyboard->GetRepeate(DIK_SPACE))
-		{//ジャンプ処理
-			m_bJump = true;
-			m_nCounterJumpTime = 0;
-			m_move.y = 5.0f;
-		}
-	}
-	if(CollisionSwitch(&pos))
-	{//着地した
-		m_bJump = false;
-		//ジャンプ
-		if (m_controllInterface->GetType() == m_type && pKeyboard->GetRepeate(DIK_SPACE))
-		{//ジャンプ処理
-			m_bJump = true;
-			m_nCounterJumpTime = 0;
-			m_move.y = 5.0f;
-		}
-	}
-
-	m_pos = pos;
-
-	//移動量減衰
-	m_move.x = CManager::FLT_ZERO;
-	m_move.z = CManager::FLT_ZERO;
 }
 
 //=================================

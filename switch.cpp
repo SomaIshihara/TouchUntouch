@@ -107,7 +107,7 @@ void CSwitch::Draw(void)
 //=================================
 //生成
 //=================================
-CSwitch* CSwitch::Create(const TYPE type)
+CSwitch* CSwitch::Create(const D3DXVECTOR3 pos, const TYPE type)
 {
 	CSwitch* pSwitch = nullptr;
 
@@ -120,7 +120,7 @@ CSwitch* CSwitch::Create(const TYPE type)
 		pSwitch->Init();
 
 		//データ設定
-		pSwitch->m_pos = D3DXVECTOR3(80.0f, -20.0f, 0.0f);
+		pSwitch->m_pos = pos;
 		pSwitch->m_type = type;
 
 		//モデルが読み込まれてなければ読み込み

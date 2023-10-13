@@ -24,6 +24,7 @@
 #include "xmodel.h"
 #include "switch.h"
 #include "player.h"
+#include "goal.h"
 
 //Ã“Iƒƒ“ƒo•Ï”
 const int CGame::CDSTART_TIME = MAX_FPS;
@@ -56,9 +57,10 @@ HRESULT CGame::Init(void)
 
 	CManager::GetCamera()->ResetPos();
 	CBlock3D::Create(D3DXVECTOR3(0.0f,-70.0f,0.0f), CBlock3D::TYPE_NORMAL);
-	CSwitch::Create(CSwitch::TYPE_A);
+	CSwitch::Create(D3DXVECTOR3(-80.0f, -20.0f, 0.0f),CSwitch::TYPE_A);
 	CCharacter::Create(D3DXVECTOR3(20.0f,50.0f,0.0f),CCharacter::TYPE_A, m_pPlayer);
 	CCharacter::Create(D3DXVECTOR3(-20.0f, 50.0f, 0.0f),CCharacter::TYPE_B, m_pPlayer);
+	CGoal::Create(D3DXVECTOR3(150.0f, -20.0f, 0.0f));
 	return S_OK;
 }
 

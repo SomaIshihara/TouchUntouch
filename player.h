@@ -28,6 +28,7 @@ public:
 	//インターフェース
 	int GetType(void) { return m_controllType; }	//操作中のキャラタイプ
 	int GetPress(void) { return m_nPressMove; };	//操作状況
+	bool IsJump(void) { return m_bPressJump; }		//ジャンプするか
 
 private:
 	//関数

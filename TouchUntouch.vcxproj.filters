@@ -133,6 +133,9 @@
     <ClCompile Include="player.cpp">
       <Filter>Added</Filter>
     </ClCompile>
+    <ClCompile Include="goal.cpp">
+      <Filter>Added</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="collision.h">
@@ -271,6 +274,9 @@
       <Filter>Added</Filter>
     </ClInclude>
     <ClInclude Include="interface.h">
+      <Filter>Added</Filter>
+    </ClInclude>
+    <ClInclude Include="goal.h">
       <Filter>Added</Filter>
     </ClInclude>
   </ItemGroup>

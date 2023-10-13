@@ -44,7 +44,7 @@ public:
 	void Draw(void);
 
 	//ê∂ê¨
-	static CSwitch* Create(const TYPE type);
+	static CSwitch* Create(const D3DXVECTOR3 pos, const TYPE type);
 
 	//éÊìæ
 	D3DXVECTOR3 GetPos(void) { return m_pos; }
@@ -52,6 +52,7 @@ public:
 	CSwitch* GetNext(void) { return m_pNext; }
 	CObjectX* GetBase(void) { return m_pObjBase; }
 	CObjectX* GetMove(void) { return m_pObjMove; }
+	bool IsPush(void) { return m_bPush; }
 
 	//ê›íË
 	void SetPos(const D3DXVECTOR3 pos) { m_pos = pos; }
