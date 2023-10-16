@@ -45,7 +45,7 @@ void CPlayer::Uninit(void)
 //=================================
 void CPlayer::Update(void)
 {
-	CInputKeyboard* pKeyboard = CManager::GetInputKeyboard();	//キーボード取得
+	CInputKeyboard* pKeyboard = CManager::GetInstance()->GetInputKeyboard();	//キーボード取得
 	
 	//移動
 	if (pKeyboard->GetPress(DIK_A) == true)
@@ -76,8 +76,8 @@ void CPlayer::Update(void)
 //=================================
 void CPlayer::Move(void)
 {
-	CInputKeyboard* pKeyboard = CManager::GetInputKeyboard();	//キーボード取得
-	CCamera* pCamera = CManager::GetCamera();					//カメラ取得
+	CInputKeyboard* pKeyboard = CManager::GetInstance()->GetInputKeyboard();	//キーボード取得
+	CCamera* pCamera = CManager::GetInstance()->CManager::GetInstance()->GetCamera();					//カメラ取得
 	D3DXVECTOR3 move = CManager::VEC3_ZERO;
 	D3DXVECTOR3 rot = pCamera->GetRot();
 	//移動

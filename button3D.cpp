@@ -56,7 +56,7 @@ void CButton3D::Uninit(void)
 void CButton3D::Update(void)
 {
 	//ボタン処理
-	CInputMouse* mouse = CManager::GetInputMouse();	//マウス取得
+	CInputMouse* mouse = CManager::GetInstance()->GetInputMouse();	//マウス取得
 
 	//マウス取得
 	if (mouse != nullptr)

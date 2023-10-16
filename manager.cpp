@@ -27,26 +27,13 @@
 #define FPS_SPEED	(500)	//FPS計測時間
 
 //静的メンバ変数
-CRenderer* CManager::m_pRenderer = nullptr;
-CInputKeyboard* CManager::m_pInputKeyboard = nullptr;
-CInputMouse* CManager::m_pInputMouse = nullptr;
-CDebugProc* CManager::m_pDebProc = nullptr;
-CSound* CManager::m_pSound = nullptr;
-CCamera* CManager::m_pCamera = nullptr;
-CLight* CManager::m_pLight = nullptr;
-CTexture* CManager::m_pTexture = nullptr;
-CScene* CManager::m_pScene = nullptr;
+CManager* CManager::m_pManager = nullptr;
 
 //静的const
 const int CManager::INT_ZERO = 0;
 const float CManager::FLT_ZERO = 0.0f;
 const D3DXVECTOR2 CManager::VEC2_ZERO = D3DXVECTOR2(0.0f, 0.0f);
 const D3DXVECTOR3 CManager::VEC3_ZERO = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-
-bool CManager::m_bPause = false;
-
-int CManager::m_nFPS = 0;
-DWORD CManager::m_dwFrameCount = 0;
 
 //************************************************
 //マネージャクラス
@@ -56,7 +43,18 @@ DWORD CManager::m_dwFrameCount = 0;
 //=================================
 CManager::CManager()
 {
-	
+	m_pRenderer = nullptr;
+	m_pInputKeyboard = nullptr;
+	m_pInputMouse = nullptr;
+	m_pDebProc = nullptr;
+	m_pSound = nullptr;
+	m_pCamera = nullptr;
+	m_pLight = nullptr;
+	m_pTexture = nullptr;
+	m_pScene = nullptr;
+
+	m_nFPS = 0;
+	m_dwFrameCount = 0;
 }
 
 //=================================
@@ -84,7 +82,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	m_pTexture = new CTexture;
 
 	//レンダラー初期化
-	if (FAILED(m_pRenderer->Init(hWnd, TRUE)))
+	if (FAILED(m_pRenderer->Init(hWnd, bWindow)))
 	{
 		return E_FAIL;
 	}
@@ -133,7 +131,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	m_dwFrameCount = 0;
 
 	//モード設定
-	SetMode(CScene::MODE_GAME);
+	GetInstance()->SetMode(CScene::MODE_GAME);
 
 	//できた
 	return S_OK;
@@ -225,10 +223,7 @@ void CManager::Update(void)
 	m_pInputMouse->Update();
 
 	//描画系
-	if (m_bPause == false)
-	{//ポーズしていなければ全オブジェクト更新
-		m_pRenderer->Update();
-	}
+	m_pRenderer->Update();
 
 	//3D系
 	m_pCamera->Update();
@@ -262,6 +257,34 @@ void CManager::CheckFPS(DWORD dwCurrentTime, DWORD dwExecLastTime)
 {
 	m_nFPS = (m_dwFrameCount * 1000) / (dwCurrentTime - dwExecLastTime);
 	m_dwFrameCount = 0;
+}
+
+//=================================
+//取得（シングルトン）
+//=================================
+CManager* CManager::GetInstance(void)
+{
+	if (m_pManager == nullptr)
+	{
+		m_pManager = new CManager;
+	}
+	return m_pManager;
+}
+
+//=================================
+//破棄
+//=================================
+HRESULT CManager::Release(void)
+{
+	if (m_pManager != nullptr)
+	{
+		m_pManager->Uninit();
+		delete m_pManager;
+		m_pManager = nullptr;
+
+		return S_OK;
+	}
+	return E_FAIL;
 }
 
 //=================================

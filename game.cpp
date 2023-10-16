@@ -55,7 +55,7 @@ HRESULT CGame::Init(void)
 		m_pPlayer->Init();
 	}
 
-	CManager::GetCamera()->ResetPos();
+	CManager::GetInstance()->CManager::GetInstance()->GetCamera()->ResetPos();
 	CBlock3D::Create(D3DXVECTOR3(0.0f,-70.0f,0.0f), CBlock3D::TYPE_NORMAL);
 	CSwitch::Create(D3DXVECTOR3(-80.0f, -20.0f, 0.0f),CSwitch::TYPE_A);
 	CCharacter::Create(D3DXVECTOR3(20.0f,50.0f,0.0f),CCharacter::TYPE_A, m_pPlayer);
@@ -70,7 +70,7 @@ HRESULT CGame::Init(void)
 void CGame::Uninit(void)
 {
 	CObject::ReleaseAll();
-	CManager::GetSound()->Stop();
+	CManager::GetInstance()->GetSound()->Stop();
 
 	if (m_pPlayer != nullptr)
 	{
@@ -85,7 +85,7 @@ void CGame::Uninit(void)
 //=================================
 void CGame::Update(void)
 {
-	CInputKeyboard* pKeyboard = CManager::GetInputKeyboard();	//キーボード取得
+	CInputKeyboard* pKeyboard = CManager::GetInstance()->GetInputKeyboard();	//キーボード取得
 
 	if (m_pPlayer != nullptr)
 	{

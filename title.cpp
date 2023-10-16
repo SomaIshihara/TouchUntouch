@@ -50,7 +50,7 @@ void CTitle::Uninit(void)
 //=================================
 void CTitle::Update(void)
 {
-	if (m_pFade == nullptr && CManager::GetInputKeyboard()->GetTrigger(DIK_SPACE))
+	if (m_pFade == nullptr && CManager::GetInstance()->GetInputKeyboard()->GetTrigger(DIK_SPACE))
 	{//スペース押された
 		m_pFade = CFade::Create(CScene::MODE_GAME);
 	}

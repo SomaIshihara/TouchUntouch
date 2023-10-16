@@ -14,6 +14,8 @@
 #include "file.h"
 #include "block3D.h"
 #include "switch.h"
+#include "collision.h"
+#include "debugproc.h"
 
 //静的メンバ変数
 CCharacter* CCharacter::m_aChara[] = { nullptr,nullptr };
@@ -26,6 +28,7 @@ CCharacter::CCharacter()
 	m_ppModel = nullptr;
 	m_nNumModel = CManager::INT_ZERO;
 	m_pos = CManager::VEC3_ZERO;
+	m_posOld = CManager::VEC3_ZERO;
 	m_move = CManager::VEC3_ZERO;
 	m_rot = CManager::VEC3_ZERO;
 	m_fWidth = CManager::FLT_ZERO;
@@ -34,6 +37,7 @@ CCharacter::CCharacter()
 	m_bJump = false;
 	m_nCounterJumpTime = CManager::INT_ZERO;
 	m_type = TYPE_MAX;
+	m_pCollider = nullptr;
 }
 
 //=================================
@@ -49,6 +53,9 @@ CCharacter::~CCharacter()
 HRESULT CCharacter::Init(void)
 {
 	SetModel();
+	SetType(TYPE_CHARACTER);
+	m_posOld = m_pos;
+	m_pCollider = CBoxCollider::Create(this);
 	return S_OK;
 }
 
@@ -79,6 +86,12 @@ void CCharacter::Uninit(void)
 		delete[] m_ppModel;	//配列そのものを破棄
 	}
 
+	if (m_pCollider != nullptr)
+	{
+		m_pCollider->Release();
+		m_pCollider = nullptr;
+	}
+
 	Release();
 }
 
@@ -87,8 +100,9 @@ void CCharacter::Uninit(void)
 //=================================
 void CCharacter::Update(void)
 {
-	CInputKeyboard* pKeyboard = CManager::GetInputKeyboard();
-	D3DXVECTOR3 pos = m_pos;
+	CInputKeyboard* pKeyboard = CManager::GetInstance()->GetInputKeyboard();
+
+	m_posOld = m_pos;	//前の位置設定
 
 	if (m_controllInterface->GetType() == m_type)
 	{
@@ -106,19 +120,35 @@ void CCharacter::Update(void)
 	m_nCounterJumpTime++;
 
 	//当たり判定
-	pos.x += m_move.x;
-	pos.y += m_move.y - (ACCELERATION_GRAVITY * m_nCounterJumpTime / MAX_FPS);
-	pos.z += m_move.z;
+	m_pos.x += m_move.x;
+	m_pos.y += m_move.y - (ACCELERATION_GRAVITY * m_nCounterJumpTime / MAX_FPS);
+	m_pos.z += m_move.z;
 
-	if (CollisionBlock(&pos))
-	{//着地した
+	m_pCollider->CollisionCheck();
+
+	//ボタンは押す
+	for (int cnt = 0; cnt < m_pCollider->GetResult().collList.size(); cnt++)
+	{
+		if (m_pCollider->GetResult().collList[cnt]->GetType() == CObject::TYPE_SWITCH)
+		{
+			CSwitch* pSwitch = CSwitch::GetTop();
+			while (pSwitch != nullptr)
+			{
+				if (pSwitch->GetMove() == m_pCollider->GetResult().collList[cnt])
+				{
+					pSwitch->Push();
+					break;
+				}
+				pSwitch = pSwitch->GetNext();
+			}
+		}
+	}
+
+	if (m_pCollider->GetResult().bHit[1] == true)
+	{
 		m_bJump = false;
 	}
-	if(CollisionSwitch(&pos))
-	{//着地した
-		m_bJump = false;
-	}
-
+	
 	//ジャンプ
 	if (m_bJump == false && m_controllInterface->GetType() == m_type && m_controllInterface->IsJump() == true)
 	{//ジャンプ処理
@@ -126,8 +156,6 @@ void CCharacter::Update(void)
 		m_nCounterJumpTime = 0;
 		m_move.y = 5.0f;
 	}
-
-	m_pos = pos;
 
 	//移動量減衰
 	m_move.x = CManager::FLT_ZERO;
@@ -158,8 +186,8 @@ void CCharacter::Update(void)
 //=================================
 void CCharacter::Draw(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();	//デバイス取得
-	CTexture* pTexture = CManager::GetTexture();						//テクスチャオブジェクト取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();	//デバイス取得
+	CTexture* pTexture = CManager::GetInstance()->GetInstance()->GetTexture();			//テクスチャオブジェクト取得
 	D3DXMATRIX mtxRot, mtxTrans, mtxTexture;							//計算用
 	D3DMATERIAL9 matDef;												//現在のマテリアル保存用
 
@@ -230,268 +258,6 @@ CCharacter* CCharacter::Create(const D3DXVECTOR3 pos, const TYPE type, IControll
 }
 
 //=================================
-//ブロック当たり判定
-//=================================
-bool CCharacter::CollisionBlock(D3DXVECTOR3* pPos)
-{
-	//自分の当たり判定
-	float fPlayerWidth = m_fWidth * 0.5f, fPlayerHeight = m_fHeight * 0.5f, fPlayerDepth = m_fDepth * 0.5f;
-
-	//着地結果
-	bool bLand = false;
-
-	//X
-	ColFloat playerCol;
-	playerCol.pPosMain = &pPos->x;
-	playerCol.pPosSubA = pPos->y;
-	playerCol.pPosSubB = pPos->z;
-	playerCol.fSizeMain = fPlayerWidth;
-	playerCol.fSizeSubA = fPlayerHeight;
-	playerCol.fSizeSubB = fPlayerDepth;
-
-	CBlock3D* pBlock = CBlock3D::GetTop();
-
-	while (pBlock != nullptr)
-	{
-		ColFloat otherCol;
-		D3DXVECTOR3 posOther = pBlock->GetPos();
-		otherCol.pPosMain = &posOther.x;
-		otherCol.pPosSubA = posOther.y;
-		otherCol.pPosSubB = posOther.z;
-		otherCol.fSizeMain = pBlock->GetWidth() * 0.5f;
-		otherCol.fSizeSubA = pBlock->GetHeight() * 0.5f;
-		otherCol.fSizeSubB = pBlock->GetDepth() * 0.5f;
-
-		if (CollisionAxis(playerCol, m_pos.x, otherCol))	//当たり判定
-		{
-			m_move.x = 0.0f;
-		}
-
-		pBlock = pBlock->GetNext();	//次のブロック
-	}
-
-	//Y
-	playerCol.pPosMain = &pPos->y;
-	playerCol.pPosSubA = pPos->x;
-	playerCol.pPosSubB = pPos->z;
-	playerCol.fSizeMain = fPlayerHeight;
-	playerCol.fSizeSubA = fPlayerWidth;
-	playerCol.fSizeSubB = fPlayerDepth;
-
-	pBlock = CBlock3D::GetTop();
-
-	while (pBlock != nullptr)
-	{
-		ColFloat otherCol;
-		D3DXVECTOR3 posOther = pBlock->GetPos();
-		otherCol.pPosMain = &posOther.y;
-		otherCol.pPosSubA = posOther.x;
-		otherCol.pPosSubB = posOther.z;
-		otherCol.fSizeMain = pBlock->GetHeight() * 0.5f;
-		otherCol.fSizeSubA = pBlock->GetWidth() * 0.5f;
-		otherCol.fSizeSubB = pBlock->GetDepth() * 0.5f;
-
-		if (CollisionAxis(playerCol, m_pos.y, otherCol) == true)	//当たり判定
-		{//着地した
-			m_move.y = 0.0f;
-			m_nCounterJumpTime = 0;
-			bLand = true;
-		}
-
-		pBlock = pBlock->GetNext();	//次のブロック
-	}
-
-	//Z
-	playerCol.pPosMain = &pPos->z;
-	playerCol.pPosSubA = pPos->x;
-	playerCol.pPosSubB = pPos->y;
-	playerCol.fSizeMain = fPlayerDepth;
-	playerCol.fSizeSubA = fPlayerWidth;
-	playerCol.fSizeSubB = fPlayerHeight;
-
-	pBlock = CBlock3D::GetTop();
-
-	while (pBlock != nullptr)
-	{
-		ColFloat otherCol;
-		D3DXVECTOR3 posOther = pBlock->GetPos();
-		otherCol.pPosMain = &posOther.z;
-		otherCol.pPosSubA = posOther.x;
-		otherCol.pPosSubB = posOther.y;
-		otherCol.fSizeMain = pBlock->GetDepth() * 0.5f;
-		otherCol.fSizeSubA = pBlock->GetWidth() * 0.5f;
-		otherCol.fSizeSubB = pBlock->GetHeight() * 0.5f;
-
-		if (CollisionAxis(playerCol, m_pos.z, otherCol))	//当たり判定
-		{
-			m_move.z = 0.0f;
-		}
-
-		pBlock = pBlock->GetNext();	//次のブロック
-	}
-
-	return bLand;
-}
-
-//=================================
-//スイッチ当たり判定
-//=================================
-bool CCharacter::CollisionSwitch(D3DXVECTOR3* pPos)
-{
-	//自分の当たり判定
-	float fPlayerWidth = m_fWidth * 0.5f, fPlayerHeight = m_fHeight * 0.5f, fPlayerDepth = m_fDepth * 0.5f;
-
-	//着地結果
-	bool bLand = false;
-
-	//X
-	ColFloat playerCol;
-	playerCol.pPosMain = &pPos->x;
-	playerCol.pPosSubA = pPos->y;
-	playerCol.pPosSubB = pPos->z;
-	playerCol.fSizeMain = fPlayerWidth;
-	playerCol.fSizeSubA = fPlayerHeight;
-	playerCol.fSizeSubB = fPlayerDepth;
-
-	CSwitch* pSwitch = CSwitch::GetTop();
-
-	while (pSwitch != nullptr)
-	{
-		ColFloat otherCol;
-		D3DXVECTOR3 posOther;
-
-		//可動部
-		posOther = pSwitch->GetMove()->GetPos();
-		otherCol.pPosMain = &posOther.x;
-		otherCol.pPosSubA = posOther.y;
-		otherCol.pPosSubB = posOther.z;
-		otherCol.fSizeMain = pSwitch->GetMove()->GetWidth() * 0.5f;
-		otherCol.fSizeSubA = pSwitch->GetMove()->GetHeight() * 0.5f;
-		otherCol.fSizeSubB = pSwitch->GetMove()->GetDepth() * 0.5f;
-
-		if (CollisionAxis(playerCol, m_pos.x, otherCol))	//当たり判定
-		{
-			m_move.x = 0.0f;
-		}
-
-		//土台
-		posOther = pSwitch->GetBase()->GetPos();
-		otherCol.pPosMain = &posOther.x;
-		otherCol.pPosSubA = posOther.y;
-		otherCol.pPosSubB = posOther.z;
-		otherCol.fSizeMain = pSwitch->GetBase()->GetWidth() * 0.5f;
-		otherCol.fSizeSubA = pSwitch->GetBase()->GetHeight() * 0.5f;
-		otherCol.fSizeSubB = pSwitch->GetBase()->GetDepth() * 0.5f;
-
-		if (CollisionAxis(playerCol, m_pos.x, otherCol))	//当たり判定
-		{
-			m_move.x = 0.0f;
-		}
-
-		pSwitch = pSwitch->GetNext();	//次のスイッチ
-	}
-
-	//Y
-	playerCol.pPosMain = &pPos->y;
-	playerCol.pPosSubA = pPos->x;
-	playerCol.pPosSubB = pPos->z;
-	playerCol.fSizeMain = fPlayerHeight;
-	playerCol.fSizeSubA = fPlayerWidth;
-	playerCol.fSizeSubB = fPlayerDepth;
-
-	pSwitch = CSwitch::GetTop();
-
-	while (pSwitch != nullptr)
-	{
-		ColFloat otherCol;
-		D3DXVECTOR3 posOther;
-
-		//可動部
-		posOther = pSwitch->GetMove()->GetPos();
-		otherCol.pPosMain = &posOther.y;
-		otherCol.pPosSubA = posOther.x;
-		otherCol.pPosSubB = posOther.z;
-		otherCol.fSizeMain = pSwitch->GetMove()->GetHeight() * 0.5f;
-		otherCol.fSizeSubA = pSwitch->GetMove()->GetWidth() * 0.5f;
-		otherCol.fSizeSubB = pSwitch->GetMove()->GetDepth() * 0.5f;
-
-		if (CollisionAxis(playerCol, m_pos.y, otherCol) == true)	//当たり判定
-		{//着地した
-			m_move.y = 0.0f;
-			m_nCounterJumpTime = 0;
-			bLand = true;
-			pSwitch->Push();
-		}
-
-		//土台
-		posOther = pSwitch->GetBase()->GetPos();
-		otherCol.pPosMain = &posOther.y;
-		otherCol.pPosSubA = posOther.x;
-		otherCol.pPosSubB = posOther.z;
-		otherCol.fSizeMain = pSwitch->GetBase()->GetHeight() * 0.5f;
-		otherCol.fSizeSubA = pSwitch->GetBase()->GetWidth() * 0.5f;
-		otherCol.fSizeSubB = pSwitch->GetBase()->GetDepth() * 0.5f;
-
-		if (CollisionAxis(playerCol, m_pos.y, otherCol) == true)	//当たり判定
-		{//着地した
-			m_move.y = 0.0f;
-			m_nCounterJumpTime = 0;
-			bLand = true;
-		}
-
-		pSwitch = pSwitch->GetNext();	//次のスイッチ
-	}
-
-	//Z
-	playerCol.pPosMain = &pPos->z;
-	playerCol.pPosSubA = pPos->x;
-	playerCol.pPosSubB = pPos->y;
-	playerCol.fSizeMain = fPlayerDepth;
-	playerCol.fSizeSubA = fPlayerWidth;
-	playerCol.fSizeSubB = fPlayerHeight;
-
-	pSwitch = CSwitch::GetTop();
-
-	while (pSwitch != nullptr)
-	{
-		ColFloat otherCol;
-		D3DXVECTOR3 posOther;
-
-		//可動部
-		posOther = pSwitch->GetMove()->GetPos();
-		otherCol.pPosMain = &posOther.z;
-		otherCol.pPosSubA = posOther.x;
-		otherCol.pPosSubB = posOther.y;
-		otherCol.fSizeMain = pSwitch->GetMove()->GetDepth() * 0.5f;
-		otherCol.fSizeSubA = pSwitch->GetMove()->GetWidth() * 0.5f;
-		otherCol.fSizeSubB = pSwitch->GetMove()->GetHeight() * 0.5f;
-
-		if (CollisionAxis(playerCol, m_pos.z, otherCol))	//当たり判定
-		{
-			m_move.z = 0.0f;
-		}
-
-		//土台
-		posOther = pSwitch->GetBase()->GetPos();
-		otherCol.pPosMain = &posOther.z;
-		otherCol.pPosSubA = posOther.x;
-		otherCol.pPosSubB = posOther.y;
-		otherCol.fSizeMain = pSwitch->GetBase()->GetDepth() * 0.5f;
-		otherCol.fSizeSubA = pSwitch->GetBase()->GetWidth() * 0.5f;
-		otherCol.fSizeSubB = pSwitch->GetBase()->GetHeight() * 0.5f;
-
-		if (CollisionAxis(playerCol, m_pos.z, otherCol))	//当たり判定
-		{
-			m_move.z = 0.0f;
-		}
-
-		pSwitch = pSwitch->GetNext();	//次のスイッチ
-	}
-
-	return bLand;
-}
-
-//=================================
 //モデル設定
 //=================================
 void CCharacter::SetModel(void)
@@ -516,33 +282,4 @@ void CCharacter::SetModel(void)
 
 	//モーション設定
 	m_pMotion->Set(0);
-}
-
-//=================================
-//軸単位での当たり判定
-//=================================
-bool CCharacter::CollisionAxis(ColFloat source, const float fPosMainOld, ColFloat dest)
-{
-	bool bCollision = false;
-
-	if (source.pPosSubA - source.fSizeSubA < dest.pPosSubA + dest.fSizeSubA &&
-		source.pPosSubA + source.fSizeSubA > dest.pPosSubA - dest.fSizeSubA &&
-		source.pPosSubB - source.fSizeSubB < dest.pPosSubB + dest.fSizeSubB &&
-		source.pPosSubB + source.fSizeSubB > dest.pPosSubB - dest.fSizeSubB)
-	{
-		if (fPosMainOld + source.fSizeMain <= *dest.pPosMain - dest.fSizeMain &&
-			*source.pPosMain + source.fSizeMain > *dest.pPosMain - dest.fSizeMain)
-		{
-			*source.pPosMain = *dest.pPosMain - dest.fSizeMain - source.fSizeMain;
-			bCollision = true;
-		}
-		else if (fPosMainOld - source.fSizeMain >= *dest.pPosMain + dest.fSizeMain &&
-			*source.pPosMain - source.fSizeMain < *dest.pPosMain + dest.fSizeMain)
-		{
-			*source.pPosMain = *dest.pPosMain + dest.fSizeMain + source.fSizeMain;
-			bCollision = true;
-		}
-	}
-
-	return bCollision;
 }

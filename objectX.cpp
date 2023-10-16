@@ -123,8 +123,8 @@ void CObjectX::Update(void)
 //========================
 void CObjectX::Draw(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();	//デバイス取得
-	CTexture* pTexture = CManager::GetTexture();						//テクスチャオブジェクト取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();	//デバイス取得
+	CTexture* pTexture = CManager::GetInstance()->GetTexture();						//テクスチャオブジェクト取得
 	D3DXMATRIX mtxRot, mtxTrans, mtxTexture;							//計算用
 	D3DMATERIAL9 matDef;												//現在のマテリアル保存用
 	D3DXMATERIAL *pMat;													//マテリアルデータへのポインタ
@@ -194,6 +194,20 @@ CObjectX* CObjectX::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, CXModel
 }
 
 //========================
+//モデル設定とサイズ計測
+//========================
+void CObjectX::SetModel(CXModel * pModel)
+{
+	m_pModel = pModel;
+
+	D3DXVECTOR3 vtxMin, vtxMax;
+	m_pModel->GetCollision().GetVtx(&vtxMin, &vtxMax);
+	m_fWidth = vtxMax.x - vtxMin.x;
+	m_fHeight = vtxMax.y - vtxMin.y;
+	m_fDepth = vtxMax.z - vtxMin.z;
+}
+
+//========================
 //オブジェクト単位除外処理
 //========================
 void CObjectX::Delete(CXModel* pTarget)
@@ -248,7 +262,7 @@ CObjectX::LOADRESULT CObjectX::LoadData(const char * pPath)
 				{
 					char aPath[PATH_LENGTH];
 					fread(&aPath[0], sizeof(char), PATH_LENGTH, pFile);
-					CManager::GetTexture()->Load(&aPath[0]);
+					CManager::GetInstance()->GetTexture()->Load(&aPath[0]);
 				}
 				else if (code == BIN_CODE_MODEL_NUM)
 				{

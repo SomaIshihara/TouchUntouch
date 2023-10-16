@@ -9,6 +9,8 @@
 
 #include "manager.h"
 #include "object.h"
+#include "interface.h"
+#include "collision.h"
 
 typedef unsigned char BINCODE;
 //バイナリのコード内容
@@ -30,7 +32,7 @@ typedef unsigned char BINCODE;
 class CXModel;
 
 //オブジェクトクラス
-class CObjectX : public CObject
+class CObjectX : public CObject, public ICollisionReader
 {
 public:
 	enum LOADRESULT
@@ -64,6 +66,7 @@ public:
 
 	//取得
 	D3DXVECTOR3 GetPos(void) { return m_pos; }
+	D3DXVECTOR3 GetPosOld(void) { return m_pos; }
 	D3DXVECTOR3 GetRot(void) { return m_rot; }
 	float GetWidth(void) { return m_fWidth; }
 	float GetHeight(void) { return m_fHeight; }
@@ -71,11 +74,14 @@ public:
 	static CObjectX* GetTop(void) { return m_pTop; }
 	CObjectX* GetNext(void) { return m_pNext; }
 	CXModel* GetModel(void) { return m_pModel; }
+	CObject* GetObj(void) { return this; }
+	CBoxCollider* GetCollider(void) { return m_pCollider; }
 
 	//設定
-	void SetPos(D3DXVECTOR3 pos) { m_pos = pos; }
-	void SetRot(D3DXVECTOR3 rot) { m_rot = rot; }
-	void SetModel(CXModel* pModel) { m_pModel = pModel; }
+	void SetPos(const D3DXVECTOR3 pos) { m_pos = pos; }
+	void SetRot(const D3DXVECTOR3 rot) { m_rot = rot; }
+	void SetModel(CXModel* pModel);
+	void SetCollider(void) { m_pCollider = CBoxCollider::Create(this); }
 
 	//使用モデル単位で消す
 	static void Delete(CXModel* pTarget);
@@ -97,6 +103,9 @@ private:
 	float m_fWidth;		//幅
 	float m_fHeight;	//高さ
 	float m_fDepth;		//奥行
+
+	//当たり判定
+	CBoxCollider* m_pCollider;
 
 	//リスト
 	static CObjectX* m_pTop;	//先頭オブジェクト

@@ -62,13 +62,13 @@ void CBG::Update(void)
 void CBG::Draw(void)
 {
 	//Zバッファを使用しない
-	CManager::GetRenderer()->SetZEnable(false);
+	CManager::GetInstance()->GetRenderer()->SetZEnable(false);
 
 	//親クラス処理
 	CObject2D::Draw();
 	
 	//Zバッファを使用する
-	CManager::GetRenderer()->SetZEnable(true);
+	CManager::GetInstance()->GetRenderer()->SetZEnable(true);
 }
 
 //=================================

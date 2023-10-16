@@ -341,8 +341,8 @@ void CInputMouse::Update(void)
 //=================================
 D3DXVECTOR3 CInputMouse::ConvertClickPosToWorld(float fZ)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();	//デバイスの取得
-	CCamera* pCamera = CManager::GetCamera();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();	//デバイスの取得
+	CCamera* pCamera = CManager::GetInstance()->CManager::GetInstance()->GetCamera();
 
 	D3DXMATRIX mtxView, mtxProj;
 	D3DXMATRIX mtxViewPort;

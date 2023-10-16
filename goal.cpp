@@ -39,6 +39,7 @@ CGoal::~CGoal()
 //=================================
 HRESULT CGoal::Init(void)
 {
+	SetType(TYPE_GOAL);
 	return S_OK;
 }
 
@@ -81,7 +82,7 @@ void CGoal::Update(void)
 
 	if (bPush == true)
 	{
-		CManager::GetDebProc()->Print("ƒS[ƒ‹\n");
+		CManager::GetInstance()->GetDebProc()->Print("ƒS[ƒ‹\n");
 	}
 }
 

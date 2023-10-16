@@ -119,7 +119,7 @@ void CNumber::SetNumber(const int nSource, const int nDigit)
 	nNumber = nSource % (int)pow(10, nDigit + 1) / (int)pow(10, nDigit);
 
 	//パターン幅高さ取得
-	CTexture* pTexture = CManager::GetTexture();
+	CTexture* pTexture = CManager::GetInstance()->GetInstance()->GetTexture();
 	int nIdx = GetIdxTexture();	//テクスチャ番号取得
 	int nPatWidth = pTexture->GetPatWidth(nIdx);
 	int nPatHeight = pTexture->GetPatHeight(nIdx);

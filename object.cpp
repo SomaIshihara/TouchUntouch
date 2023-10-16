@@ -94,7 +94,7 @@ void CObject::UpdateAll(void)
 //=================================
 void CObject::DrawAll(void)
 {
-	CCamera* pCamera = CManager::GetCamera();	//ƒJƒƒ‰
+	CCamera* pCamera = CManager::GetInstance()->CManager::GetInstance()->GetCamera();	//ƒJƒƒ‰
 	pCamera->SetCamera();
 
 	for (int cnt = 0; cnt < PRIORITY_MAX; cnt++)

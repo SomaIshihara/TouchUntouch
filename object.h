@@ -19,6 +19,11 @@ public:
 	typedef enum
 	{
 		TYPE_NONE = 0,
+		TYPE_BLOCK,
+		TYPE_CHARACTER,
+		TYPE_SWITCH,
+		TYPE_GOAL,
+		TYPE_ITEM,
 		TYPE_MAX
 	} TYPE;
 

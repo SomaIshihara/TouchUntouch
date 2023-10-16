@@ -9,6 +9,10 @@
 
 //必要なものインクルード
 #include "objectX.h"
+#include "interface.h"
+
+//前方宣言
+class CBoxCollider;
 
 //ブロッククラス
 class CBlock3D : public CObjectX
@@ -44,9 +48,7 @@ public:
 	//取得
 	static CBlock3D* GetTop(void) { return m_pTop; }
 	CBlock3D* GetNext(void) { return m_pNext; }
-	float GetWidth(void) { return m_fWidth; }
-	float GetHeight(void) { return m_fHeight; }
-	float GetDepth(void) { return m_fDepth; }
+
 private:
 	//リスト
 	static CBlock3D* m_pTop;	//リストの最初
@@ -54,14 +56,14 @@ private:
 	CBlock3D* m_pNext;			//次
 	CBlock3D* m_pPrev;			//前
 
-	//サイズ
-	float m_fWidth, m_fHeight, m_fDepth;
-
 	//個数
 	static int m_nNumAll;
 
 	//パラメータ
 	TYPE m_type;	//ブロック種類
+
+	//当たり判定
+	CBoxCollider* m_pCollider;
 };
 
 #endif // !_BLOCK_3D_H_

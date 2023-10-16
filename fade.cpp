@@ -71,7 +71,7 @@ void CFade::Update(void)
 			{
 				m_fAlpha = 1.0f;
 				m_fade = FADE_IN;
-				CManager::SetMode(m_modeNext);
+				CManager::GetInstance()->SetMode(m_modeNext);
 			}
 		}
 	}

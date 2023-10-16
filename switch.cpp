@@ -60,6 +60,7 @@ CSwitch::~CSwitch()
 //=================================
 HRESULT CSwitch::Init(void)
 {
+	SetType(TYPE_SWITCH);
 	return S_OK;
 }
 
@@ -90,7 +91,7 @@ void CSwitch::Update(void)
 {
 	if (m_bPush == true)
 	{
-		CManager::GetDebProc()->Print("プチプチ\n");
+		CManager::GetInstance()->GetDebProc()->Print("プチプチ\n");
 	}
 
 	m_bPush = false;	//いったん押されていない状態にする（状況に応じてキャラクターが押す）
@@ -135,7 +136,11 @@ CSwitch* CSwitch::Create(const D3DXVECTOR3 pos, const TYPE type)
 
 		//モデル生成
 		pSwitch->m_pObjBase = CObjectX::Create(pSwitch->m_pos + D3DXVECTOR3(0.0f, 0.0f, 0.0f), CManager::VEC3_ZERO, m_pModelBase);
+		pSwitch->m_pObjBase->SetCollider();
+		pSwitch->m_pObjBase->SetType(TYPE_SWITCH);
 		pSwitch->m_pObjMove = CObjectX::Create(pSwitch->m_pos + D3DXVECTOR3(0.0f, 10.0f, 0.0f), CManager::VEC3_ZERO, m_pModelMove);
+		pSwitch->m_pObjMove->SetCollider();
+		pSwitch->m_pObjMove->SetType(TYPE_SWITCH);
 
 		return pSwitch;
 	}

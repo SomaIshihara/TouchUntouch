@@ -5,6 +5,7 @@
 //
 //======================================================
 #include "block3D.h"
+#include "collision.h"
 #include "xmodel.h"
 
 //静的メンバ変数
@@ -20,9 +21,6 @@ CBlock3D::CBlock3D()
 	//クリア
 	CObjectX::SetPos(CManager::VEC3_ZERO);
 	CObjectX::SetRot(CManager::VEC3_ZERO);
-	m_fWidth = CManager::FLT_ZERO;
-	m_fHeight = CManager::FLT_ZERO;
-	m_fDepth = CManager::FLT_ZERO;
 
 	if (m_pCur == nullptr)
 	{//最後尾がいない（すなわち先頭もいない）
@@ -53,6 +51,8 @@ CBlock3D::~CBlock3D()
 HRESULT CBlock3D::Init(void)
 {
 	CObjectX::Init();
+	SetType(TYPE_BLOCK);
+	m_pCollider = CBoxCollider::Create(this);
 	return S_OK;
 }
 
@@ -99,14 +99,7 @@ CBlock3D* CBlock3D::Create(const D3DXVECTOR3 pos, const TYPE type)
 		pBlock->SetPos(pos);
 		pBlock->m_type = type;
 
-		CXModel* pModel = CXModel::Load("data\\MODEL\\OBJECT\\block_univ.x");
-		pBlock->SetModel(pModel);
-
-		D3DXVECTOR3 vtxMin, vtxMax;
-		pModel->GetCollision().GetVtx(&vtxMin, &vtxMax);
-		pBlock->m_fWidth = vtxMax.x - vtxMin.x;
-		pBlock->m_fHeight = vtxMax.y - vtxMin.y;
-		pBlock->m_fDepth = vtxMax.z - vtxMin.z;
+		pBlock->SetModel(CXModel::Load("data\\MODEL\\OBJECT\\block_univ.x"));
 
 		return pBlock;
 	}
