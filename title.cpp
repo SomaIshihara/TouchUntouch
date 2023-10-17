@@ -59,6 +59,18 @@ void CTitle::Uninit(void)
 //=================================
 void CTitle::Update(void)
 {
+	CManager* pIns = CManager::GetInstance();
+	CInputGamePad* pGamepad = pIns->GetInputGamePad();
+
+	if (pGamepad->IsConnect() == true)
+	{//ゲームパッド接続
+		m_pStart->BindTexture(2);
+	}
+	else
+	{//未接続
+		m_pStart->BindTexture(1);
+	}
+
 	if (m_pFade == nullptr && CManager::GetInstance()->GetInputKeyboard()->GetTrigger(DIK_SPACE))
 	{//スペース押された
 		m_pFade = CFade::Create(CScene::MODE_GAME);

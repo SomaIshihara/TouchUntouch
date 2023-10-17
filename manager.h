@@ -11,6 +11,7 @@
 //前方宣言
 class CInputKeyboard;
 class CInputMouse;
+class CInputGamePad;
 class CRenderer;
 class CDebugProc;
 class CSound;
@@ -77,6 +78,7 @@ public:
 	static CManager* GetInstance(void);
 	CInputKeyboard* GetInputKeyboard(void) { return m_pInputKeyboard; }
 	CInputMouse* GetInputMouse(void) { return m_pInputMouse; }
+	CInputGamePad* GetInputGamePad(void) { return m_pInputPad; }
 	CSound* GetSound(void) { return m_pSound; }
 	CRenderer* GetRenderer(void) { return m_pRenderer; }
 	CDebugProc* GetDebProc(void) { return m_pDebProc; }
@@ -97,6 +99,7 @@ private:
 	static CManager* m_pManager;				//マネージャ（シングルトン）
 	CInputKeyboard* m_pInputKeyboard;	//キーボード
 	CInputMouse* m_pInputMouse;			//マウス
+	CInputGamePad* m_pInputPad;			//ゲームパッド
 	CSound* m_pSound;					//サウンド
 	CRenderer* m_pRenderer;				//レンダラー
 	CDebugProc* m_pDebProc;				//デバッグ

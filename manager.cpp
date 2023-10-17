@@ -46,6 +46,7 @@ CManager::CManager()
 	m_pRenderer = nullptr;
 	m_pInputKeyboard = nullptr;
 	m_pInputMouse = nullptr;
+	m_pInputPad = nullptr;
 	m_pDebProc = nullptr;
 	m_pSound = nullptr;
 	m_pCamera = nullptr;
@@ -74,6 +75,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	//生成
 	m_pInputKeyboard = new CInputKeyboard;
 	m_pInputMouse = new CInputMouse;
+	m_pInputPad = new CInputGamePad;
 	//m_pSound = new CSound;
 	m_pRenderer = new CRenderer;
 	m_pDebProc = new CDebugProc;
@@ -95,6 +97,12 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 
 	//マウス初期化
 	if (FAILED(m_pInputMouse->Init(hInstance, hWnd)))
+	{
+		return E_FAIL;
+	}
+
+	//ゲームパッド初期化
+	if (FAILED(m_pInputPad->Init(hInstance, hWnd)))
 	{
 		return E_FAIL;
 	}
@@ -188,6 +196,14 @@ void CManager::Uninit(void)
 	//	m_pSound = nullptr;
 	//}
 
+	//ゲームパッド破棄
+	if (m_pInputPad != nullptr)
+	{//マウス終了
+		m_pInputPad->Uninit();
+		delete m_pInputPad;
+		m_pInputPad = nullptr;
+	}
+
 	//マウス破棄
 	if (m_pInputMouse != nullptr)
 	{//マウス終了
@@ -221,6 +237,7 @@ void CManager::Update(void)
 	//入力系
 	m_pInputKeyboard->Update();
 	m_pInputMouse->Update();
+	m_pInputPad->Update();
 
 	//描画系
 	m_pRenderer->Update();
