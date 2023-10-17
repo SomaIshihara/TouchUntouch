@@ -14,6 +14,7 @@
 #include "file.h"
 #include "block3D.h"
 #include "switch.h"
+#include "item.h"
 #include "collision.h"
 #include "debugproc.h"
 
@@ -56,6 +57,7 @@ HRESULT CCharacter::Init(void)
 	SetType(TYPE_CHARACTER);
 	m_posOld = m_pos;
 	m_pCollider = CBoxCollider::Create(this);
+	m_pCollider->SetType(CBoxCollider::TYPE_COLLISION);
 	return S_OK;
 }
 
@@ -126,7 +128,7 @@ void CCharacter::Update(void)
 
 	m_pCollider->CollisionCheck();
 
-	//ボタンは押す
+	//ボタンは押す・アイテムは拾う
 	for (int cnt = 0; cnt < m_pCollider->GetResult().collList.size(); cnt++)
 	{
 		if (m_pCollider->GetResult().collList[cnt]->GetType() == CObject::TYPE_SWITCH)
@@ -140,6 +142,19 @@ void CCharacter::Update(void)
 					break;
 				}
 				pSwitch = pSwitch->GetNext();
+			}
+		}
+		if (m_pCollider->GetResult().collList[cnt]->GetType() == CObject::TYPE_ITEM)
+		{
+			CItem* pItem = CItem::GetTop();
+			while (pItem != nullptr)
+			{
+				if (pItem == m_pCollider->GetResult().collList[cnt])
+				{
+					pItem->Get();
+					break;
+				}
+				pItem = pItem->GetNext();
 			}
 		}
 	}

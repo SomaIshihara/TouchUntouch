@@ -53,6 +53,7 @@ HRESULT CBlock3D::Init(void)
 	CObjectX::Init();
 	SetType(TYPE_BLOCK);
 	m_pCollider = CBoxCollider::Create(this);
+	m_pCollider->SetType(CBoxCollider::TYPE_COLLISION);
 	return S_OK;
 }
 

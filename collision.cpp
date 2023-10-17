@@ -190,7 +190,7 @@ void CBoxCollider::CollisionCheck(void)
 			otherCol.fSizeSubA = pCollider->m_iCollisionReader->GetHeight() * 0.5f;
 			otherCol.fSizeSubB = pCollider->m_iCollisionReader->GetDepth() * 0.5f;
 
-			if (CollisionAxis(playerCol, posOld.x, otherCol))	//当たり判定
+			if (CollisionAxis(playerCol, posOld.x, otherCol, pCollider->m_type))	//当たり判定
 			{
 				//重複チェック
 				bool bRegisted = false;
@@ -238,7 +238,7 @@ void CBoxCollider::CollisionCheck(void)
 			otherCol.fSizeSubA = pCollider->m_iCollisionReader->GetWidth() * 0.5f;
 			otherCol.fSizeSubB = pCollider->m_iCollisionReader->GetDepth() * 0.5f;
 
-			if (CollisionAxis(playerCol, posOld.y, otherCol) == true)	//当たり判定
+			if (CollisionAxis(playerCol, posOld.y, otherCol, pCollider->m_type) == true)	//当たり判定
 			{//着地した
 				//重複チェック
 				bool bRegisted = false;
@@ -286,7 +286,7 @@ void CBoxCollider::CollisionCheck(void)
 			otherCol.fSizeSubA = pCollider->m_iCollisionReader->GetWidth() * 0.5f;
 			otherCol.fSizeSubB = pCollider->m_iCollisionReader->GetHeight() * 0.5f;
 
-			if (CollisionAxis(playerCol, posOld.z, otherCol))	//当たり判定
+			if (CollisionAxis(playerCol, posOld.z, otherCol, pCollider->m_type))	//当たり判定
 			{
 				//重複チェック
 				bool bRegisted = false;
@@ -364,7 +364,7 @@ void CBoxCollider::Release(void)
 //=================================
 //軸単位での当たり判定
 //=================================
-bool CBoxCollider::CollisionAxis(ColFloat source, const float fPosMainOld, ColFloat dest)
+bool CBoxCollider::CollisionAxis(ColFloat source, const float fPosMainOld, ColFloat dest, const TYPE otherType)
 {
 	bool bCollision = false;
 
@@ -376,13 +376,19 @@ bool CBoxCollider::CollisionAxis(ColFloat source, const float fPosMainOld, ColFl
 		if (fPosMainOld + source.fSizeMain <= *dest.pPosMain - dest.fSizeMain &&
 			*source.pPosMain + source.fSizeMain >= *dest.pPosMain - dest.fSizeMain)
 		{
-			*source.pPosMain = *dest.pPosMain - dest.fSizeMain - source.fSizeMain;
+			if (this->m_type == TYPE_COLLISION && otherType == TYPE_COLLISION)
+			{
+				*source.pPosMain = *dest.pPosMain - dest.fSizeMain - source.fSizeMain;
+			}
 			bCollision = true;
 		}
 		else if (fPosMainOld - source.fSizeMain >= *dest.pPosMain + dest.fSizeMain &&
 			*source.pPosMain - source.fSizeMain <= *dest.pPosMain + dest.fSizeMain)
 		{
-			*source.pPosMain = *dest.pPosMain + dest.fSizeMain + source.fSizeMain;
+			if (this->m_type == TYPE_COLLISION && otherType == TYPE_COLLISION)
+			{
+				*source.pPosMain = *dest.pPosMain + dest.fSizeMain + source.fSizeMain;
+			}
 			bCollision = true;
 		}
 	}

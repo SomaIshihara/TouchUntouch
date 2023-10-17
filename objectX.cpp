@@ -104,6 +104,12 @@ HRESULT CObjectX::Init(void)
 //========================
 void CObjectX::Uninit(void)
 {
+	if (m_pCollider != nullptr)
+	{
+		m_pCollider->Release();
+		m_pCollider = nullptr;
+	}
+
 	m_bExclusion = true;		//œŠO—\’è
 
 	//©•ª©g”jŠü

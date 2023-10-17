@@ -11,8 +11,9 @@
 #include "xmodel.h"
 
 //静的メンバ変数
-CXModel* CItem::m_pModel = nullptr;
 int CItem::m_nNumAll = 0;
+CItem* CItem::m_pTop = nullptr;	//リストの最初
+CItem* CItem::m_pCur = nullptr;	//リストの終端
 
 //************************************************
 //アイテム弾クラス
@@ -24,15 +25,20 @@ CItem::CItem()
 {
 	//値クリア
 	m_nScore = CManager::INT_ZERO;
-}
 
-//=================================
-//コンストラクタ（オーバーロード 位置幅高さ）
-//=================================
-CItem::CItem(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot) : CObjectX(pos, rot, m_pModel)
-{
-	//値クリア
-	m_nScore = CManager::INT_ZERO;
+	if (m_pCur == nullptr)
+	{//最後尾がいない（すなわち先頭もいない）
+		m_pTop = this;			//俺が先頭
+		m_pPrev = nullptr;		//前後誰もいない
+		m_pNext = nullptr;
+	}
+	else
+	{//最後尾がいる
+		m_pPrev = m_pCur;		//最後尾が自分の前のオブジェ
+		m_pCur->m_pNext = this;	//最後尾の次のオブジェが自分
+		m_pNext = nullptr;		//自分の次のオブジェはいない
+	}
+	m_pCur = this;				//俺が最後尾
 }
 
 //=================================
@@ -84,7 +90,7 @@ CItem* CItem::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot)
 
 	if (pItem == NULL)
 	{
-		//オブジェクトアニメーション2Dの生成
+		//オブジェクト生成
 		pItem = new CItem;
 
 		//初期化
@@ -96,7 +102,12 @@ CItem* CItem::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot)
 		pItem->SetRot(rot);
 
 		//モデル設定
+		CXModel* aaa = CXModel::Load("data\\MODEL\\OBJECT\\item.x");
 		pItem->SetModel(CXModel::Load("data\\MODEL\\OBJECT\\item.x"));
+
+		//当たり判定設定
+		pItem->SetCollider();
+		pItem->GetCollider()->SetType(CBoxCollider::TYPE_TRIGGER);
 
 		return pItem;
 	}
@@ -104,4 +115,41 @@ CItem* CItem::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot)
 	{
 		return NULL;
 	}
+}
+
+//=================================
+//アイテム取得
+//=================================
+void CItem::Get(void)
+{
+	CItem::Uninit();
+}
+
+//=================================
+//除外
+//=================================
+void CItem::Exclusion(void)
+{
+	if (m_pPrev != nullptr)
+	{//前にオブジェがいる
+		m_pPrev->m_pNext = m_pNext;	//前のオブジェの次のオブジェは自分の次のオブジェ
+	}
+	if (m_pNext != nullptr)
+	{
+		m_pNext->m_pPrev = m_pPrev;	//次のオブジェの前のオブジェは自分の前のオブジェ
+	}
+
+	if (m_pCur == this)
+	{//最後尾でした
+		m_pCur = m_pPrev;	//最後尾を自分の前のオブジェにする
+	}
+	if (m_pTop == this)
+	{
+		m_pTop = m_pNext;	//先頭を自分の次のオブジェにする
+	}
+
+	//成仏
+	m_nNumAll--;	//総数減らす
+
+	CObjectX::Exclusion();	//親オブジェの除外も行う
 }

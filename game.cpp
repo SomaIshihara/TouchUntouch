@@ -25,6 +25,7 @@
 #include "switch.h"
 #include "player.h"
 #include "goal.h"
+#include "item.h"
 
 //ê√ìIÉÅÉìÉoïœêî
 const int CGame::CDSTART_TIME = MAX_FPS;
@@ -61,6 +62,7 @@ HRESULT CGame::Init(void)
 	CCharacter::Create(D3DXVECTOR3(20.0f,50.0f,0.0f),CCharacter::TYPE_A, m_pPlayer);
 	CCharacter::Create(D3DXVECTOR3(-20.0f, 50.0f, 0.0f),CCharacter::TYPE_B, m_pPlayer);
 	CGoal::Create(D3DXVECTOR3(150.0f, -20.0f, 0.0f));
+	CItem::Create(D3DXVECTOR3(150.0f, 50.0f, 0.0f), CManager::VEC3_ZERO);
 	return S_OK;
 }
 

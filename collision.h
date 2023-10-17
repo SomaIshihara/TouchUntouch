@@ -90,7 +90,7 @@ private:
 	CBoxCollider* m_pNext;			//次のオブジェクト
 	CBoxCollider* m_pPrev;			//前のオブジェクト
 
-	bool CollisionAxis(ColFloat source, const float fPosMainOld, ColFloat dest);
+	bool CollisionAxis(ColFloat source, const float fPosMainOld, ColFloat dest, const TYPE otherType);
 
 	ICollisionReader* m_iCollisionReader;	//当たり判定に使うものの取得に使うインターフェース
 	TYPE m_type;							//当たり判定種類
