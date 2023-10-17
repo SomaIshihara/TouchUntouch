@@ -131,7 +131,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	m_dwFrameCount = 0;
 
 	//ƒ‚[ƒhÝ’è
-	GetInstance()->SetMode(CScene::MODE_GAME);
+	GetInstance()->SetMode(CScene::MODE_TITLE);
 
 	//‚Å‚«‚½
 	return S_OK;

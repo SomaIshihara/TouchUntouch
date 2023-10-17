@@ -7,6 +7,7 @@
 #ifndef _ITEM_H_
 #define _ITEM_H_
 #include "objectX.h"
+#include "interface.h"
 
 //前方宣言
 class CPictoTaxi;
@@ -37,6 +38,9 @@ public:
 	//リスト除外
 	void Exclusion(void);
 
+	//スコアインターフェース設定
+	static void SetScoreInterface(IScoreSetter* pInterface) { m_pScoreInterface = pInterface; }
+
 private:
 	//リスト
 	static CItem* m_pTop;	//リストの最初
@@ -45,6 +49,8 @@ private:
 	CItem* m_pPrev;			//前
 
 	static int m_nNumAll;
+	static IScoreSetter* m_pScoreInterface;
+
 	int m_nScore;
 };
 

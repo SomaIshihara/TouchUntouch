@@ -51,8 +51,6 @@ void CFade::Uninit(void)
 //========================
 void CFade::Update(void)
 {
-	VERTEX_2D *pVtx;					//設定用ポインタ
-
 	if (m_fade != FADE_NONE)
 	{
 		if (m_fade == FADE_IN)

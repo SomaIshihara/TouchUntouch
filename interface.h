@@ -30,4 +30,11 @@ __interface ICollisionReader
 	CObject* GetObj(void) = 0;
 };
 
+//スコア設定用インターフェース
+__interface IScoreSetter
+{
+	void Set(const int nScore) = 0;	//スコア設定
+	void Add(const int nAdd) = 0;	//スコア加算
+};
+
 #endif // !_INTERFACE_H_

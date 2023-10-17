@@ -10,6 +10,8 @@
 
 //前方宣言
 class CPlayer;
+class CScore;
+class CTimer;
 
 //タイトルクラス
 class CGame : public CScene
@@ -30,6 +32,8 @@ public:
 
 private:
 	CPlayer* m_pPlayer;	//プレイヤーポインタ
+	CScore* m_pScore;	//スコアポインタ
+	CTimer* m_pTimer;	//タイマーポインタ
 };
 
 #endif // !_GAME_H_

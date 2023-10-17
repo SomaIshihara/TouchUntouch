@@ -11,6 +11,7 @@
 #include "input.h"
 #include "camera.h"
 #include "sound.h"
+#include "object2D.h"
 
 //静的メンバ変数
 
@@ -19,7 +20,8 @@
 //=================================
 CTitle::CTitle()
 {
-	
+	m_pFade = nullptr;
+	m_pStart = nullptr;
 }
 
 //=================================
@@ -34,6 +36,13 @@ CTitle::~CTitle()
 //=================================
 HRESULT CTitle::Init(void)
 {
+	//タイトルロゴ
+	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 300.0f, 0.0f), CManager::VEC3_ZERO, 1180.0f, 244.0f, CObject::PRIORITY_UI)->BindTexture(0);
+
+	//スタート文字
+	m_pStart = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 600.0f, 0.0f), CManager::VEC3_ZERO, 560.0f, 48.0f, CObject::PRIORITY_UI);
+	m_pStart->BindTexture(1);
+
 	return S_OK;
 }
 

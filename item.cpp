@@ -12,6 +12,7 @@
 
 //静的メンバ変数
 int CItem::m_nNumAll = 0;
+IScoreSetter* CItem::m_pScoreInterface = nullptr;
 CItem* CItem::m_pTop = nullptr;	//リストの最初
 CItem* CItem::m_pCur = nullptr;	//リストの終端
 
@@ -122,6 +123,10 @@ CItem* CItem::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot)
 //=================================
 void CItem::Get(void)
 {
+	if (m_pScoreInterface != nullptr)
+	{
+		m_pScoreInterface->Add(m_nScore);
+	}
 	CItem::Uninit();
 }
 

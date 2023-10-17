@@ -164,8 +164,7 @@ CObject2D* CObject2D::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, const
 		//’lÝ’è
 		pObj2D->SetPos(pos);
 		pObj2D->SetRot(rot);
-		pObj2D->m_fWidth = fWidth;
-		pObj2D->m_fHeight = fHeight;
+		pObj2D->SetSize(fWidth, fHeight);
 
 		return pObj2D;
 	}

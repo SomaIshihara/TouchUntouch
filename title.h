@@ -10,6 +10,7 @@
 
 //前方宣言
 class CFade;
+class CObject2D;
 
 //タイトルクラス
 class CTitle : public CScene
@@ -26,7 +27,8 @@ public:
 	void Draw(void);
 
 private:
-	CFade* m_pFade;	//フェードオブジェクト
+	CFade* m_pFade;			//フェードオブジェクト
+	CObject2D* m_pStart;	//スタート文字（入力によって切替）
 };
 
 #endif // !_TITLE_H_
