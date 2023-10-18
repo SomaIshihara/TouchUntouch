@@ -4,7 +4,6 @@
 //Author:石原颯馬
 //
 //======================================================
-#include "precompile.h"
 #include "texture.h"
 #include "title.h"
 #include "fade.h"
@@ -62,7 +61,7 @@ void CTitle::Update(void)
 	CManager* pIns = CManager::GetInstance();
 	CInputGamePad* pGamepad = pIns->GetInputGamePad();
 
-	if (pGamepad->IsConnect() == true)
+	if (pGamepad != nullptr && pGamepad->IsConnect() == true)
 	{//ゲームパッド接続
 		m_pStart->BindTexture(2);
 	}
