@@ -47,9 +47,10 @@ public:
 	int GetTime(void) { return m_nTime; }
 
 	//設定
-	void Set(const int nScore, COUNT type);	//タイマー設定
+	void Set(const int nTime, COUNT type);	//タイマー設定
 	void Start(void) { m_shouldCount = true; }
 	void Stop(void) { m_shouldCount = false; }
+	void Add(const int nTime) { m_nTime += nTime; }
 	void BindTexture(const int nIdx);	//テクスチャ設定（数字オブジェクトすべてに適用）
 
 	//除外（必要なし）

@@ -41,6 +41,7 @@ public:
 
 	//æ“¾
 	D3DXVECTOR3 GetPos(void) { return m_pos; }
+	bool IsGoal(void) { return m_bGoal; }
 
 	//İ’è
 	void SetPos(const D3DXVECTOR3 pos) { m_pos = pos; }
@@ -57,6 +58,7 @@ private:
 	D3DXVECTOR3 m_move;				//ˆÚ“®—Ê
 	D3DXVECTOR3 m_rot;				//Œü‚«
 	float m_fWidth, m_fHeight, m_fDepth;	//ƒTƒCƒY
+	bool m_bGoal;
 };
 
 #endif // !_CHARACTER_H_

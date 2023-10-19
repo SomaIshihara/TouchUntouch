@@ -12,6 +12,10 @@
 class CPlayer;
 class CScore;
 class CTimer;
+class CResult;
+
+//仮
+class CGoal;
 
 //タイトルクラス
 class CGame : public CScene
@@ -34,6 +38,8 @@ private:
 	CPlayer* m_pPlayer;	//プレイヤーポインタ
 	CScore* m_pScore;	//スコアポインタ
 	CTimer* m_pTimer;	//タイマーポインタ
+	CResult* m_pResult;	//リザルトポインタ
+	CGoal* m_pGoal;
 };
 
 #endif // !_GAME_H_

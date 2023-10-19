@@ -25,6 +25,7 @@ CGoal::CGoal(int nPriority) : CObject(nPriority)
 	m_fWidth = CManager::FLT_ZERO;
 	m_fHeight = CManager::FLT_ZERO;
 	m_fDepth = CManager::FLT_ZERO;
+	m_bGoal = false;
 }
 
 //=================================
@@ -70,19 +71,14 @@ void CGoal::Uninit(void)
 //=================================
 void CGoal::Update(void)
 {
-	bool bPush = true;
+	m_bGoal = true;	//ÉSÅ[ÉãÇµÇƒÇÈÇ©Ç‡ÇµÇÍÇ»Ç¢ÇÃÇ≈Ç¢Ç¡ÇΩÇÒtrue
 	for (int cnt = 0; cnt < CCharacter::TYPE_MAX; cnt++)
 	{
 		if (m_aSwitch[cnt] != nullptr && m_aSwitch[cnt]->IsPush() == false)
 		{
-			bPush = false;
+			m_bGoal = false;	//ÉSÅ[ÉãÇµÇƒÇ»Ç¢ÇÌÅBfalseÇ…Ç∑ÇÈ
 			break;
 		}
-	}
-
-	if (bPush == true)
-	{
-		CManager::GetInstance()->GetDebProc()->Print("ÉSÅ[Éã\n");
 	}
 }
 

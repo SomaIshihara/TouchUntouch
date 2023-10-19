@@ -9,6 +9,8 @@
 #include "manager.h"
 
 //前方宣言
+class CObject2D;
+class CScore;
 class CFade;
 
 //タイトルクラス
@@ -34,7 +36,10 @@ public:
 private:
 	static void Load(int* pRanking);
 	static void Save(int* pRanking);
+
+	//オブジェ（いったんスコア類すべて投げっぱで）
 	CFade* m_pFade;
+	CObject2D* m_pPress;	//遷移用
 };
 
 #endif // !_RANKING_H_

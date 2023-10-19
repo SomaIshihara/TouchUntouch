@@ -4,17 +4,13 @@
 //Author:石原颯馬
 //
 //======================================================
-#include "precompile.h"
 #include "manager.h"
 #include "result.h"
-#include "game.h"
-#include "fade.h"
-#include "texture.h"
-#include "bg.h"
-#include "number.h"
+#include "timer.h"
 #include "score.h"
-#include "button2D.h"
-#include "sound.h"
+#include "fade.h"
+#include "input.h"
+#include "texture.h"
 
 //静的メンバ変数
 
@@ -24,7 +20,11 @@
 //=================================
 CResult::CResult()
 {
-	
+	m_pTimer = nullptr;
+	m_pBonus = nullptr;
+	m_pScore = nullptr;
+	m_pPress = nullptr;
+	m_pFade = nullptr;
 }
 
 //=================================
@@ -39,6 +39,40 @@ CResult::~CResult()
 //=================================
 HRESULT CResult::Init(void)
 {
+	//文字背景（投げっぱなし）
+	CObject2D* pObj = CObject2D::Create(CManager::SCREEN_CENTER, CManager::VEC3_ZERO, 570.0f, 336.0f, CObject::PRIORITY_UI);
+	pObj->SetCol(D3DXCOLOR(0.66f, 0.5f, 0.75f, 1.0f));
+	pObj->BindTexture(-1);
+
+	//時間（数字）
+	m_pTimer = CTimer::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + 130.0f, 240.0f, 0.0f), CManager::VEC3_ZERO, 32.0f, 48.0f);
+	m_pTimer->Set(0, CTimer::COUNT_DOWN);	//初期値だが、Createで変更がされる
+	m_pTimer->Stop();
+	m_pTimer->BindTexture(CTexture::PRELOAD_03_NUMBER);
+	//時間（文字）
+	pObj = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 74.0f, 240.0f, 0.0f), CManager::VEC3_ZERO, 168.0f, 48.0f, CObject::PRIORITY_UI);
+	pObj->BindTexture(CTexture::PRELOAD_04_TIMERSTR);
+
+	//ボーナス（数字）
+	m_pBonus = CScore::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + 192.0f, 288.0f, 0.0f), CManager::VEC3_ZERO, 32.0f, 48.0f);
+	m_pBonus->Set(0);
+	m_pBonus->BindTexture(CTexture::PRELOAD_03_NUMBER);
+	//ボーナス（文字）
+	pObj = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 108.0f, 288.0f, 0.0f), CManager::VEC3_ZERO, 168.0f, 48.0f, CObject::PRIORITY_UI);
+	pObj->BindTexture(CTexture::PRELOAD_06_BONUSSTR);
+
+	//最終スコア（数字）
+	m_pScore = CScore::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + 192.0f, 384.0f, 0.0f), CManager::VEC3_ZERO, 32.0f, 48.0f);
+	m_pScore->Set(0);	//初期値だが、Createで変更がされる
+	m_pScore->BindTexture(CTexture::PRELOAD_03_NUMBER);
+	//最終スコア（文字）
+	pObj = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 108.0f, 384.0f, 0.0f), CManager::VEC3_ZERO, 168.0f, 48.0f, CObject::PRIORITY_UI);
+	pObj->BindTexture(CTexture::PRELOAD_05_SCORESTR);
+
+	//遷移文字
+	m_pPress = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 480.0f, 0.0f), CManager::VEC3_ZERO, 560.0f, 48.0f, CObject::PRIORITY_UI);
+	m_pPress->BindTexture(CTexture::PRELOAD_07_SCENERANKKB);
+
 	return S_OK;
 }
 
@@ -55,7 +89,45 @@ void CResult::Uninit(void)
 //=================================
 void CResult::Update(void)
 {
-	
+	CInputKeyboard* pKeyboard = CManager::GetInstance()->GetInputKeyboard();
+	CInputGamePad* pGamePad = CManager::GetInstance()->GetInputGamePad();
+
+	if (m_pTimer->GetTime() > 0)
+	{//時間を減らしてボーナス加算
+		m_pTimer->Add(-1);
+		m_pBonus->Add(100);
+	}//↓は時間が0になったら実行
+	else if (m_pBonus->GetScore() > 0)
+	{//ボーナスから最終スコアに移動
+		m_pBonus->Add(-100);
+		m_pScore->Add(100);
+	}//下はボーナス移動完了後実行
+	else
+	{//移動しきった
+		if (pGamePad != nullptr && pGamePad->IsConnect() == true)
+		{//ゲームパッド操作
+			if (pGamePad->GetTrigger(XINPUT_GAMEPAD_A) == true && m_pFade == nullptr)
+			{
+				m_pFade = CFade::Create(CScene::MODE_RANKING);
+			}
+		}
+		else
+		{//キーボード操作
+			if (pKeyboard->GetTrigger(DIK_SPACE) == true && m_pFade == nullptr)
+			{
+				m_pFade = CFade::Create(CScene::MODE_RANKING);
+			}
+		}
+	}
+
+	if (pGamePad != nullptr && pGamePad->IsConnect() == true)
+	{//ゲームパッド文字切替
+		m_pPress->BindTexture(CTexture::PRELOAD_08_SCENERANKGP);
+	}
+	else
+	{//キーボード文字切替
+		m_pPress->BindTexture(CTexture::PRELOAD_07_SCENERANKKB);
+	}
 }
 
 //=================================
@@ -69,7 +141,7 @@ void CResult::Draw(void)
 //=================================
 //生成
 //=================================
-CResult* CResult::Create(void)
+CResult* CResult::Create(const int nTimer, const int nScore)
 {
 	CResult* pResult = nullptr;
 
@@ -81,6 +153,11 @@ CResult* CResult::Create(void)
 		//初期化
 		pResult->Init();
 
+		//データ設定
+		pResult->m_pTimer->Set(nTimer, CTimer::COUNT_DOWN);
+		pResult->m_pTimer->Stop();
+		pResult->m_pScore->Set(nScore);
+		
 		return pResult;
 	}
 	else

@@ -27,9 +27,15 @@
 #include "goal.h"
 #include "item.h"
 
+//シーン系
+#include "result.h"
+
 //UI系
 #include "timer.h"
 #include "score.h"
+
+//仮
+#include "goal.h"
 
 //静的メンバ変数
 const int CGame::CDSTART_TIME = MAX_FPS;
@@ -42,6 +48,9 @@ CGame::CGame()
 	m_pPlayer = nullptr;
 	m_pTimer = nullptr;
 	m_pScore = nullptr;
+
+	//仮
+	m_pGoal = nullptr;
 }
 
 //=================================
@@ -66,20 +75,22 @@ HRESULT CGame::Init(void)
 	//UI-------------------------------------------
 	//スコア（数字）
 	m_pScore = CScore::Create(D3DXVECTOR3(SCREEN_WIDTH + 8.0f, 32.0f, 0.0f), CManager::VEC3_ZERO, 32.0f, 48.0f);
-	m_pScore->BindTexture(3);
+	m_pScore->BindTexture(CTexture::PRELOAD_03_NUMBER);
 	CItem::SetScoreInterface(m_pScore);
 
 	//スコア（文字）
 	CObject2D* pObj2D = CObject2D::Create(D3DXVECTOR3(988.0f, 32.0f, 0.0f), CManager::VEC3_ZERO, 168.0f, 48.0f, CObject::PRIORITY_UI);
-	pObj2D->BindTexture(5);
+	pObj2D->BindTexture(CTexture::PRELOAD_05_SCORESTR);
 
 	//タイマー文字
 	pObj2D = CObject2D::Create(D3DXVECTOR3(68.0f, 32.0f, 0.0f), CManager::VEC3_ZERO, 168.0f, 48.0f, CObject::PRIORITY_UI);
-	pObj2D->BindTexture(4);
+	pObj2D->BindTexture(CTexture::PRELOAD_04_TIMERSTR);
 
 	//タイマー（数字）
 	m_pTimer = CTimer::Create(D3DXVECTOR3(264.0f, 32.0f, 0.0f), CManager::VEC3_ZERO, 32.0f, 48.0f);
-	m_pTimer->BindTexture(3);
+	m_pTimer->BindTexture(CTexture::PRELOAD_03_NUMBER);
+	m_pTimer->Set(120, CTimer::COUNT_DOWN);
+	m_pTimer->Start();
 
 	//UI-------------------------------------------
 
@@ -90,7 +101,7 @@ HRESULT CGame::Init(void)
 	CSwitch::Create(D3DXVECTOR3(-80.0f, -20.0f, 0.0f),CSwitch::TYPE_A);
 	CCharacter::Create(D3DXVECTOR3(20.0f,50.0f,0.0f),CCharacter::TYPE_A, m_pPlayer);
 	CCharacter::Create(D3DXVECTOR3(-20.0f, 50.0f, 0.0f),CCharacter::TYPE_B, m_pPlayer);
-	CGoal::Create(D3DXVECTOR3(150.0f, -20.0f, 0.0f));
+	m_pGoal = CGoal::Create(D3DXVECTOR3(150.0f, -20.0f, 0.0f));
 	CItem::Create(D3DXVECTOR3(150.0f, 50.0f, 0.0f), CManager::VEC3_ZERO);
 	return S_OK;
 }
@@ -101,7 +112,7 @@ HRESULT CGame::Init(void)
 void CGame::Uninit(void)
 {
 	CObject::ReleaseAll();
-	CManager::GetInstance()->GetSound()->Stop();
+	//CManager::GetInstance()->GetSound()->Stop();
 
 	if (m_pPlayer != nullptr)
 	{
@@ -118,9 +129,25 @@ void CGame::Update(void)
 {
 	CInputKeyboard* pKeyboard = CManager::GetInstance()->GetInputKeyboard();	//キーボード取得
 
-	if (m_pPlayer != nullptr)
-	{
-		m_pPlayer->Update();
+	//時間管理と終了判定
+	if (m_pTimer->GetTime() <= 0 || m_pGoal->IsGoal() == true)
+	{//糸冬
+		if (m_pResult == nullptr)
+		{
+			m_pTimer->Stop();
+			m_pResult = CResult::Create(m_pTimer->GetTime(),m_pScore->GetScore());
+		}
+		else
+		{
+			m_pResult->Update();
+		}
+	}
+	else
+	{//終わってない
+		if (m_pPlayer != nullptr)
+		{
+			m_pPlayer->Update();
+		}
 	}
 }
 

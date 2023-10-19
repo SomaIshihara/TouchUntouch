@@ -56,10 +56,11 @@ class CManager
 {
 public:
 	//静的const
-	static const int CManager::INT_ZERO;			//int型の0
-	static const float CManager::FLT_ZERO;		//float型の0
-	static const D3DXVECTOR2 VEC2_ZERO;				//vec2型の0
-	static const D3DXVECTOR3 CManager::VEC3_ZERO;	//vec3型の0
+	static const int INT_ZERO;				//int型の0
+	static const float FLT_ZERO;			//float型の0
+	static const D3DXVECTOR2 VEC2_ZERO;		//vec2型の0
+	static const D3DXVECTOR3 VEC3_ZERO;		//vec3型の0
+	static const D3DXVECTOR3 SCREEN_CENTER;	//画面中央
 
 	//コンストラクタ・デストラクタ
 	CManager();

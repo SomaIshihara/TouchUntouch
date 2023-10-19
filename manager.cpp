@@ -34,6 +34,7 @@ const int CManager::INT_ZERO = 0;
 const float CManager::FLT_ZERO = 0.0f;
 const D3DXVECTOR2 CManager::VEC2_ZERO = D3DXVECTOR2(0.0f, 0.0f);
 const D3DXVECTOR3 CManager::VEC3_ZERO = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+const D3DXVECTOR3 CManager::SCREEN_CENTER = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);
 
 //************************************************
 //マネージャクラス

@@ -4,16 +4,12 @@
 //Author:石原颯馬
 //
 //======================================================
-#include "precompile.h"
-#include "texture.h"
 #include "ranking.h"
-#include "camera.h"
+#include "texture.h"
 #include "input.h"
 #include "fade.h"
-#include "bg.h"
-#include "number.h"
+#include "object2D.h"
 #include "score.h"
-#include "sound.h"
 
 //静的メンバ変数
 const int CRanking::MAX_RANK = 5;
@@ -23,6 +19,8 @@ const int CRanking::MAX_RANK = 5;
 //=================================
 CRanking::CRanking()
 {
+	m_pFade = nullptr;
+	m_pPress = nullptr;
 }
 
 //=================================
@@ -37,6 +35,37 @@ CRanking::~CRanking()
 //=================================
 HRESULT CRanking::Init(void)
 {
+	//スコア値
+	int* pRankScore = new int[MAX_RANK];	//動的確保
+	Load(pRankScore);
+
+	//投げっぱオブジェ
+	CObject2D* pObj2D = nullptr;
+	CScore* pScore = nullptr;
+
+	//ランキング文字
+	pObj2D = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 108.0f, 0.0f), CManager::VEC3_ZERO, 400.0f, 96.0f, CObject::PRIORITY_UI);
+	pObj2D->BindTexture(CTexture::PRELOAD_09_RANKSTR);
+
+	//順位
+	for (int cnt = 0; cnt < MAX_RANK; cnt++)
+	{
+		//文字
+		pObj2D = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 104.0f, 240.0f + (72.0f * cnt), 0.0f), CManager::VEC3_ZERO, 104.0f, 48.0f, CObject::PRIORITY_UI);
+		pObj2D->BindTexture(CTexture::PRELOAD_10_RANK_01 + cnt);
+
+		//数字
+		pScore = CScore::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + 156.0f, 240.0f + (72.0f * cnt), 0.0f), CManager::VEC3_ZERO, 32.0f, 48.0f);
+		pScore->BindTexture(CTexture::PRELOAD_03_NUMBER);
+		pScore->Set(pRankScore[cnt]);
+	}
+
+	//戻る文字
+	m_pPress = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 636.0f, 0.0f), CManager::VEC3_ZERO, 560.0f, 48.0f, CObject::PRIORITY_UI);
+	m_pPress->BindTexture(CTexture::PRELOAD_15_SCENETITLEKB);
+
+	delete[] pRankScore;	//スコア破棄
+
 	return S_OK;
 }
 
@@ -53,7 +82,27 @@ void CRanking::Uninit(void)
 //=================================
 void CRanking::Update(void)
 {
-	
+	CInputKeyboard* pKeyboard = CManager::GetInstance()->GetInputKeyboard();
+	CInputGamePad* pGamePad = CManager::GetInstance()->GetInputGamePad();
+
+	if (pGamePad != nullptr && pGamePad->IsConnect() == true)
+	{//ゲームパッド接続
+		m_pPress->BindTexture(CTexture::PRELOAD_16_SCENETITLEGP);
+
+		if (pGamePad->GetTrigger(XINPUT_GAMEPAD_A) == true && m_pFade == nullptr)
+		{
+			m_pFade = CFade::Create(CScene::MODE_TITLE);
+		}
+	}
+	else
+	{//未接続
+		m_pPress->BindTexture(CTexture::PRELOAD_15_SCENETITLEKB);
+
+		if (pKeyboard->GetTrigger(DIK_SPACE) == true && m_pFade == nullptr)
+		{
+			m_pFade = CFade::Create(CScene::MODE_TITLE);
+		}
+	}
 }
 
 //=================================
@@ -105,7 +154,7 @@ void CRanking::Save(int* pRanking)
 	assert(("書き込みモードで開けなかったよ！奇跡だね！", pFile != nullptr));
 
 	//開けた体で進める
-	fwrite(pRanking, sizeof(long long), MAX_RANK, pFile);	//書き込み
+	fwrite(pRanking, sizeof(int), MAX_RANK, pFile);	//書き込み
 
 	fclose(pFile);	//閉じる
 }
