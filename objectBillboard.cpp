@@ -36,7 +36,7 @@ CObjectBillboard::~CObjectBillboard()
 //========================
 HRESULT CObjectBillboard::Init(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();	//デバイス取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();	//デバイス取得
 
 	//頂点バッファの生成
 	if (FAILED(pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * 4,
@@ -114,8 +114,8 @@ void CObjectBillboard::Update(void)
 //========================
 void CObjectBillboard::Draw(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();	//デバイス取得
-	CTexture* pTexture = CManager::GetTexture();						//テクスチャオブジェクト取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();	//デバイス取得
+	CTexture* pTexture = CManager::GetInstance()->GetInstance()->GetTexture();						//テクスチャオブジェクト取得
 	D3DXMATRIX mtxRot, mtxTrans;	//計算用
 	D3DXMATRIX mtxView;				//ビューマトリ取得用
 

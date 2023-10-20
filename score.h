@@ -8,13 +8,14 @@
 #define _SCORE_H_
 
 #include "object2D.h"
+#include "interface.h"
 
 #define SCORE_DIGIT	(6)	//スコアの桁数
 
 //前方宣言
 class CNumber;
 
-class CScore : public CObject
+class CScore : public CObject, public IScoreSetter
 {
 public:
 	//コンストラクタ・デストラクタ
@@ -33,11 +34,11 @@ public:
 	//取得（純粋仮想関数の関係上実装しているが、こいつにサイズやらはいらないのですべて0を返す）
 	D3DXVECTOR3 GetPos(void) { return m_pos; }
 	D3DXVECTOR3 GetRot(void) { return m_rot; }
-	float GetWidth(void) { return CManager::FLT_ZERO; }
+	/*float GetWidth(void) { return CManager::FLT_ZERO; }
 	float GetHeight(void) { return CManager::FLT_ZERO; }
-	float GetDepth(void) { return CManager::FLT_ZERO; }
-	int GetModelIdx(void) { return -1; }
-	long long GetScore(void) { return m_nScore; }
+	float GetDepth(void) { return CManager::FLT_ZERO; }*/
+	/*int GetModelIdx(void) { return -1; }*/
+	int GetScore(void) { return m_nScore; }
 
 	//設定
 	void Set(const int nScore);	//スコア設定

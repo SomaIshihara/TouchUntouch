@@ -150,7 +150,7 @@ void CRenderer::Draw(void)
 	{//成功した場合
 	 //自分が書く描画処理
 		CObject::DrawAll();
-		CManager::GetDebProc()->Draw();
+		CManager::GetInstance()->GetDebProc()->Draw();
 
 		//描画終了処理
 		m_pD3DDevice->EndScene();
@@ -165,7 +165,7 @@ void CRenderer::Draw(void)
 //=================================
 void CRenderer::SetBlendType(BLENDTYPE type)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();	//デバイス取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();	//デバイス取得
 
 	switch (type)
 	{
@@ -192,7 +192,7 @@ void CRenderer::SetBlendType(BLENDTYPE type)
 //=================================
 void CRenderer::SetZEnable(const bool bEnable)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();	//デバイス取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();	//デバイス取得
 
 	pDevice->SetRenderState(D3DRS_ZENABLE, (bEnable == true ? TRUE : FALSE));
 }
@@ -202,7 +202,7 @@ void CRenderer::SetZEnable(const bool bEnable)
 //=================================
 void CRenderer::SetEnableZTest(bool bEnable)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();	//デバイス取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();	//デバイス取得
 
 	//Zバッファの有効・無効設定
 	pDevice->SetRenderState(D3DRS_ZFUNC, (bEnable == true ? D3DCMP_LESSEQUAL : D3DCMP_ALWAYS));
@@ -214,7 +214,7 @@ void CRenderer::SetEnableZTest(bool bEnable)
 //=================================
 void CRenderer::SetEnableAlplaTest(bool bEnable)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();	//デバイス取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();	//デバイス取得
 
 	//アルファテスト有効・無効設定
 	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, (bEnable == true ? TRUE : FALSE));

@@ -27,11 +27,13 @@ public:
 	void SetCamera(void);
 
 	//à íuà⁄ìÆ
-	void SetPos(const D3DXVECTOR3 move);
+	void SetPosV(const D3DXVECTOR3 pos) { m_posV = pos; }
+	void SetPosR(const D3DXVECTOR3 pos) { m_posR = pos; }
+	void Move(const D3DXVECTOR3 move);
 	void SetRot(const D3DXVECTOR3 rot);
 
 	//ê›íË
-	void SetLength(const float fLength) { m_fLength = fLength; }
+	void SetLength(const float fLength);
 
 	//éÊìæ
 	D3DXVECTOR3 GetPosV(void) { return m_posV; }

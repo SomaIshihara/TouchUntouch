@@ -21,7 +21,6 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 //========================
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR lpCmdLine, int CmdShow)
 {
-	CManager* pManager = nullptr;
 	RECT rect = { 0,0,SCREEN_WIDTH,SCREEN_HEIGHT };	//ウィンドウの領域（書き換え不可の定数）
 
 	WNDCLASSEX wcex =
@@ -70,11 +69,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR lpCmdLine
 		nullptr								//ウィンドウ作成データ
 	);
 
-	//マネージャ生成
-	pManager = new CManager;
-
-	//マネージャ初期化
-	if (FAILED(pManager->Init(hInstance, hWnd, TRUE)))
+	if(FAILED(CManager::GetInstance()->Init(hInstance, hWnd, TRUE)))
 	{
 		return -1;
 	}
@@ -111,29 +106,23 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR lpCmdLine
 			dwCurrentTime = timeGetTime();
 			if (dwCurrentTime - dwFPSTime >= FPS_SPEED)
 			{
-				pManager->CheckFPS(dwCurrentTime, dwFPSTime);
+				CManager::GetInstance()->CheckFPS(dwCurrentTime, dwFPSTime);
 				dwFPSTime = dwCurrentTime;
 			}
 			if ((dwCurrentTime - dwExecLastTime) >= PROC_SPEED)
 			{//60分の1秒経過
 				dwExecLastTime = dwCurrentTime;
 				//更新処理
-				pManager->Update();
+				CManager::GetInstance()->Update();
 
 				//描画処理
-				pManager->Draw();
+				CManager::GetInstance()->Draw();
 			}
 		}
 	}
 
 	//マネージャ破棄
-	if (pManager != nullptr)
-	{
-		//終了
-		pManager->Uninit();
-		delete pManager;
-		pManager = nullptr;
-	}
+	CManager::Release();
 
 	//クラスの登録を解除
 	UnregisterClass(CLASS_NAME, wcex.hInstance);

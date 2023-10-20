@@ -193,7 +193,7 @@ void LoadModelViewerFile(const char *path)
 						}
 
 						//テクスチャ読み込み
-						CManager::GetTexture()->Regist(pSprit);
+						CManager::GetInstance()->GetInstance()->GetTexture()->Regist(pSprit);
 					}
 					else if (strncmp(&aCode[0], CODE_MODEL_FILENAME, sizeof CODE_MODEL_FILENAME / sizeof(char) - 1) == 0)
 					{

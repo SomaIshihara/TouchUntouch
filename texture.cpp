@@ -55,7 +55,7 @@ HRESULT CTexture::Load(const char* pPath)
 	int nPatWidth, nPatHeight;
 
 	//デバイス取得
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();
 
 	//読み込みファイル設定
 	pFile = fopen(pPath, "r");
@@ -207,7 +207,7 @@ int CTexture::Regist(const char * pPath, const int nPatWidth, const int nPatHeig
 	if (m_nNumAll < MAX_TEXTURE)
 	{//テクスチャ保存限界以内
 		//デバイス取得
-		LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
+		LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();
 
 		//テクスチャ読み込み
 		D3DXCreateTextureFromFile(pDevice, pPath,

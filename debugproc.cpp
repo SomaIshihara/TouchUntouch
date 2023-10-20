@@ -32,7 +32,7 @@ CDebugProc::~CDebugProc()
 //========================
 void CDebugProc::Init(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();	//デバイスの取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();	//デバイスの取得
 
 	//デバッグ表示用フォント生成
 	D3DXCreateFont(pDevice, 18, 0, 0, 0, FALSE,
@@ -61,7 +61,7 @@ void CDebugProc::Uninit(void)
 //========================
 void CDebugProc::Draw(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();	//デバイスの取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();	//デバイスの取得
 	RECT rect = { 0,0,SCREEN_WIDTH,SCREEN_HEIGHT };
 	
 	//テキスト描画

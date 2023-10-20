@@ -15,9 +15,10 @@
 class CModel;
 class CShadow;
 class CMotion;
+class CBoxCollider;
 
 //キャラクタークラス
-class CCharacter : public CObject
+class CCharacter : public CObject, public ICollisionReader
 {
 public:
 	//当たり判定用float3つ
@@ -50,6 +51,8 @@ public:
 
 	//取得
 	D3DXVECTOR3 GetPos(void) { return m_pos; }
+	D3DXVECTOR3 GetMove(void) { return m_move; }
+	static CCharacter** GetChara(void) { return &m_aChara[0]; }
 
 	//設定
 	void SetPos(const D3DXVECTOR3 pos) { m_pos = pos; }
@@ -57,13 +60,15 @@ public:
 	//除外（必要なし）
 	void Exclusion(void){}
 
-	//当たり判定
-	bool CollisionBlock(D3DXVECTOR3* pPos);
-	bool CollisionSwitch(D3DXVECTOR3* pPos);
+	//インターフェース実装
+	D3DXVECTOR3 GetPosOld(void) { return m_posOld; }
+	float GetWidth(void) { return m_fWidth; }
+	float GetHeight(void) { return m_fHeight; }
+	float GetDepth(void) { return m_fDepth; }
+	CObject* GetObj(void) { return this; }
 
 private:
 	void SetModel(void);
-	bool CollisionAxis(ColFloat source, const float fPosMainOld,ColFloat dest);
 
 	static CCharacter* m_aChara[TYPE_MAX];	//種類別のキャラポインタ
 
@@ -73,7 +78,9 @@ private:
 	CMotion* m_pMotion;			//モーションポインタ
 
 	D3DXVECTOR3 m_pos;			//位置
+	D3DXVECTOR3 m_posOld;		//前の位置
 	D3DXVECTOR3 m_move;			//移動量
+	float m_fJumpPower;			//ジャンプ力
 	D3DXVECTOR3 m_rot;			//向き
 	float m_fWidth, m_fHeight, m_fDepth;	//サイズ
 
@@ -82,6 +89,7 @@ private:
 
 	//CShadow* m_pShadow;			//影オブジェクトポインタ
 	TYPE m_type;				//種類
+	CBoxCollider* m_pCollider;	//当たり判定
 
 	IControllStat* m_controllInterface;	//操作状況のインターフェース
 };

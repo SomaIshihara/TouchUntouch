@@ -36,7 +36,7 @@ public:
 	static CObject2D* Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, const float fWidth, const float fHeight, const int nPriority = PRIORITY_DEFAULT);
 
 	//テクスチャ設定
-	void BindTexture(int nIdx) { m_nIdxTexture = nIdx; }
+	virtual void BindTexture(int nIdx) { m_nIdxTexture = nIdx; }
 
 	//取得
 	D3DXVECTOR3 GetPos(void) { return m_pos; }

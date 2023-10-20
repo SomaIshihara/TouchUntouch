@@ -12,15 +12,10 @@
 #include "xmodel.h"
 #include <assert.h>
 
-//マクロ
-#define PATH_LENGTH	(256)
-
 //静的メンバ変数
 CObjectX* CObjectX::m_pTop = nullptr;
 CObjectX* CObjectX::m_pCur = nullptr;
 int CObjectX::m_nNumAll = 0;
-
-using namespace std;
 
 //=================================
 //コンストラクタ（デフォルト）
@@ -46,6 +41,7 @@ CObjectX::CObjectX(int nPriority) : CObject(nPriority)
 	m_pCur = this;				//俺が最後尾
 	m_bExclusion = false;		//生きてる
 	m_pModel = nullptr;
+	m_bEnable = false;
 	m_nNumAll++;
 }
 
@@ -73,6 +69,7 @@ CObjectX::CObjectX(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, CXModel* pModel
 	m_pCur = this;				//俺が最後尾
 	m_bExclusion = false;		//生きてる
 	m_pModel = pModel;			//モデル設定
+	m_bEnable = false;
 
 	//サイズ設定
 	D3DXVECTOR3 vtxMin, vtxMax;
@@ -104,6 +101,12 @@ HRESULT CObjectX::Init(void)
 //========================
 void CObjectX::Uninit(void)
 {
+	if (m_pCollider != nullptr)
+	{
+		m_pCollider->Release();
+		m_pCollider = nullptr;
+	}
+
 	m_bExclusion = true;		//除外予定
 
 	//自分自身破棄
@@ -123,8 +126,8 @@ void CObjectX::Update(void)
 //========================
 void CObjectX::Draw(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();	//デバイス取得
-	CTexture* pTexture = CManager::GetTexture();						//テクスチャオブジェクト取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();	//デバイス取得
+	CTexture* pTexture = CManager::GetInstance()->GetTexture();						//テクスチャオブジェクト取得
 	D3DXMATRIX mtxRot, mtxTrans, mtxTexture;							//計算用
 	D3DMATERIAL9 matDef;												//現在のマテリアル保存用
 	D3DXMATERIAL *pMat;													//マテリアルデータへのポインタ
@@ -156,8 +159,17 @@ void CObjectX::Draw(void)
 
 	for (int nCntMat = 0; nCntMat < (int)m_pModel->GetNumMat(); nCntMat++)
 	{
+		//マテリアル変更
+		D3DMATERIAL9 changeMat = pMat[nCntMat].MatD3D;
+
+		if (m_bEnable == true)
+		{//色を変更する場合
+		 //メイン色変更
+			changeMat.Diffuse = m_changeColor;
+		}
+
 		//マテリアル設定
-		pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
+		pDevice->SetMaterial(&changeMat);
 
 		//テクスチャ設定
 		pDevice->SetTexture(0, pTexture->GetAddress(m_pModel->GetIdxTexture()[nCntMat]));
@@ -185,11 +197,47 @@ CObjectX* CObjectX::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, CXModel
 		//初期化
 		pObjX->Init();
 
+		//追加変数設定
+		CVariableManager* pVariableManager = CManager::GetInstance()->GetVariableManager();
+		int nVariableNum = pVariableManager->GetDefinedNum();
+		for (int cnt = 0; cnt < nVariableNum; cnt++)
+		{
+			char* pName = pVariableManager->GetDefinedVariable()[cnt]->pName;
+			pObjX->m_apVariable[cnt] = pVariableManager->Declaration(pName);
+		}
+
 		return pObjX;
 	}
 	else
 	{
 		return nullptr;
+	}
+}
+
+//========================
+//モデル設定とサイズ計測
+//========================
+void CObjectX::SetModel(CXModel * pModel)
+{
+	m_pModel = pModel;
+
+	D3DXVECTOR3 vtxMin, vtxMax;
+	m_pModel->GetCollision().GetVtx(&vtxMin, &vtxMax);
+	m_fWidth = vtxMax.x - vtxMin.x;
+	m_fHeight = vtxMax.y - vtxMin.y;
+	m_fDepth = vtxMax.z - vtxMin.z;
+}
+
+//========================
+//色変更設定
+//========================
+void CObjectX::SetColor(const bool bEnable, const D3DXCOLOR col)
+{
+	m_bEnable = bEnable;
+
+	if (bEnable == true)
+	{
+		m_changeColor = col;
 	}
 }
 
@@ -210,85 +258,6 @@ void CObjectX::Delete(CXModel* pTarget)
 		}
 
 		pObject = pObjectNext;	//次を入れる
-	}
-}
-
-//========================
-//データ読み込み
-//========================
-CObjectX::LOADRESULT CObjectX::LoadData(const char * pPath)
-{
-	FILE* pFile;
-	BINCODE code;
-	bool bRead = false;
-	char** ppFilePath = nullptr;
-	int nReadedModel = 0;
-
-	pFile = fopen(pPath, "rb");
-
-	if (pFile != nullptr)
-	{//開けた
-		while (1)
-		{
-			fread(&code, sizeof(BINCODE), 1, pFile);
-
-			//文字列チェック
-			if (code == BIN_CODE_SCRIPT)
-			{//読み取り開始
-				bRead = true;
-			}
-			else if (code == BIN_CODE_END_SCRIPT)
-			{//読み取り終了
-				bRead = false;
-				break;
-			}
-			else if (bRead == true)
-			{//読み取り
-				if (code == BIN_CODE_TEXTURE_FILENAME)
-				{
-					char aPath[PATH_LENGTH];
-					fread(&aPath[0], sizeof(char), PATH_LENGTH, pFile);
-					CManager::GetTexture()->Load(&aPath[0]);
-				}
-				else if (code == BIN_CODE_MODEL_NUM)
-				{
-					int nNumAll;
-					fread(&nNumAll, sizeof(int), 1, pFile);
-					ppFilePath = new char*[nNumAll];
-				}
-				else if (code == BIN_CODE_MODEL_FILENAME)
-				{
-					char aPath[PATH_LENGTH];
-					fread(&aPath[0], sizeof(char), PATH_LENGTH, pFile);
-					CXModel::Load(&aPath[0]);
-
-					//モデルパス読み取り（引き出し用に使う）
-					ppFilePath[nReadedModel] = new char[strlen(&aPath[0]) + 1];
-					strcpy(ppFilePath[nReadedModel], &aPath[0]);
-					nReadedModel++;
-				}
-				else if (code == BIN_CODE_MODELSET)
-				{
-					D3DXVECTOR3 pos, rot;
-					int nModelNum = -1;
-					CXModel* pModel = nullptr;
-					fread(&pos, sizeof(D3DXVECTOR3), 1, pFile);
-					fread(&rot, sizeof(D3DXVECTOR3), 1, pFile);
-					fread(&nModelNum, sizeof(int), 1, pFile);
-					pModel = CXModel::Load(ppFilePath[nModelNum]);
-
-					//生成
-					CObjectX::Create(pos, rot, pModel);
-				}
-			}
-		}
-
-		fclose(pFile);
-		return RES_OK;
-	}
-	else
-	{//開けなかった（ファイルないんじゃね？）
-		return RES_ERR_FILE_NOTFOUND;
 	}
 }
 

@@ -341,8 +341,8 @@ void CInputMouse::Update(void)
 //=================================
 D3DXVECTOR3 CInputMouse::ConvertClickPosToWorld(float fZ)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();	//デバイスの取得
-	CCamera* pCamera = CManager::GetCamera();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();	//デバイスの取得
+	CCamera* pCamera = CManager::GetInstance()->CManager::GetInstance()->GetCamera();
 
 	D3DXMATRIX mtxView, mtxProj;
 	D3DXMATRIX mtxViewPort;
@@ -393,6 +393,7 @@ CInputGamePad::CInputGamePad()
 	m_gamePad.wVibrPower = CManager::INT_ZERO;
 	m_gamePad.nVibrTime = CManager::INT_ZERO;
 	m_gamePad.Vibr_State = VIBE_STATE_00_STOP;
+	m_bConnect = false;
 }
 
 //========================
@@ -447,33 +448,36 @@ void CInputGamePad::Update(void)
 	XINPUT_STATE xInputState;
 
 	//ゲームパッドから情報取得
-	for (int nCntGPad = 0; nCntGPad < MAX_USE_GAMEPAD; nCntGPad++)
+	if (XInputGetState(m_nID, &xInputState) == ERROR_SUCCESS)
 	{
-		if (XInputGetState(nCntGPad, &xInputState) == ERROR_SUCCESS)
+		//ボタントリガー情報取得
+		m_gamePad.trigger = (m_gamePad.state.Gamepad.wButtons ^ xInputState.Gamepad.wButtons) & xInputState.Gamepad.wButtons;
+
+		//ボタンリリース情報取得
+		m_gamePad.release = (m_gamePad.state.Gamepad.wButtons ^ xInputState.Gamepad.wButtons) & ~xInputState.Gamepad.wButtons;
+
+		//リピート情報生成
+		m_gamePad.repeateTime.currentTime = timeGetTime();
+		for (int nCntKey = 0; nCntKey < BUTTON_NUM; nCntKey++)
 		{
-			//ボタントリガー情報取得
-			m_gamePad.trigger = (m_gamePad.state.Gamepad.wButtons ^ xInputState.Gamepad.wButtons) & xInputState.Gamepad.wButtons;
-
-			//ボタンリリース情報取得
-			m_gamePad.release = (m_gamePad.state.Gamepad.wButtons ^ xInputState.Gamepad.wButtons) & ~xInputState.Gamepad.wButtons;
-
-			//リピート情報生成
-			m_gamePad.repeateTime.currentTime = timeGetTime();
-			for (int nCntKey = 0; nCntKey < BUTTON_NUM; nCntKey++)
+			if (m_gamePad.state.Gamepad.wButtons & 1 << nCntKey && (m_gamePad.repeateTime.currentTime - m_gamePad.repeateTime.execLastTime) > REPEATE_TIME)
 			{
-				if (m_gamePad.state.Gamepad.wButtons & 1 << nCntKey && (m_gamePad.repeateTime.currentTime - m_gamePad.repeateTime.execLastTime) > REPEATE_TIME)
-				{
-					m_gamePad.repeateTime.execLastTime = m_gamePad.repeateTime.currentTime;
-					m_gamePad.repeate += 1 << nCntKey;
-				}
+				m_gamePad.repeateTime.execLastTime = m_gamePad.repeateTime.currentTime;
+				m_gamePad.repeate += 1 << nCntKey;
 			}
-
-			//プレス情報その他もろもろ設定
-			m_gamePad.state = xInputState;
-
-			//コントローラーの振動状態更新
-			UpdateVibration();
 		}
+
+		//プレス情報その他もろもろ設定
+		m_gamePad.state = xInputState;
+
+		//コントローラーの振動状態更新
+		UpdateVibration();
+
+		m_bConnect = true;
+	}
+	else
+	{//つながってない？
+		m_bConnect = false;
 	}
 }
 

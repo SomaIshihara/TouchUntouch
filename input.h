@@ -200,11 +200,13 @@ public:
 	SHORT GetLStickY(void) { return AdjustStick(m_gamePad.state.Gamepad.sThumbLY); }
 	SHORT GetRStickX(void) { return AdjustStick(m_gamePad.state.Gamepad.sThumbRX); }
 	SHORT GetRStickY(void) { return AdjustStick(m_gamePad.state.Gamepad.sThumbRY); }
+	bool IsConnect(void) { return m_bConnect; }
 private:
 	SHORT AdjustStick(SHORT stick);
 	static int m_nNumAll;//ゲームパッド数
 	GamePad m_gamePad;	//ゲームパッドすべて
 	int m_nID;			//ゲームパッドID
+	bool m_bConnect;	//接続されているか
 };
 
 #endif // !_INPUT_H_

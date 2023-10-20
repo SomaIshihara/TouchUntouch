@@ -10,6 +10,13 @@
 
 //前方宣言
 class CPlayer;
+class CScore;
+class CTimer;
+class CResult;
+class CSwitchManager;
+
+//仮
+class CGoal;
 
 //タイトルクラス
 class CGame : public CScene
@@ -30,6 +37,10 @@ public:
 
 private:
 	CPlayer* m_pPlayer;	//プレイヤーポインタ
+	CScore* m_pScore;	//スコアポインタ
+	CTimer* m_pTimer;	//タイマーポインタ
+	CResult* m_pResult;	//リザルトポインタ
+	CSwitchManager* m_pSwitchManager;	//スイッチマネ
 };
 
 #endif // !_GAME_H_

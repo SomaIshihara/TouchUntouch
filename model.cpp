@@ -79,8 +79,8 @@ void CModel::Update(void)
 //========================
 void CModel::Draw(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();	//デバイス取得
-	CTexture* pTexture = CManager::GetTexture();						//テクスチャオブジェクト取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();	//デバイス取得
+	CTexture* pTexture = CManager::GetInstance()->GetInstance()->GetTexture();						//テクスチャオブジェクト取得
 	D3DXMATRIX mtxRot, mtxTrans, mtxTexture;							//計算用
 	D3DXMATRIX mtxParent;												//親のマトリ
 	D3DMATERIAL9 matDef;												//現在のマテリアル保存用
@@ -167,8 +167,8 @@ CModel* CModel::Create(const char * pPath, const D3DXVECTOR3 posOffset, const D3
 //========================
 HRESULT CModel::Load(const char* pPath)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();	//デバイス取得
-	CTexture* pTexture = CManager::GetTexture();						//テクスチャオブジェクト取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();	//デバイス取得
+	CTexture* pTexture = CManager::GetInstance()->GetInstance()->GetTexture();						//テクスチャオブジェクト取得
 	m_pIdxtexture = nullptr;											//テクスチャ番号ポインタをnullptrにする
 
 	if (SUCCEEDED(D3DXLoadMeshFromX(

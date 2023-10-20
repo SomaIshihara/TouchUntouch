@@ -11,12 +11,14 @@
 //前方宣言
 class CInputKeyboard;
 class CInputMouse;
+class CInputGamePad;
 class CRenderer;
 class CDebugProc;
 class CSound;
 class CCamera;
 class CLight;
 class CTexture;
+class CVariableManager;
 
 //シーンクラス
 class CScene
@@ -55,10 +57,11 @@ class CManager
 {
 public:
 	//静的const
-	static const int CManager::INT_ZERO;			//int型の0
-	static const float CManager::FLT_ZERO;		//float型の0
-	static const D3DXVECTOR2 VEC2_ZERO;				//vec2型の0
-	static const D3DXVECTOR3 CManager::VEC3_ZERO;	//vec3型の0
+	static const int INT_ZERO;				//int型の0
+	static const float FLT_ZERO;			//float型の0
+	static const D3DXVECTOR2 VEC2_ZERO;		//vec2型の0
+	static const D3DXVECTOR3 VEC3_ZERO;		//vec3型の0
+	static const D3DXVECTOR3 SCREEN_CENTER;	//画面中央
 
 	//コンストラクタ・デストラクタ
 	CManager();
@@ -74,39 +77,42 @@ public:
 	void CheckFPS(DWORD dwCurrentTime, DWORD dwExecLastTime);
 
 	//取得
-	static CInputKeyboard* GetInputKeyboard(void) { return m_pInputKeyboard; }
-	static CInputMouse* GetInputMouse(void) { return m_pInputMouse; }
-	static CSound* GetSound(void) { return m_pSound; }
-	static CRenderer* GetRenderer(void) { return m_pRenderer; }
-	static CDebugProc* GetDebProc(void) { return m_pDebProc; }
-	static CCamera* GetCamera(void) { return m_pCamera; }
-	static CLight* GetLight(void) { return m_pLight; }
-	static CTexture* GetTexture(void) { return m_pTexture; }
-	static bool GetPause(void) { return m_bPause; }
+	static CManager* GetInstance(void);
+	CInputKeyboard* GetInputKeyboard(void) { return m_pInputKeyboard; }
+	CInputMouse* GetInputMouse(void) { return m_pInputMouse; }
+	CInputGamePad* GetInputGamePad(void) { return m_pInputPad; }
+	CSound* GetSound(void) { return m_pSound; }
+	CRenderer* GetRenderer(void) { return m_pRenderer; }
+	CDebugProc* GetDebProc(void) { return m_pDebProc; }
+	CCamera* GetCamera(void) { return m_pCamera; }
+	CLight* GetLight(void) { return m_pLight; }
+	CTexture* GetTexture(void) { return m_pTexture; }
+	CVariableManager* GetVariableManager(void) { return m_pVariableManager; }
+
+	//破棄
+	static HRESULT Release(void);
 
 	//シーン系
-	static void SetMode(CScene::MODE mode);
-	static CScene::MODE GetMode(void) { return m_pScene->GetMode(); }
-	static CScene* GetScene(void) { return m_pScene; }
-
-	//設定
-	static void SetPause(const bool bFrag) { m_bPause = bFrag; }
+	void SetMode(CScene::MODE mode);
+	CScene::MODE GetMode(void) { return m_pScene->GetMode(); }
+	CScene* GetScene(void) { return m_pScene; }
 
 private:
 	//変数
-	static CInputKeyboard* m_pInputKeyboard;	//キーボード
-	static CInputMouse* m_pInputMouse;			//マウス
-	static CSound* m_pSound;					//サウンド
-	static CRenderer* m_pRenderer;				//レンダラー
-	static CDebugProc* m_pDebProc;				//デバッグ
-	static CCamera* m_pCamera;					//カメラ
-	static CLight* m_pLight;					//ライト
-	static CTexture* m_pTexture;				//テクスチャ
-	static int m_nFPS;							//FPS
-	static DWORD m_dwFrameCount;				//回したフレーム数
-	static CScene* m_pScene;	//シーン
-
-	static bool m_bPause;		//ポーズ状態
+	static CManager* m_pManager;			//マネージャ（シングルトン）
+	CInputKeyboard* m_pInputKeyboard;		//キーボード
+	CInputMouse* m_pInputMouse;				//マウス
+	CInputGamePad* m_pInputPad;				//ゲームパッド
+	CSound* m_pSound;						//サウンド
+	CRenderer* m_pRenderer;					//レンダラー
+	CDebugProc* m_pDebProc;					//デバッグ
+	CCamera* m_pCamera;						//カメラ
+	CLight* m_pLight;						//ライト
+	CTexture* m_pTexture;					//テクスチャ
+	CVariableManager* m_pVariableManager;	//追加変数マネ
+	int m_nFPS;								//FPS
+	DWORD m_dwFrameCount;					//回したフレーム数
+	CScene* m_pScene;						//シーン
 };
 
 #endif

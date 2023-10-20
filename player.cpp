@@ -45,29 +45,37 @@ void CPlayer::Uninit(void)
 //=================================
 void CPlayer::Update(void)
 {
-	CInputKeyboard* pKeyboard = CManager::GetInputKeyboard();	//キーボード取得
-	
-	//移動
-	if (pKeyboard->GetPress(DIK_A) == true)
-	{//Aキーが押されている
-		m_nPressMove = DIK_A;
-	}
-	else if (pKeyboard->GetPress(DIK_D) == true)
-	{//Dキーが押されている
-		m_nPressMove = DIK_D;
+	if (m_bControlled == true)
+	{//操作可能
+		CInputKeyboard* pKeyboard = CManager::GetInstance()->GetInputKeyboard();	//キーボード取得
+
+		//移動
+		if (pKeyboard->GetPress(DIK_A) == true)
+		{//Aキーが押されている
+			m_nPressMove = DIK_A;
+		}
+		else if (pKeyboard->GetPress(DIK_D) == true)
+		{//Dキーが押されている
+			m_nPressMove = DIK_D;
+		}
+		else
+		{//何も押されていない
+			m_nPressMove = 0;
+		}
+
+		//ジャンプ
+		m_bPressJump = (pKeyboard->GetTrigger(DIK_SPACE) == true) ? true : false;
+
+		//キャラ切替
+		if (pKeyboard->GetTrigger(DIK_S) == true)
+		{
+			m_controllType = (m_controllType == CCharacter::TYPE_A) ? CCharacter::TYPE_B : CCharacter::TYPE_A;
+		}
 	}
 	else
-	{//何も押されていない
+	{//不可能
 		m_nPressMove = 0;
-	}
-
-	//ジャンプ
-	m_bPressJump = (pKeyboard->GetTrigger(DIK_SPACE) == true) ? true : false;
-
-	//キャラ切替
-	if (pKeyboard->GetTrigger(DIK_S) == true)
-	{
-		m_controllType = (m_controllType == CCharacter::TYPE_A) ? CCharacter::TYPE_B : CCharacter::TYPE_A;
+		m_bPressJump = false;
 	}
 }
 
@@ -76,8 +84,8 @@ void CPlayer::Update(void)
 //=================================
 void CPlayer::Move(void)
 {
-	CInputKeyboard* pKeyboard = CManager::GetInputKeyboard();	//キーボード取得
-	CCamera* pCamera = CManager::GetCamera();					//カメラ取得
+	CInputKeyboard* pKeyboard = CManager::GetInstance()->GetInputKeyboard();	//キーボード取得
+	CCamera* pCamera = CManager::GetInstance()->CManager::GetInstance()->GetCamera();					//カメラ取得
 	D3DXVECTOR3 move = CManager::VEC3_ZERO;
 	D3DXVECTOR3 rot = pCamera->GetRot();
 	//移動

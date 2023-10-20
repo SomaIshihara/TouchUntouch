@@ -119,7 +119,7 @@ void CNumber::SetNumber(const int nSource, const int nDigit)
 	nNumber = nSource % (int)pow(10, nDigit + 1) / (int)pow(10, nDigit);
 
 	//パターン幅高さ取得
-	CTexture* pTexture = CManager::GetTexture();
+	CTexture* pTexture = CManager::GetInstance()->GetInstance()->GetTexture();
 	int nIdx = GetIdxTexture();	//テクスチャ番号取得
 	int nPatWidth = pTexture->GetPatWidth(nIdx);
 	int nPatHeight = pTexture->GetPatHeight(nIdx);
@@ -130,6 +130,32 @@ void CNumber::SetNumber(const int nSource, const int nDigit)
 		(float)(nNumber / nPatWidth) / nPatHeight);
 	tex3 = D3DXVECTOR2((float)(nNumber % nPatWidth + 1) / nPatWidth,
 		(float)(nNumber / nPatWidth + 1) / nPatHeight);
+
+	if (FAILED(SetTex(tex0, tex3)))
+	{
+		assert(false);
+	}
+}
+
+//=================================
+//テクスチャ設定
+//=================================
+void CNumber::BindTexture(int nIdx)
+{
+	//テクスチャ設定
+	CObject2D::BindTexture(nIdx);
+
+	//パターン幅高さ取得
+	CTexture* pTexture = CManager::GetInstance()->GetInstance()->GetTexture();
+	int nPatWidth = pTexture->GetPatWidth(nIdx);
+	int nPatHeight = pTexture->GetPatHeight(nIdx);
+
+	//テクスチャ設定
+	D3DXVECTOR2 tex0, tex3;
+	tex0 = D3DXVECTOR2((float)(0 % nPatWidth) / nPatWidth,
+		(float)(0 / nPatWidth) / nPatHeight);
+	tex3 = D3DXVECTOR2((float)(0 % nPatWidth + 1) / nPatWidth,
+		(float)(0 / nPatWidth + 1) / nPatHeight);
 
 	if (FAILED(SetTex(tex0, tex3)))
 	{

@@ -37,7 +37,7 @@ CMeshSky::~CMeshSky()
 //=================================
 HRESULT CMeshSky::Init(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();	//デバイスの取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();	//デバイスの取得
 
 	//頂点バッファの生成
 	pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * ((m_nBlockVertical) * (m_nBlockHorizontal + 1) + 2),
@@ -204,8 +204,8 @@ void CMeshSky::Update(void)
 //=================================
 void CMeshSky::Draw(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();	//デバイスの取得
-	CTexture* pTexture = CManager::GetTexture();						//テクスチャオブジェクト取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();	//デバイスの取得
+	CTexture* pTexture = CManager::GetInstance()->GetInstance()->GetTexture();						//テクスチャオブジェクト取得
 	D3DXMATRIX mtxRot, mtxTrans;	//計算用
 
 	//ワールドマトリックス初期化
@@ -282,7 +282,7 @@ CMeshSky* CMeshSky::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, const f
 		pMeshField->m_nBlockVertical = nBlockWidth;
 		pMeshField->m_nBlockHorizontal = nBlockDepth;
 
-		pMeshField->BindTexture(CManager::GetTexture()->Regist("data\\TEXTURE\\sky000.png"));
+		pMeshField->BindTexture(CManager::GetInstance()->GetInstance()->GetTexture()->Regist("data\\TEXTURE\\sky000.png"));
 
 		return pMeshField;
 	}

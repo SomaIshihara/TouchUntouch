@@ -34,7 +34,7 @@ HRESULT CShadow::Init(void)
 	CObject3D::Init();
 
 	//仮：テクスチャ読み込み
-	CTexture* pTexture = CManager::GetTexture();
+	CTexture* pTexture = CManager::GetInstance()->GetInstance()->GetTexture();
 	m_nIdxTexture = pTexture->Regist("data\\TEXTURE\\effect000.jpg");
 
 	//できた
@@ -65,13 +65,13 @@ void CShadow::Update(void)
 void CShadow::Draw(void)
 {
 	//ブレンディング種類を加算合成に変更
-	CManager::GetRenderer()->SetBlendType(CRenderer::BLENDTYPE_SUB);
+	CManager::GetInstance()->GetRenderer()->SetBlendType(CRenderer::BLENDTYPE_SUB);
 
 	//親処理
 	CObject3D::Draw();
 
 	//ブレンディング種類を通常状態に戻す
-	CManager::GetRenderer()->SetBlendType(CRenderer::BLENDTYPE_NORMAL);
+	CManager::GetInstance()->GetRenderer()->SetBlendType(CRenderer::BLENDTYPE_NORMAL);
 }
 
 //========================

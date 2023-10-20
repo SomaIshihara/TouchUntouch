@@ -51,8 +51,6 @@ void CFade::Uninit(void)
 //========================
 void CFade::Update(void)
 {
-	VERTEX_2D *pVtx;					//設定用ポインタ
-
 	if (m_fade != FADE_NONE)
 	{
 		if (m_fade == FADE_IN)
@@ -71,7 +69,7 @@ void CFade::Update(void)
 			{
 				m_fAlpha = 1.0f;
 				m_fade = FADE_IN;
-				CManager::SetMode(m_modeNext);
+				CManager::GetInstance()->SetMode(m_modeNext);
 			}
 		}
 	}

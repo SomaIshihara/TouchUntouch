@@ -8,8 +8,9 @@
 #define _RESULT_H_
 
 //前方宣言
-class CBG;
-class CButton2D;
+class CTimer;
+class CScore;
+class CObject2D;
 class CFade;
 
 //リザルトクラス
@@ -27,10 +28,14 @@ public:
 	void Draw(void);
 
 	//生成
-	static CResult* Create(void);
+	static CResult* Create(const int nTimer, const int nScore);
 
 private:
-
+	CTimer* m_pTimer;	//リザルト用タイマー
+	CScore* m_pBonus;	//ボーナス用スコア（文字は投げっぱなし）
+	CScore* m_pScore;	//最終スコア用スコア（文字は投げっぱなし）
+	CObject2D* m_pPress;//遷移文字用オブジェ（接続で切替）
+	CFade* m_pFade;		//フェードオブジェクト
 };
 
 #endif // !_RESULT_H_

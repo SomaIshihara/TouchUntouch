@@ -40,7 +40,7 @@ HRESULT CEffect2D::Init(void)
 	}
 
 	//テクスチャ読み込み
-	CTexture* pTexture = CManager::GetTexture();
+	CTexture* pTexture = CManager::GetInstance()->GetInstance()->GetTexture();
 	m_nIdxTexture = pTexture->Regist("data\\TEXTURE\\effect000.jpg");
 
 	return S_OK;
@@ -87,25 +87,25 @@ void CEffect2D::Update(void)
 void CEffect2D::Draw(void)
 {
 	//Zテスト無効化
-	CManager::GetRenderer()->SetEnableZTest(false);
+	CManager::GetInstance()->GetRenderer()->SetEnableZTest(false);
 
 	//アルファテスト有効化
-	CManager::GetRenderer()->SetEnableAlplaTest(true);
+	CManager::GetInstance()->GetRenderer()->SetEnableAlplaTest(true);
 
 	//ブレンディング種類を加算合成に変更
-	CManager::GetRenderer()->SetBlendType(CRenderer::BLENDTYPE_ADD);
+	CManager::GetInstance()->GetRenderer()->SetBlendType(CRenderer::BLENDTYPE_ADD);
 
 	//親クラス処理
 	CObject2D::Draw();
 
 	//ブレンディング種類を通常状態に戻す
-	CManager::GetRenderer()->SetBlendType(CRenderer::BLENDTYPE_NORMAL);
+	CManager::GetInstance()->GetRenderer()->SetBlendType(CRenderer::BLENDTYPE_NORMAL);
 
 	//アルファテスト無効化
-	CManager::GetRenderer()->SetEnableAlplaTest(false);
+	CManager::GetInstance()->GetRenderer()->SetEnableAlplaTest(false);
 
 	//Zテスト無効化
-	CManager::GetRenderer()->SetEnableZTest(true);
+	CManager::GetInstance()->GetRenderer()->SetEnableZTest(true);
 }
 
 //=================================

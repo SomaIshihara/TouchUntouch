@@ -172,6 +172,7 @@
     <ClCompile Include="game.cpp" />
     <ClCompile Include="goal.cpp" />
     <ClCompile Include="input.cpp" />
+    <ClCompile Include="item.cpp" />
     <ClCompile Include="light.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manager.cpp" />
@@ -185,6 +186,7 @@
     <ClCompile Include="object3D.cpp" />
     <ClCompile Include="objectBillboard.cpp" />
     <ClCompile Include="objectX.cpp" />
+    <ClCompile Include="objloader.cpp" />
     <ClCompile Include="particle2D.cpp" />
     <ClCompile Include="particleBillboard.cpp" />
     <ClCompile Include="pause.cpp" />
@@ -201,9 +203,11 @@
     <ClCompile Include="shadow.cpp" />
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="switch.cpp" />
+    <ClCompile Include="switchmanager.cpp" />
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="timer.cpp" />
     <ClCompile Include="title.cpp" />
+    <ClCompile Include="userdef.cpp" />
     <ClCompile Include="xmodel.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -224,6 +228,7 @@
     <ClInclude Include="goal.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="interface.h" />
+    <ClInclude Include="item.h" />
     <ClInclude Include="light.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="manager.h" />
@@ -237,6 +242,7 @@
     <ClInclude Include="object3D.h" />
     <ClInclude Include="objectBillboard.h" />
     <ClInclude Include="objectX.h" />
+    <ClInclude Include="objloader.h" />
     <ClInclude Include="particle2D.h" />
     <ClInclude Include="particleBillboard.h" />
     <ClInclude Include="pause.h" />
@@ -249,9 +255,11 @@
     <ClInclude Include="shadow.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="switch.h" />
+    <ClInclude Include="switchmanager.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="timer.h" />
     <ClInclude Include="title.h" />
+    <ClInclude Include="userdef.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="xmodel.h" />
   </ItemGroup>
