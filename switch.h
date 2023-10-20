@@ -53,6 +53,7 @@ public:
 	CObjectX* GetBase(void) { return m_pObjBase; }
 	CObjectX* GetMove(void) { return m_pObjMove; }
 	bool IsPush(void) { return m_bPush; }
+	TYPE GetType(void) { return m_type; }
 
 	//ê›íË
 	void SetPos(const D3DXVECTOR3 pos) { m_pos = pos; }

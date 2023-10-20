@@ -13,6 +13,7 @@
 
 //前方宣言
 class CBoxCollider;
+class CSwitchManager;
 
 //ブロッククラス
 class CBlock3D : public CObjectX
@@ -49,6 +50,9 @@ public:
 	static CBlock3D* GetTop(void) { return m_pTop; }
 	CBlock3D* GetNext(void) { return m_pNext; }
 
+	//設定
+	static void SetSwitchManager(CSwitchManager* pManager) { m_pSwitchManager = pManager; }
+
 private:
 	//リスト
 	static CBlock3D* m_pTop;	//リストの最初
@@ -61,6 +65,7 @@ private:
 
 	//パラメータ
 	TYPE m_type;	//ブロック種類
+	static CSwitchManager* m_pSwitchManager;
 };
 
 #endif // !_BLOCK_3D_H_

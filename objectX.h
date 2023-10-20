@@ -54,6 +54,7 @@ public:
 	void SetRot(const D3DXVECTOR3 rot) { m_rot = rot; }
 	void SetModel(CXModel* pModel);
 	void SetCollider(void) { m_pCollider = CBoxCollider::Create(this); }
+	void SetColor(const bool bEnable, const D3DXCOLOR col = D3DXCOLOR(0xffffffff));
 
 	//使用モデル単位で消す
 	static void Delete(CXModel* pTarget);
@@ -63,8 +64,10 @@ public:
 
 private:
 	//モデル
-	D3DXMATRIX mtxWorld;	//ワールドマトリ
-	CXModel* m_pModel;		//モデル
+	D3DXMATRIX mtxWorld;		//ワールドマトリ
+	CXModel* m_pModel;			//モデル
+	D3DXCOLOR m_changeColor;	//変更した色
+	bool m_bEnable;				//色変更有効無効
 
 	//位置類
 	D3DXVECTOR3 m_pos;	//位置

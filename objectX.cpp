@@ -41,6 +41,7 @@ CObjectX::CObjectX(int nPriority) : CObject(nPriority)
 	m_pCur = this;				//俺が最後尾
 	m_bExclusion = false;		//生きてる
 	m_pModel = nullptr;
+	m_bEnable = false;
 	m_nNumAll++;
 }
 
@@ -68,6 +69,7 @@ CObjectX::CObjectX(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, CXModel* pModel
 	m_pCur = this;				//俺が最後尾
 	m_bExclusion = false;		//生きてる
 	m_pModel = pModel;			//モデル設定
+	m_bEnable = false;
 
 	//サイズ設定
 	D3DXVECTOR3 vtxMin, vtxMax;
@@ -157,8 +159,17 @@ void CObjectX::Draw(void)
 
 	for (int nCntMat = 0; nCntMat < (int)m_pModel->GetNumMat(); nCntMat++)
 	{
+		//マテリアル変更
+		D3DMATERIAL9 changeMat = pMat[nCntMat].MatD3D;
+
+		if (m_bEnable == true)
+		{//色を変更する場合
+		 //メイン色変更
+			changeMat.Diffuse = m_changeColor;
+		}
+
 		//マテリアル設定
-		pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
+		pDevice->SetMaterial(&changeMat);
 
 		//テクスチャ設定
 		pDevice->SetTexture(0, pTexture->GetAddress(m_pModel->GetIdxTexture()[nCntMat]));
@@ -215,6 +226,19 @@ void CObjectX::SetModel(CXModel * pModel)
 	m_fWidth = vtxMax.x - vtxMin.x;
 	m_fHeight = vtxMax.y - vtxMin.y;
 	m_fDepth = vtxMax.z - vtxMin.z;
+}
+
+//========================
+//色変更設定
+//========================
+void CObjectX::SetColor(const bool bEnable, const D3DXCOLOR col)
+{
+	m_bEnable = bEnable;
+
+	if (bEnable == true)
+	{
+		m_changeColor = col;
+	}
 }
 
 //========================

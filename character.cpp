@@ -164,6 +164,8 @@ void CCharacter::Update(void)
 	if (m_pCollider->GetResult().bHit[1] == true)
 	{
 		m_bJump = false;
+		m_nCounterJumpTime = 0;
+		m_fJumpPower = 0.0f;
 	}
 	
 	//ジャンプ
@@ -263,6 +265,20 @@ CCharacter* CCharacter::Create(const D3DXVECTOR3 pos, const TYPE type, IControll
 
 			//初期化
 			pChara->Init();
+
+			//当たり判定タグ設定
+			if (type == TYPE_A)
+			{
+				pChara->m_pCollider->SetTag(CBoxCollider::TAG_TYPE_A);
+			}
+			else if (type == TYPE_B)
+			{
+				pChara->m_pCollider->SetTag(CBoxCollider::TAG_TYPE_B);
+			}
+			else
+			{
+				assert(false);
+			}
 
 			//いるよ
 			m_aChara[type] = pChara;

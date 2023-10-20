@@ -1,28 +1,24 @@
 //======================================================
 //
-//一般人マネージャのヘッダ[normanager.h]
+//スイッチマネージャのヘッダ[switchmanager.h]
 //Author:石原颯馬
 //
 //======================================================
-#ifndef _NORMANAGER_H_
-#define _NORMANAGER_H_
-#include "main.h"
-#include "object.h"
-#include "manager.h"
+#ifndef _SWITCHMANAGER_H_
+#define _SWITCHMANAGER_H_
 
-class CNorManager : public CObject
+#include "object.h"
+#include "switch.h"
+
+class CSwitchManager : public CObject
 {
 public:
-	//静的const
-	static const int RESEARCH_NUM;				//検索回数
-	static const float NOBUILDING_TIME_PERCE;	//再探索の時間の割合
-
 	//コンストラクタ・デストラクタ
-	CNorManager(int nPriority = PRIORITY_DEFAULT);
-	~CNorManager();
+	CSwitchManager(int nPriority = PRIORITY_04);
+	~CSwitchManager();
 
 	//生成
-	static CNorManager* Create(void);
+	static CSwitchManager* Create(void);
 
 	//基本処理
 	HRESULT Init(void);
@@ -30,21 +26,17 @@ public:
 	void Update(void);
 	void Draw(void);
 
-	//取得（特になんも返す必要がない）
-	D3DXVECTOR3 GetPos(void) { return CManager::VEC3_ZERO; }
-	D3DXVECTOR3 GetRot(void) { return CManager::VEC3_ZERO; }
-	float GetWidth(void) { return CManager::FLOAT_ZERO; }
-	float GetHeight(void) { return CManager::FLOAT_ZERO; }
-	float GetDepth(void) { return CManager::FLOAT_ZERO; }
+	//取得
+	bool* IsPush(void) { return &m_aPush[0]; }
 
-	//設定
-	void SetNum(const int maxNum) { m_maxPicto = maxNum; }
-	void SetTime(const int time) { m_spawnTime = time; }
+	//リセット
+	void Reset(void);
+
+	//除外（必要なし）
+	void Exclusion(void){}
 
 private:
-	int m_maxPicto;		//一般人の上限
-	int m_spawnTime;	//沸かすのにかかる時間
-	int m_counter;		//沸きカウンター
+	bool m_aPush[CSwitch::TYPE_MAX];
 };
 
-#endif // !_NORMANAGER_H_
+#endif // !_SWITCHMANAGER_H_

@@ -12,6 +12,12 @@
 //静的メンバ変数
 CBoxCollider* CBoxCollider::m_pTop;	//先頭オブジェクト
 CBoxCollider* CBoxCollider::m_pCur;	//最後尾オブジェクト
+bool CBoxCollider::m_aTagColl[CBoxCollider::TAG_MAX][CBoxCollider::TAG_MAX] =
+{//  Univ   A    B
+	{true,true,true},	//Univ
+	{true,true,false},	//A
+	{true,false,true}	//B
+};
 
 //=================================
 //コンストラクタ
@@ -181,7 +187,7 @@ void CBoxCollider::CollisionCheck(void)
 
 	while (pCollider != nullptr)
 	{
-		if (pCollider != this)
+		if (pCollider != this && pCollider->m_type != TYPE_NONE && m_aTagColl[this->m_tag][pCollider->m_tag] == true)
 		{
 			ColFloat otherCol;
 			D3DXVECTOR3 posOther = pCollider->m_iCollisionReader->GetPosOld() + pCollider->m_iCollisionReader->GetMove();
@@ -230,7 +236,7 @@ void CBoxCollider::CollisionCheck(void)
 
 	while (pCollider != nullptr)
 	{
-		if (pCollider != this)
+		if (pCollider != this && pCollider->m_type != TYPE_NONE && m_aTagColl[this->m_tag][pCollider->m_tag] == true)
 		{
 			ColFloat otherCol;
 			D3DXVECTOR3 posOther = pCollider->m_iCollisionReader->GetPosOld() + pCollider->m_iCollisionReader->GetMove();
@@ -279,7 +285,7 @@ void CBoxCollider::CollisionCheck(void)
 
 	while (pCollider != nullptr)
 	{
-		if (pCollider != this)
+		if (pCollider != this && pCollider->m_type != TYPE_NONE && m_aTagColl[this->m_tag][pCollider->m_tag] == true)
 		{
 			ColFloat otherCol;
 			D3DXVECTOR3 posOther = pCollider->m_iCollisionReader->GetPosOld() + pCollider->m_iCollisionReader->GetMove();

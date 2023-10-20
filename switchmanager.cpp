@@ -1,39 +1,31 @@
 //======================================================
 //
-//一般人マネージャ処理[normanager.cpp]
+//スイッチマネージャ処理[switchmanager.cpp]
 //Author:石原颯馬
 //
 //======================================================
-#include "normanager.h"
+#include "switchmanager.h"
 #include "manager.h"
-#include "point.h"
-#include "picto.h"
-
-//静的メンバ変数
-const int CNorManager::RESEARCH_NUM = 5;
-const float CNorManager::NOBUILDING_TIME_PERCE = 0.5f;
 
 //=================================
 //コンストラクタ
 //=================================
-CNorManager::CNorManager(int nPriority) : CObject(nPriority)
+CSwitchManager::CSwitchManager(int nPriority) : CObject(nPriority)
 {
-	m_maxPicto = CManager::INT_ZERO;
-	m_spawnTime = CManager::INT_ZERO;
-	m_counter = CManager::INT_ZERO;
+	Reset();
 }
 
 //=================================
 //デストラクタ
 //=================================
-CNorManager::~CNorManager()
+CSwitchManager::~CSwitchManager()
 {
 }
 
 //=================================
 //初期化
 //=================================
-HRESULT CNorManager::Init(void)
+HRESULT CSwitchManager::Init(void)
 {
 	return S_OK;
 }
@@ -41,7 +33,7 @@ HRESULT CNorManager::Init(void)
 //=================================
 //終了
 //=================================
-void CNorManager::Uninit(void)
+void CSwitchManager::Uninit(void)
 {
 	//管理オブジェクト破棄
 	Release();
@@ -50,55 +42,57 @@ void CNorManager::Uninit(void)
 //=================================
 //更新
 //=================================
-void CNorManager::Update(void)
+void CSwitchManager::Update(void)
 {
-	if (CPictoNormal::GetNumAll() < m_maxPicto)
-	{//一般人の人数が上限以下
-		m_counter++;	//カウント増やす
-		if (m_counter >= m_spawnTime)
-		{//沸きの時間
-			int spawnPoint = rand() % CPoint::GetNumAll();	//適当に決める
-			CPoint* pPoint = CPoint::GetTop();				//先頭取得
+	CSwitch* pSwitch = CSwitch::GetTop();
+	Reset();	//いっかい押されてないことにする
 
-			//適当に決めた数字の回数分回す
-			for (int cnt = 0; cnt < spawnPoint; cnt++)
-			{
-				pPoint = pPoint->GetNext();	//次入れる
-			}
-
-			//決めたポイントから沸かす
-			CPictoNormal::Create(pPoint->GetPos());
-
-			//リセット
-			m_counter = 0;
+	while (pSwitch != nullptr)
+	{
+		if (pSwitch->IsPush() == true)
+		{
+			m_aPush[pSwitch->GetType()] = true;
 		}
+
+		pSwitch = pSwitch->GetNext();
 	}
 }
 
 //=================================
 //描画
 //=================================
-void CNorManager::Draw(void)
+void CSwitchManager::Draw(void)
 {
 	
 }
 
 //=================================
+//リセット
+//=================================
+void CSwitchManager::Reset(void)
+{
+	for (int cnt = 0; cnt < CSwitch::TYPE_MAX; cnt++)
+	{
+		m_aPush[cnt] = false;
+	}
+}
+
+//=================================
 //生成処理
 //=================================
-CNorManager* CNorManager::Create(void)
+CSwitchManager* CSwitchManager::Create(void)
 {
-	CNorManager* pObjNorManager = nullptr;
+	CSwitchManager* pObjSwitchManager = nullptr;
 
-	if (pObjNorManager == nullptr)
+	if (pObjSwitchManager == nullptr)
 	{
-		//背景の生成
-		pObjNorManager = new CNorManager;
+		//マネの生成
+		pObjSwitchManager = new CSwitchManager;
 
 		//初期化
-		pObjNorManager->Init();
+		pObjSwitchManager->Init();
 
-		return pObjNorManager;
+		return pObjSwitchManager;
 	}
 	else
 	{

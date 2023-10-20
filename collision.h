@@ -45,7 +45,17 @@ public:
 	{
 		TYPE_COLLISION = 0,	//ぶつかる
 		TYPE_TRIGGER,		//重なる
+		TYPE_NONE,			//当たり判定がない
 		TYPE_MAX
+	};
+
+	//タグ
+	enum TAG
+	{
+		TAG_UNIV = 0,
+		TAG_TYPE_A,
+		TAG_TYPE_B,
+		TAG_MAX
 	};
 
 	//当たり判定用float3つ
@@ -72,6 +82,7 @@ public:
 	//当たり判定設定
 	static CBoxCollider* Create(ICollisionReader* iCollisionReader);
 	void SetType(TYPE type) { m_type = type; }
+	void SetTag(TAG tag) { m_tag = tag; }
 
 	//破棄
 	void Release(void);
@@ -90,11 +101,15 @@ private:
 	CBoxCollider* m_pNext;			//次のオブジェクト
 	CBoxCollider* m_pPrev;			//前のオブジェクト
 
+	//当たり判定設定
+	static bool m_aTagColl[TAG_MAX][TAG_MAX];
+
 	bool CollisionAxis(ColFloat source, const float fPosMainOld, ColFloat dest, const TYPE otherType);
 
 	ICollisionReader* m_iCollisionReader;	//当たり判定に使うものの取得に使うインターフェース
 	TYPE m_type;							//当たり判定種類
 	CollisionResult m_collisionResult;		//当たり判定結果
+	TAG m_tag;								//タグ（当たり判定設定用）
 };
 
 #endif // !_COLLISION_H_

@@ -27,6 +27,8 @@
 #include "goal.h"
 #include "item.h"
 #include "objloader.h"
+#include "switchmanager.h"
+#include "block3D.h"
 
 //ƒV[ƒ“Œn
 #include "result.h"
@@ -68,6 +70,9 @@ HRESULT CGame::Init(void)
 		m_pPlayer = new CPlayer;
 		m_pPlayer->Init();
 	}
+
+	m_pSwitchManager = CSwitchManager::Create();
+	CBlock3D::SetSwitchManager(m_pSwitchManager);
 
 	CTexture* pTexture = CManager::GetInstance()->GetTexture();
 	//UI-------------------------------------------

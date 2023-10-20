@@ -131,13 +131,13 @@ CObjLoader::LOADRESULT CObjLoader::LoadData(const char * pPath)
 
 					if (nType == OBJTYPE_BLOCK)
 					{//ブロック
-						CBlock3D::Create(pObject->GetPos(), (CBlock3D::TYPE)nType);	//新しいオブジェクト配置
-						pObject->Uninit();											//仮オブジェクト破棄
+						CBlock3D::Create(pObject->GetPos(), (CBlock3D::TYPE)nSubType);	//新しいオブジェクト配置
+						pObject->Uninit();												//仮オブジェクト破棄
 					}
 					else if (nType == OBJTYPE_SWITCH)
 					{
-						CSwitch::Create(pObject->GetPos(), (CSwitch::TYPE)nType);	//新しいオブジェクト配置
-						pObject->Uninit();											//仮オブジェクト破棄
+						CSwitch::Create(pObject->GetPos(), (CSwitch::TYPE)nSubType);	//新しいオブジェクト配置
+						pObject->Uninit();												//仮オブジェクト破棄
 					}
 					else if (nType == OBJTYPE_GOAL)
 					{
