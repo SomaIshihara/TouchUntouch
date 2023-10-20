@@ -139,6 +139,15 @@
     <ClCompile Include="item.cpp">
       <Filter>Added</Filter>
     </ClCompile>
+    <ClCompile Include="userdef.cpp">
+      <Filter>Added</Filter>
+    </ClCompile>
+    <ClCompile Include="objloader.cpp">
+      <Filter>Added</Filter>
+    </ClCompile>
+    <ClCompile Include="switchmanager.cpp">
+      <Filter>Added</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="collision.h">
@@ -283,6 +292,15 @@
       <Filter>Added</Filter>
     </ClInclude>
     <ClInclude Include="item.h">
+      <Filter>Added</Filter>
+    </ClInclude>
+    <ClInclude Include="userdef.h">
+      <Filter>Added</Filter>
+    </ClInclude>
+    <ClInclude Include="objloader.h">
+      <Filter>Added</Filter>
+    </ClInclude>
+    <ClInclude Include="switchmanager.h">
       <Filter>Added</Filter>
     </ClInclude>
   </ItemGroup>

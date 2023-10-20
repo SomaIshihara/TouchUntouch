@@ -93,7 +93,7 @@ void CCamera::SetCamera(void)
 //========================
 //位置設定
 //========================
-void CCamera::SetPos(const D3DXVECTOR3 move)
+void CCamera::Move(const D3DXVECTOR3 move)
 {
 	//位置適用
 	m_posV += move;
@@ -116,18 +116,26 @@ void CCamera::SetRot(const D3DXVECTOR3 rot)
 }
 
 //========================
+//距離設定とposVの修正
+//========================
+void CCamera::SetLength(const float fLength)
+{
+	m_fLength = fLength;
+	FixPosV();
+}
+
+//========================
 //カメラ位置リセット
 //========================
 void CCamera::ResetPos(void)
 {
 	//値設定
-	m_posV = D3DXVECTOR3(0.0f, 50.0f, -400.0f);
-	m_posR = D3DXVECTOR3(0.0f, 60.0f, 0.0f);
+	m_posR = D3DXVECTOR3(0.0f, 250.0f, 0.0f);
 	m_vecU = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-	m_rot = D3DXVECTOR3(-0.5f, 0.0f, 0.0f);
+	m_rot = D3DXVECTOR3(-0.3f, 0.0f, 0.0f);
 	m_fLength = 900.0f;
 	FixRot();
-	FixPosV();
+	FixPosV();	//ここでposVを決める
 }
 
 //========================

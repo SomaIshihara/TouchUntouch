@@ -30,6 +30,9 @@ public:
 	int GetPress(void) { return m_nPressMove; };	//操作状況
 	bool IsJump(void) { return m_bPressJump; }		//ジャンプするか
 
+	//設定
+	void SetControll(const bool bEnable) { m_bControlled = bEnable; }
+
 private:
 	//関数
 	void Move(void);					//カメラ移動処理
@@ -38,6 +41,7 @@ private:
 	CCharacter::TYPE m_controllType;	//操作中のキャラのタイプ
 	int m_nPressMove;					//押されている移動使用ボタン
 	bool m_bPressJump;					//ジャンプボタンが押されているか
+	bool m_bControlled;					//操作できるか
 };
 
 #endif

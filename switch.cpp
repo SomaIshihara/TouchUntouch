@@ -89,11 +89,6 @@ void CSwitch::Uninit(void)
 //=================================
 void CSwitch::Update(void)
 {
-	if (m_bPush == true)
-	{
-		CManager::GetInstance()->GetDebProc()->Print("プチプチ\n");
-	}
-
 	m_bPush = false;	//いったん押されていない状態にする（状況に応じてキャラクターが押す）
 }
 
@@ -127,11 +122,11 @@ CSwitch* CSwitch::Create(const D3DXVECTOR3 pos, const TYPE type)
 		//モデルが読み込まれてなければ読み込み
 		if (m_pModelBase == nullptr)
 		{//土台がぬるぽ
-			m_pModelBase = CXModel::Load("data\\MODEL\\OBJECT\\switch\\switch_01.x");
+			m_pModelBase = CXModel::Load("data\\MODEL\\switch_01.x");
 		}
 		if (m_pModelMove == nullptr)
 		{//土台がぬるぽ
-			m_pModelMove = CXModel::Load("data\\MODEL\\OBJECT\\switch\\switch_02.x");
+			m_pModelMove = CXModel::Load("data\\MODEL\\switch_02.x");
 		}
 
 		//モデル生成

@@ -160,13 +160,15 @@ void CBoxCollider::CollisionCheck(void)
 	collResult.bHit[2] = false;
 	
 	//Ž©•ª‚Ì“–‚½‚è”»’è
-	D3DXVECTOR3 pos = m_iCollisionReader->GetPos();
+	D3DXVECTOR3 move = m_iCollisionReader->GetMove();
 	D3DXVECTOR3 posOld = m_iCollisionReader->GetPosOld();
+	D3DXVECTOR3 pos = posOld;
 	float fPlayerWidth = m_iCollisionReader->GetWidth() * 0.5f;
 	float fPlayerHeight = m_iCollisionReader->GetHeight() * 0.5f;
 	float fPlayerDepth = m_iCollisionReader->GetDepth() * 0.5f;
 
 	//X
+	pos.x += move.x;
 	ColFloat playerCol;
 	playerCol.pPosMain = &pos.x;
 	playerCol.pPosSubA = pos.y;
@@ -182,7 +184,7 @@ void CBoxCollider::CollisionCheck(void)
 		if (pCollider != this)
 		{
 			ColFloat otherCol;
-			D3DXVECTOR3 posOther = pCollider->m_iCollisionReader->GetPos();
+			D3DXVECTOR3 posOther = pCollider->m_iCollisionReader->GetPosOld() + pCollider->m_iCollisionReader->GetMove();
 			otherCol.pPosMain = &posOther.x;
 			otherCol.pPosSubA = posOther.y;
 			otherCol.pPosSubB = posOther.z;
@@ -216,6 +218,7 @@ void CBoxCollider::CollisionCheck(void)
 	}
 
 	//Y
+	pos.y += move.y;
 	playerCol.pPosMain = &pos.y;
 	playerCol.pPosSubA = pos.x;
 	playerCol.pPosSubB = pos.z;
@@ -230,7 +233,7 @@ void CBoxCollider::CollisionCheck(void)
 		if (pCollider != this)
 		{
 			ColFloat otherCol;
-			D3DXVECTOR3 posOther = pCollider->m_iCollisionReader->GetPos();
+			D3DXVECTOR3 posOther = pCollider->m_iCollisionReader->GetPosOld() + pCollider->m_iCollisionReader->GetMove();
 			otherCol.pPosMain = &posOther.y;
 			otherCol.pPosSubA = posOther.x;
 			otherCol.pPosSubB = posOther.z;
@@ -264,6 +267,7 @@ void CBoxCollider::CollisionCheck(void)
 	}
 
 	//Z
+	pos.z += move.z;
 	playerCol.pPosMain = &pos.z;
 	playerCol.pPosSubA = pos.x;
 	playerCol.pPosSubB = pos.y;
@@ -278,7 +282,7 @@ void CBoxCollider::CollisionCheck(void)
 		if (pCollider != this)
 		{
 			ColFloat otherCol;
-			D3DXVECTOR3 posOther = pCollider->m_iCollisionReader->GetPos();
+			D3DXVECTOR3 posOther = pCollider->m_iCollisionReader->GetPosOld() + pCollider->m_iCollisionReader->GetMove();
 			otherCol.pPosMain = &posOther.z;
 			otherCol.pPosSubA = posOther.x;
 			otherCol.pPosSubB = posOther.y;

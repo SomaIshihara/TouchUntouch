@@ -51,6 +51,8 @@ public:
 
 	//取得
 	D3DXVECTOR3 GetPos(void) { return m_pos; }
+	D3DXVECTOR3 GetMove(void) { return m_move; }
+	static CCharacter** GetChara(void) { return &m_aChara[0]; }
 
 	//設定
 	void SetPos(const D3DXVECTOR3 pos) { m_pos = pos; }
@@ -78,6 +80,7 @@ private:
 	D3DXVECTOR3 m_pos;			//位置
 	D3DXVECTOR3 m_posOld;		//前の位置
 	D3DXVECTOR3 m_move;			//移動量
+	float m_fJumpPower;			//ジャンプ力
 	D3DXVECTOR3 m_rot;			//向き
 	float m_fWidth, m_fHeight, m_fDepth;	//サイズ
 

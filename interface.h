@@ -21,7 +21,7 @@ __interface IControllStat
 //当たり判定関係インターフェース
 __interface ICollisionReader
 {
-	D3DXVECTOR3 GetPos(void) = 0;
+	D3DXVECTOR3 GetMove(void) = 0;
 	D3DXVECTOR3 GetPosOld(void) = 0;
 	void SetPos(const D3DXVECTOR3 pos) = 0;
 	float GetWidth(void) = 0;

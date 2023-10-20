@@ -11,22 +11,7 @@
 #include "object.h"
 #include "interface.h"
 #include "collision.h"
-
-typedef unsigned char BINCODE;
-//バイナリのコード内容
-//システム(0b00xxxxxx)
-#define BIN_CODE_SYSTEM				(0b00000000)
-#define BIN_CODE_SCRIPT				(BIN_CODE_SYSTEM + 0b000000)
-#define BIN_CODE_END_SCRIPT			(BIN_CODE_SYSTEM + 0b000001)
-//モデル系(0b01xxxxxx)
-#define BIN_CODE_MODEL				(0b01000000)
-#define BIN_CODE_TEXTURE_FILENAME	(BIN_CODE_MODEL + 0b000000)
-#define BIN_CODE_MODEL_FILENAME		(BIN_CODE_MODEL + 0b000001)
-#define BIN_CODE_MODELSET			(BIN_CODE_MODEL + 0b000010)
-#define BIN_CODE_TEXTURE_NUM		(BIN_CODE_MODEL + 0b000011)
-#define BIN_CODE_MODEL_NUM			(BIN_CODE_MODEL + 0b000100)
-//モーション系(0b10xxxxxx)
-#define BIN_CODE_MOTION				(0b10000000)
+#include "userdef.h"
 
 //前方宣言
 class CXModel;
@@ -35,21 +20,6 @@ class CXModel;
 class CObjectX : public CObject, public ICollisionReader
 {
 public:
-	enum LOADRESULT
-	{
-		RES_OK = 0,
-		RES_ERR_FILE_NOTFOUND,
-		RES_MAX
-	};
-
-	enum STATE
-	{
-		STATE_NONE = 0,		//設定なし
-		STATE_BREAKABLE,	//破壊可能設定
-		STATE_KOBAN,		//交番設定
-		STATE_MAX
-	};
-
 	//コンストラクタ・デストラクタ
 	CObjectX(int nPriority = PRIORITY_DEFAULT);																	//デフォルト
 	CObjectX(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, CXModel* pModel, int nPriority = PRIORITY_DEFAULT);	//オーバーロード（位置向きサイズ）
@@ -76,6 +46,8 @@ public:
 	CXModel* GetModel(void) { return m_pModel; }
 	CObject* GetObj(void) { return this; }
 	CBoxCollider* GetCollider(void) { return m_pCollider; }
+	CVariable** GetVariable(void) { return &m_apVariable[0]; }
+	D3DXVECTOR3 GetMove(void) { return CManager::VEC3_ZERO; }
 
 	//設定
 	void SetPos(const D3DXVECTOR3 pos) { m_pos = pos; }
@@ -85,9 +57,6 @@ public:
 
 	//使用モデル単位で消す
 	static void Delete(CXModel* pTarget);
-
-	//読み込み
-	static LOADRESULT LoadData(const char* pPath);
 
 	//リスト除外
 	virtual void Exclusion(void);
@@ -106,6 +75,9 @@ private:
 
 	//当たり判定
 	CBoxCollider* m_pCollider;
+
+	//追加変数
+	CVariable* m_apVariable[VARIABLE_NUM];
 
 	//リスト
 	static CObjectX* m_pTop;	//先頭オブジェクト

@@ -37,6 +37,7 @@ CCharacter::CCharacter()
 	m_fDepth = CManager::FLT_ZERO;
 	m_bJump = false;
 	m_nCounterJumpTime = CManager::INT_ZERO;
+	m_fJumpPower = CManager::FLT_ZERO;
 	m_type = TYPE_MAX;
 	m_pCollider = nullptr;
 }
@@ -94,6 +95,8 @@ void CCharacter::Uninit(void)
 		m_pCollider = nullptr;
 	}
 
+	m_aChara[m_type] = nullptr;
+
 	Release();
 }
 
@@ -121,11 +124,10 @@ void CCharacter::Update(void)
 	//ジャンプカウンタ増やす
 	m_nCounterJumpTime++;
 
-	//当たり判定
-	m_pos.x += m_move.x;
-	m_pos.y += m_move.y - (ACCELERATION_GRAVITY * m_nCounterJumpTime / MAX_FPS);
-	m_pos.z += m_move.z;
+	//重力加速度によるYの移動量変更
+	m_move.y = m_fJumpPower - (ACCELERATION_GRAVITY * m_nCounterJumpTime / MAX_FPS);
 
+	//当たり判定
 	m_pCollider->CollisionCheck();
 
 	//ボタンは押す・アイテムは拾う
@@ -169,7 +171,7 @@ void CCharacter::Update(void)
 	{//ジャンプ処理
 		m_bJump = true;
 		m_nCounterJumpTime = 0;
-		m_move.y = 5.0f;
+		m_fJumpPower = 6.0f;
 	}
 
 	//移動量減衰

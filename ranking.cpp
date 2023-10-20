@@ -117,7 +117,30 @@ void CRanking::Draw(void)
 //=================================
 void CRanking::Set(const int nScore)
 {
-	
+	int* pRanking = new int[MAX_RANK];	//一応静的constも変数なので
+													//ランキング読み込み
+	Load(pRanking);
+
+	//ソート
+	if (pRanking[MAX_RANK - 1] < nScore)
+	{//表示できる中で一番低い順位に入るか
+		pRanking[MAX_RANK - 1] = nScore;	//とりあえず入れる
+
+		for (int cnt = MAX_RANK - 1; cnt > 0; cnt--)
+		{
+			if (pRanking[cnt] > pRanking[cnt - 1])
+			{//入れ替え
+				int nTemp = pRanking[cnt - 1];
+				pRanking[cnt - 1] = pRanking[cnt];
+				pRanking[cnt] = nTemp;
+			}
+		}
+	}
+
+	//ランキング書き込み
+	Save(pRanking);
+
+	delete[] pRanking;	//破棄
 }
 
 //=================================

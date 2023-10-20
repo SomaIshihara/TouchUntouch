@@ -39,7 +39,6 @@ private:
 	CScore* m_pScore;	//スコアポインタ
 	CTimer* m_pTimer;	//タイマーポインタ
 	CResult* m_pResult;	//リザルトポインタ
-	CGoal* m_pGoal;
 };
 
 #endif // !_GAME_H_

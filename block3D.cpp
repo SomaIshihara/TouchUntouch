@@ -52,8 +52,10 @@ HRESULT CBlock3D::Init(void)
 {
 	CObjectX::Init();
 	SetType(TYPE_BLOCK);
-	m_pCollider = CBoxCollider::Create(this);
-	m_pCollider->SetType(CBoxCollider::TYPE_COLLISION);
+
+	CObjectX::SetCollider();
+	CBoxCollider* pCollider = CObjectX::GetCollider();
+	pCollider->SetType(CBoxCollider::TYPE_COLLISION);
 	return S_OK;
 }
 
@@ -100,7 +102,7 @@ CBlock3D* CBlock3D::Create(const D3DXVECTOR3 pos, const TYPE type)
 		pBlock->SetPos(pos);
 		pBlock->m_type = type;
 
-		pBlock->SetModel(CXModel::Load("data\\MODEL\\OBJECT\\block_univ.x"));
+		pBlock->SetModel(CXModel::Load("data\\MODEL\\block_univ.x"));
 
 		return pBlock;
 	}

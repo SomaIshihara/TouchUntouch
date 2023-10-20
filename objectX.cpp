@@ -12,15 +12,10 @@
 #include "xmodel.h"
 #include <assert.h>
 
-//マクロ
-#define PATH_LENGTH	(256)
-
 //静的メンバ変数
 CObjectX* CObjectX::m_pTop = nullptr;
 CObjectX* CObjectX::m_pCur = nullptr;
 int CObjectX::m_nNumAll = 0;
-
-using namespace std;
 
 //=================================
 //コンストラクタ（デフォルト）
@@ -191,6 +186,15 @@ CObjectX* CObjectX::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, CXModel
 		//初期化
 		pObjX->Init();
 
+		//追加変数設定
+		CVariableManager* pVariableManager = CManager::GetInstance()->GetVariableManager();
+		int nVariableNum = pVariableManager->GetDefinedNum();
+		for (int cnt = 0; cnt < nVariableNum; cnt++)
+		{
+			char* pName = pVariableManager->GetDefinedVariable()[cnt]->pName;
+			pObjX->m_apVariable[cnt] = pVariableManager->Declaration(pName);
+		}
+
 		return pObjX;
 	}
 	else
@@ -230,85 +234,6 @@ void CObjectX::Delete(CXModel* pTarget)
 		}
 
 		pObject = pObjectNext;	//次を入れる
-	}
-}
-
-//========================
-//データ読み込み
-//========================
-CObjectX::LOADRESULT CObjectX::LoadData(const char * pPath)
-{
-	FILE* pFile;
-	BINCODE code;
-	bool bRead = false;
-	char** ppFilePath = nullptr;
-	int nReadedModel = 0;
-
-	pFile = fopen(pPath, "rb");
-
-	if (pFile != nullptr)
-	{//開けた
-		while (1)
-		{
-			fread(&code, sizeof(BINCODE), 1, pFile);
-
-			//文字列チェック
-			if (code == BIN_CODE_SCRIPT)
-			{//読み取り開始
-				bRead = true;
-			}
-			else if (code == BIN_CODE_END_SCRIPT)
-			{//読み取り終了
-				bRead = false;
-				break;
-			}
-			else if (bRead == true)
-			{//読み取り
-				if (code == BIN_CODE_TEXTURE_FILENAME)
-				{
-					char aPath[PATH_LENGTH];
-					fread(&aPath[0], sizeof(char), PATH_LENGTH, pFile);
-					CManager::GetInstance()->GetTexture()->Load(&aPath[0]);
-				}
-				else if (code == BIN_CODE_MODEL_NUM)
-				{
-					int nNumAll;
-					fread(&nNumAll, sizeof(int), 1, pFile);
-					ppFilePath = new char*[nNumAll];
-				}
-				else if (code == BIN_CODE_MODEL_FILENAME)
-				{
-					char aPath[PATH_LENGTH];
-					fread(&aPath[0], sizeof(char), PATH_LENGTH, pFile);
-					CXModel::Load(&aPath[0]);
-
-					//モデルパス読み取り（引き出し用に使う）
-					ppFilePath[nReadedModel] = new char[strlen(&aPath[0]) + 1];
-					strcpy(ppFilePath[nReadedModel], &aPath[0]);
-					nReadedModel++;
-				}
-				else if (code == BIN_CODE_MODELSET)
-				{
-					D3DXVECTOR3 pos, rot;
-					int nModelNum = -1;
-					CXModel* pModel = nullptr;
-					fread(&pos, sizeof(D3DXVECTOR3), 1, pFile);
-					fread(&rot, sizeof(D3DXVECTOR3), 1, pFile);
-					fread(&nModelNum, sizeof(int), 1, pFile);
-					pModel = CXModel::Load(ppFilePath[nModelNum]);
-
-					//生成
-					CObjectX::Create(pos, rot, pModel);
-				}
-			}
-		}
-
-		fclose(pFile);
-		return RES_OK;
-	}
-	else
-	{//開けなかった（ファイルないんじゃね？）
-		return RES_ERR_FILE_NOTFOUND;
 	}
 }
 

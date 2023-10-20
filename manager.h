@@ -18,6 +18,7 @@ class CSound;
 class CCamera;
 class CLight;
 class CTexture;
+class CVariableManager;
 
 //シーンクラス
 class CScene
@@ -86,6 +87,7 @@ public:
 	CCamera* GetCamera(void) { return m_pCamera; }
 	CLight* GetLight(void) { return m_pLight; }
 	CTexture* GetTexture(void) { return m_pTexture; }
+	CVariableManager* GetVariableManager(void) { return m_pVariableManager; }
 
 	//破棄
 	static HRESULT Release(void);
@@ -97,19 +99,20 @@ public:
 
 private:
 	//変数
-	static CManager* m_pManager;				//マネージャ（シングルトン）
-	CInputKeyboard* m_pInputKeyboard;	//キーボード
-	CInputMouse* m_pInputMouse;			//マウス
-	CInputGamePad* m_pInputPad;			//ゲームパッド
-	CSound* m_pSound;					//サウンド
-	CRenderer* m_pRenderer;				//レンダラー
-	CDebugProc* m_pDebProc;				//デバッグ
-	CCamera* m_pCamera;					//カメラ
-	CLight* m_pLight;					//ライト
-	CTexture* m_pTexture;				//テクスチャ
-	int m_nFPS;							//FPS
-	DWORD m_dwFrameCount;				//回したフレーム数
-	CScene* m_pScene;	//シーン
+	static CManager* m_pManager;			//マネージャ（シングルトン）
+	CInputKeyboard* m_pInputKeyboard;		//キーボード
+	CInputMouse* m_pInputMouse;				//マウス
+	CInputGamePad* m_pInputPad;				//ゲームパッド
+	CSound* m_pSound;						//サウンド
+	CRenderer* m_pRenderer;					//レンダラー
+	CDebugProc* m_pDebProc;					//デバッグ
+	CCamera* m_pCamera;						//カメラ
+	CLight* m_pLight;						//ライト
+	CTexture* m_pTexture;					//テクスチャ
+	CVariableManager* m_pVariableManager;	//追加変数マネ
+	int m_nFPS;								//FPS
+	DWORD m_dwFrameCount;					//回したフレーム数
+	CScene* m_pScene;						//シーン
 };
 
 #endif

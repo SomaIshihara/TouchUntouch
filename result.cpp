@@ -6,6 +6,7 @@
 //======================================================
 #include "manager.h"
 #include "result.h"
+#include "ranking.h"
 #include "timer.h"
 #include "score.h"
 #include "fade.h"
@@ -108,6 +109,7 @@ void CResult::Update(void)
 		{//ゲームパッド操作
 			if (pGamePad->GetTrigger(XINPUT_GAMEPAD_A) == true && m_pFade == nullptr)
 			{
+				CRanking::Set(m_pScore->GetScore());
 				m_pFade = CFade::Create(CScene::MODE_RANKING);
 			}
 		}
@@ -115,6 +117,7 @@ void CResult::Update(void)
 		{//キーボード操作
 			if (pKeyboard->GetTrigger(DIK_SPACE) == true && m_pFade == nullptr)
 			{
+				CRanking::Set(m_pScore->GetScore());
 				m_pFade = CFade::Create(CScene::MODE_RANKING);
 			}
 		}

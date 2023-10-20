@@ -14,6 +14,7 @@
 #include "texture.h"
 #include "object.h"
 #include "xmodel.h"
+#include "userdef.h"
 
 //シーン
 #include "title.h"
@@ -83,6 +84,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	m_pCamera = new CCamera;
 	m_pLight = new CLight;
 	m_pTexture = new CTexture;
+	m_pVariableManager = new CVariableManager;
 
 	//レンダラー初期化
 	if (FAILED(m_pRenderer->Init(hWnd, bWindow)))

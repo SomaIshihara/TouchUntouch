@@ -61,9 +61,6 @@ private:
 
 	//パラメータ
 	TYPE m_type;	//ブロック種類
-
-	//当たり判定
-	CBoxCollider* m_pCollider;
 };
 
 #endif // !_BLOCK_3D_H_
