@@ -155,7 +155,7 @@ void CGame::Update(void)
 
 	if (bGoal == true)
 	{//ƒS[ƒ‹‚µ‚½
-		m_pPlayer->SetControll(true);
+		m_pPlayer->SetControll(false);
 		if (m_pResult == nullptr)
 		{
 			m_pTimer->Stop();
