@@ -15,6 +15,8 @@
 #include "block3D.h"
 #include "switch.h"
 #include "goal.h"
+#include "item.h"
+#include "teleport.h"
 
 //静的メンバ変数
 const int CObjLoader::STR_LENGTH = 256;
@@ -143,6 +145,21 @@ CObjLoader::LOADRESULT CObjLoader::LoadData(const char * pPath)
 					{
 						CGoal::Create(pObject->GetPos());	//新しいオブジェクト配置
 						pObject->Uninit();					//仮オブジェクト破棄
+					}
+					else if (nType == OBJTYPE_ITEM)
+					{
+						CItem::Create(pObject->GetPos(), CManager::VEC3_ZERO);	//新しいオブジェクト配置
+						pObject->Uninit();										//仮オブジェクト破棄
+					}
+					else if (nType == OBJTYPE_TELEPORT_COLL)
+					{
+						CTeleportCollision::Create(pObject->GetPos(), nSubType);	//新しいオブジェクト配置
+						pObject->Uninit();											//仮オブジェクト破棄
+					}
+					else if (nType == OBJTYPE_TELEPORT_POS)
+					{
+						CTeleportPos::Create(pObject->GetPos(), nSubType);	//新しいオブジェクト配置
+						pObject->Uninit();									//仮オブジェクト破棄
 					}
 				}
 				else if (code == BIN_CODE_USERDEF)

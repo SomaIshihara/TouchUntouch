@@ -65,16 +65,20 @@ CGame::~CGame()
 //=================================
 HRESULT CGame::Init(void)
 {
+	//カメラリセット
+	CManager::GetInstance()->CManager::GetInstance()->GetCamera()->ResetPos();
+
+	//操作プレイヤーのクラス生成
 	if (m_pPlayer == nullptr)
 	{
 		m_pPlayer = new CPlayer;
 		m_pPlayer->Init();
 	}
 
+	//スイッチ管理オブジェ生成と設定
 	m_pSwitchManager = CSwitchManager::Create();
 	CBlock3D::SetSwitchManager(m_pSwitchManager);
 
-	CTexture* pTexture = CManager::GetInstance()->GetTexture();
 	//UI-------------------------------------------
 	//スコア（数字）
 	m_pScore = CScore::Create(D3DXVECTOR3(SCREEN_WIDTH + 8.0f, 32.0f, 0.0f), CManager::VEC3_ZERO, 32.0f, 48.0f);
@@ -96,16 +100,11 @@ HRESULT CGame::Init(void)
 	m_pTimer->Start();
 
 	//UI-------------------------------------------
-	CObjLoader::LoadData("data\\tut_mapdata.ismd");
+	CObjLoader::LoadData("data\\tut_mapdata_game.ismd");
 	
-	//仮置き
-	CManager::GetInstance()->CManager::GetInstance()->GetCamera()->ResetPos();
-	/*CBlock3D::Create(D3DXVECTOR3(0.0f,-70.0f,0.0f), CBlock3D::TYPE_NORMAL);
-	CSwitch::Create(D3DXVECTOR3(-80.0f, -20.0f, 0.0f),CSwitch::TYPE_A);*/
-	CCharacter::Create(D3DXVECTOR3(100.0f,100.0f,0.0f),CCharacter::TYPE_A, m_pPlayer);
-	CCharacter::Create(D3DXVECTOR3(0.0f, 100.0f, 0.0f),CCharacter::TYPE_B, m_pPlayer);
-	/*m_pGoal = CGoal::Create(D3DXVECTOR3(150.0f, -20.0f, 0.0f));
-	CItem::Create(D3DXVECTOR3(150.0f, 50.0f, 0.0f), CManager::VEC3_ZERO);*/
+	//キャラ生成
+	CCharacter::Create(D3DXVECTOR3(100.0f,150.0f,0.0f),CCharacter::TYPE_A, m_pPlayer);
+	CCharacter::Create(D3DXVECTOR3(0.0f, 150.0f, 0.0f),CCharacter::TYPE_B, m_pPlayer);
 	return S_OK;
 }
 
@@ -178,15 +177,19 @@ void CGame::Update(void)
 	}
 
 	if (pCamera != nullptr)
-	{
+	{//カメラ移動
 		D3DXVECTOR3 posV = pCamera->GetPosV();
 		D3DXVECTOR3 posR = pCamera->GetPosR();
 		CCharacter** chara = CCharacter::GetChara();
 
 		float posXCenter = (chara[0]->GetPos().x + chara[1]->GetPos().x) * 0.5f;
 		float lenXHalf = fabsf(chara[0]->GetPos().x - chara[1]->GetPos().x) * 0.5f;
+		float posYCenter = (chara[0]->GetPos().y + chara[1]->GetPos().y) * 0.5f;
+		float lenYHalf = fabsf(chara[0]->GetPos().y - chara[1]->GetPos().y) * 0.5f;
 		posV.x = posXCenter;
 		posR.x = posXCenter;
+		posV.y = posYCenter;
+		posR.y = posYCenter;
 
 		pCamera->SetPosV(posV);
 		pCamera->SetPosR(posR);

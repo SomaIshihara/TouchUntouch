@@ -103,8 +103,7 @@ CItem* CItem::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot)
 		pItem->SetRot(rot);
 
 		//ƒ‚ƒfƒ‹Ý’è
-		CXModel* aaa = CXModel::Load("data\\MODEL\\OBJECT\\item.x");
-		pItem->SetModel(CXModel::Load("data\\MODEL\\OBJECT\\item.x"));
+		pItem->SetModel(CXModel::Load("data\\MODEL\\item.x"));
 
 		//“–‚½‚è”»’èÝ’è
 		pItem->SetCollider();

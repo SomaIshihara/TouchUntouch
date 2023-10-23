@@ -16,10 +16,12 @@
 #include "switch.h"
 #include "item.h"
 #include "collision.h"
+#include "teleport.h"
 #include "debugproc.h"
 
 //静的メンバ変数
 CCharacter* CCharacter::m_aChara[] = { nullptr,nullptr };
+const float CCharacter::CHARA_SPEED = 3.5f;
 
 //=================================
 //コンストラクタ
@@ -113,11 +115,11 @@ void CCharacter::Update(void)
 	{
 		if (m_controllInterface->GetPress() == DIK_A)
 		{
-			m_move.x -= 2.0f;
+			m_move.x -= CHARA_SPEED;
 		}
 		else if (m_controllInterface->GetPress() == DIK_D)
 		{
-			m_move.x += 2.0f;
+			m_move.x += CHARA_SPEED;
 		}
 	}
 
@@ -157,6 +159,19 @@ void CCharacter::Update(void)
 					break;
 				}
 				pItem = pItem->GetNext();
+			}
+		}
+		if (m_pCollider->GetResult().collList[cnt]->GetType() == CObject::TYPE_TELEPORT)
+		{
+			CTeleportCollision* pTeleport = CTeleportCollision::GetTop();
+			while (pTeleport != nullptr)
+			{
+				if (pTeleport == m_pCollider->GetResult().collList[cnt])
+				{
+					m_pos = pTeleport->GetFromPos();
+					break;
+				}
+				pTeleport = pTeleport->GetNext();
 			}
 		}
 	}
@@ -309,9 +324,12 @@ void CCharacter::SetModel(void)
 		LoadMotionViewerFile("data\\motion_rei.txt", &m_ppModel, m_pMotion, &m_nNumModel);
 	}
 
-	m_fWidth = 100.0f;
-	m_fHeight = 100.0f;
-	m_fDepth = 100.0f;
+	m_fWidth = 60.0f;
+	m_fHeight = 150.0f;
+	m_fDepth = 60.0f;
+
+	//モーション補正
+	m_ppModel[0]->SetPosOffset(m_ppModel[0]->GetPosOffset() - D3DXVECTOR3(0.0f, 75.0f, 0.0f));
 
 	//モーション設定
 	m_pMotion->Set(0);

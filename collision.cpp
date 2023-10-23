@@ -209,7 +209,7 @@ void CBoxCollider::CollisionCheck(void)
 						bRegisted = true;
 						break;
 					}
-					
+
 				}
 
 				if (bRegisted == false)
@@ -249,7 +249,7 @@ void CBoxCollider::CollisionCheck(void)
 
 			if (CollisionAxis(playerCol, posOld.y, otherCol, pCollider->m_type) == true)	//当たり判定
 			{//着地した
-				//重複チェック
+			 //重複チェック
 				bool bRegisted = false;
 				for (int cnt = 0; cnt < collResult.collList.size(); cnt++)
 				{
@@ -351,7 +351,7 @@ void CBoxCollider::Release(void)
 {
 	if (m_pPrev != nullptr)
 	{//前にオブジェがいる
-		m_pPrev->m_pNext =m_pNext;	//前のオブジェの次のオブジェは自分の次のオブジェ
+		m_pPrev->m_pNext = m_pNext;	//前のオブジェの次のオブジェは自分の次のオブジェ
 	}
 	if (m_pNext != nullptr)
 	{
@@ -378,13 +378,13 @@ bool CBoxCollider::CollisionAxis(ColFloat source, const float fPosMainOld, ColFl
 {
 	bool bCollision = false;
 
-	if (source.pPosSubA - source.fSizeSubA <= dest.pPosSubA + dest.fSizeSubA &&
-		source.pPosSubA + source.fSizeSubA >= dest.pPosSubA - dest.fSizeSubA &&
-		source.pPosSubB - source.fSizeSubB <= dest.pPosSubB + dest.fSizeSubB &&
-		source.pPosSubB + source.fSizeSubB >= dest.pPosSubB - dest.fSizeSubB)
+	if (source.pPosSubA - source.fSizeSubA < dest.pPosSubA + dest.fSizeSubA &&
+		source.pPosSubA + source.fSizeSubA > dest.pPosSubA - dest.fSizeSubA &&
+		source.pPosSubB - source.fSizeSubB < dest.pPosSubB + dest.fSizeSubB &&
+		source.pPosSubB + source.fSizeSubB > dest.pPosSubB - dest.fSizeSubB)
 	{
 		if (fPosMainOld + source.fSizeMain <= *dest.pPosMain - dest.fSizeMain &&
-			*source.pPosMain + source.fSizeMain >= *dest.pPosMain - dest.fSizeMain)
+			*source.pPosMain + source.fSizeMain > *dest.pPosMain - dest.fSizeMain)
 		{
 			if (this->m_type == TYPE_COLLISION && otherType == TYPE_COLLISION)
 			{
@@ -393,7 +393,7 @@ bool CBoxCollider::CollisionAxis(ColFloat source, const float fPosMainOld, ColFl
 			bCollision = true;
 		}
 		else if (fPosMainOld - source.fSizeMain >= *dest.pPosMain + dest.fSizeMain &&
-			*source.pPosMain - source.fSizeMain <= *dest.pPosMain + dest.fSizeMain)
+			*source.pPosMain - source.fSizeMain < *dest.pPosMain + dest.fSizeMain)
 		{
 			if (this->m_type == TYPE_COLLISION && otherType == TYPE_COLLISION)
 			{

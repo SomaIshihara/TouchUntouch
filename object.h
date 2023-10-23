@@ -24,6 +24,7 @@ public:
 		TYPE_SWITCH,
 		TYPE_GOAL,
 		TYPE_ITEM,
+		TYPE_TELEPORT,
 		TYPE_MAX
 	} TYPE;
 

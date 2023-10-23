@@ -21,6 +21,9 @@ class CBoxCollider;
 class CCharacter : public CObject, public ICollisionReader
 {
 public:
+	//Ã“Iconst
+	static const float CHARA_SPEED;	//ˆÚ“®‘¬“x
+
 	//“–‚½‚è”»’è—pfloat3‚Â
 	struct ColFloat
 	{
