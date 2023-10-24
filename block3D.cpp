@@ -5,6 +5,7 @@
 //
 //======================================================
 #include "block3D.h"
+#include "renderer.h"
 #include "collision.h"
 #include "xmodel.h"
 #include "switchmanager.h"
@@ -18,7 +19,7 @@ CSwitchManager* CBlock3D::m_pSwitchManager = nullptr;
 //=================================
 //コンストラクタ
 //=================================
-CBlock3D::CBlock3D()
+CBlock3D::CBlock3D(int nPriority) : CObjectX(nPriority)
 {
 	//クリア
 	CObjectX::SetPos(CManager::VEC3_ZERO);

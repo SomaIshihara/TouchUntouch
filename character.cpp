@@ -17,21 +17,25 @@
 #include "item.h"
 #include "collision.h"
 #include "teleport.h"
+#include "tutorialobj.h"
 #include "debugproc.h"
 
 //静的メンバ変数
 CCharacter* CCharacter::m_aChara[] = { nullptr,nullptr };
-const float CCharacter::CHARA_SPEED = 3.5f;
+const float CCharacter::CHARA_SPEED = 3.7f;
+const float CCharacter::CHARA_JUMP_POW = 6.0f;
+const float CCharacter::CHARA_RESPAWN_HEIGHT = -500.0f;
 
 //=================================
 //コンストラクタ
 //=================================
-CCharacter::CCharacter()
+CCharacter::CCharacter(int nPriority) : CObject(nPriority)
 {
 	m_ppModel = nullptr;
 	m_nNumModel = CManager::INT_ZERO;
 	m_pos = CManager::VEC3_ZERO;
 	m_posOld = CManager::VEC3_ZERO;
+	m_posLastLanding = CManager::VEC3_ZERO;
 	m_move = CManager::VEC3_ZERO;
 	m_rot = CManager::VEC3_ZERO;
 	m_fWidth = CManager::FLT_ZERO;
@@ -174,13 +178,31 @@ void CCharacter::Update(void)
 				pTeleport = pTeleport->GetNext();
 			}
 		}
+		if (m_pCollider->GetResult().collList[cnt]->GetType() == CObject::TYPE_TUTORIALOBJ)
+		{
+			CTutorialObj* pTutorialObj = CTutorialObj::GetTop();
+			while (pTutorialObj != nullptr)
+			{
+				if (pTutorialObj == m_pCollider->GetResult().collList[cnt])
+				{
+					pTutorialObj->Popup();
+					break;
+				}
+				pTutorialObj = pTutorialObj->GetNext();
+			}
+		}
 	}
 
 	if (m_pCollider->GetResult().bHit[1] == true)
-	{
+	{//着地した
 		m_bJump = false;
 		m_nCounterJumpTime = 0;
 		m_fJumpPower = 0.0f;
+		m_posLastLanding = m_pos;
+	}
+	else
+	{
+		m_bJump = true;
 	}
 	
 	//ジャンプ
@@ -188,7 +210,14 @@ void CCharacter::Update(void)
 	{//ジャンプ処理
 		m_bJump = true;
 		m_nCounterJumpTime = 0;
-		m_fJumpPower = 6.0f;
+		m_fJumpPower = CHARA_JUMP_POW;
+	}
+
+	//リスポーン判定
+	if (m_pos.y <= CHARA_RESPAWN_HEIGHT)
+	{
+		m_pos = m_posLastLanding;
+		m_pos.y += 30.0f;
 	}
 
 	//移動量減衰
@@ -243,6 +272,10 @@ void CCharacter::Draw(void)
 	//ワールドマトリックス設定
 	pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
 
+	//アルファテスト有効化
+	CRenderer* pRenderer = CManager::GetInstance()->GetRenderer();
+	pRenderer->SetEnableAlplaTest(true);
+
 	//モデル描画
 	if (m_ppModel != nullptr)
 	{
@@ -255,6 +288,9 @@ void CCharacter::Draw(void)
 		}
 	}
 
+	//アルファテスト無効化
+	pRenderer->SetEnableAlplaTest(false);
+	
 	//マテリアルを戻す
 	pDevice->SetMaterial(&matDef);
 }

@@ -112,4 +112,29 @@ START_LOAD		#16:タイトル移動文字(GP)
 	PATTERN_HEIGHT = 1
 END_LOAD
 
+#チュートリアル
+START_LOAD		#17:チュートリアル01（スイッチ）
+	TEXTURE_NAME = data\\TEXTURE\\tex_tutorial_popup_01.png
+	PATTERN_WIDTH = 1
+	PATTERN_HEIGHT = 1
+END_LOAD
+
+START_LOAD		#18:チュートリアル02（キャラ）
+	TEXTURE_NAME = data\\TEXTURE\\tex_tutorial_popup_02.png
+	PATTERN_WIDTH = 1
+	PATTERN_HEIGHT = 1
+END_LOAD
+
+START_LOAD		#19:チュートリアル03（アイテム）
+	TEXTURE_NAME = data\\TEXTURE\\tex_tutorial_popup_03.png
+	PATTERN_WIDTH = 1
+	PATTERN_HEIGHT = 1
+END_LOAD
+
+START_LOAD		#20:チュートリアル04（ゴール）
+	TEXTURE_NAME = data\\TEXTURE\\tex_tutorial_popup_04.png
+	PATTERN_WIDTH = 1
+	PATTERN_HEIGHT = 1
+END_LOAD
+
 SCRIPT_END

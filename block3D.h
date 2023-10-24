@@ -31,7 +31,7 @@ public:
 	};
 
 	//コンストラクタ・デストラクタ
-	CBlock3D();
+	CBlock3D(int nPriority = CObject::PRIORITY_04);
 	~CBlock3D();
 
 	//基本処理

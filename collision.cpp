@@ -165,164 +165,172 @@ void CBoxCollider::CollisionCheck(void)
 	collResult.bHit[1] = false;
 	collResult.bHit[2] = false;
 	
-	//自分の当たり判定
-	D3DXVECTOR3 move = m_iCollisionReader->GetMove();
-	D3DXVECTOR3 posOld = m_iCollisionReader->GetPosOld();
-	D3DXVECTOR3 pos = posOld;
-	float fPlayerWidth = m_iCollisionReader->GetWidth() * 0.5f;
-	float fPlayerHeight = m_iCollisionReader->GetHeight() * 0.5f;
-	float fPlayerDepth = m_iCollisionReader->GetDepth() * 0.5f;
-
-	//X
-	pos.x += move.x;
-	ColFloat playerCol;
-	playerCol.pPosMain = &pos.x;
-	playerCol.pPosSubA = pos.y;
-	playerCol.pPosSubB = pos.z;
-	playerCol.fSizeMain = fPlayerWidth;
-	playerCol.fSizeSubA = fPlayerHeight;
-	playerCol.fSizeSubB = fPlayerDepth;
-
-	CBoxCollider* pCollider = CBoxCollider::GetTop();
-
-	while (pCollider != nullptr)
+	//そもそも当たり判定有効か
+	if (this->m_type != TYPE_NONE)
 	{
-		if (pCollider != this && pCollider->m_type != TYPE_NONE && m_aTagColl[this->m_tag][pCollider->m_tag] == true)
-		{
-			ColFloat otherCol;
-			D3DXVECTOR3 posOther = pCollider->m_iCollisionReader->GetPosOld() + pCollider->m_iCollisionReader->GetMove();
-			otherCol.pPosMain = &posOther.x;
-			otherCol.pPosSubA = posOther.y;
-			otherCol.pPosSubB = posOther.z;
-			otherCol.fSizeMain = pCollider->m_iCollisionReader->GetWidth() * 0.5f;
-			otherCol.fSizeSubA = pCollider->m_iCollisionReader->GetHeight() * 0.5f;
-			otherCol.fSizeSubB = pCollider->m_iCollisionReader->GetDepth() * 0.5f;
+		//自分の当たり判定
+		D3DXVECTOR3 move = m_iCollisionReader->GetMove();
+		D3DXVECTOR3 posOld = m_iCollisionReader->GetPosOld();
+		D3DXVECTOR3 pos = posOld;
+		float fPlayerWidth = m_iCollisionReader->GetWidth() * 0.5f;
+		float fPlayerHeight = m_iCollisionReader->GetHeight() * 0.5f;
+		float fPlayerDepth = m_iCollisionReader->GetDepth() * 0.5f;
 
-			if (CollisionAxis(playerCol, posOld.x, otherCol, pCollider->m_type))	//当たり判定
+		//X
+		pos.x += move.x;
+		ColFloat playerCol;
+		playerCol.pPosMain = &pos.x;
+		playerCol.pPosSubA = pos.y;
+		playerCol.pPosSubB = pos.z;
+		playerCol.fSizeMain = fPlayerWidth;
+		playerCol.fSizeSubA = fPlayerHeight;
+		playerCol.fSizeSubB = fPlayerDepth;
+
+		CBoxCollider* pCollider = CBoxCollider::GetTop();
+
+		while (pCollider != nullptr)
+		{
+			if (pCollider != this && pCollider->m_type != TYPE_NONE && m_aTagColl[this->m_tag][pCollider->m_tag] == true)
 			{
-				//重複チェック
-				bool bRegisted = false;
-				for (int cnt = 0; cnt < collResult.collList.size(); cnt++)
+				ColFloat otherCol;
+				D3DXVECTOR3 posOther = pCollider->m_iCollisionReader->GetPosOld() + pCollider->m_iCollisionReader->GetMove();
+				otherCol.pPosMain = &posOther.x;
+				otherCol.pPosSubA = posOther.y;
+				otherCol.pPosSubB = posOther.z;
+				otherCol.fSizeMain = pCollider->m_iCollisionReader->GetWidth() * 0.5f;
+				otherCol.fSizeSubA = pCollider->m_iCollisionReader->GetHeight() * 0.5f;
+				otherCol.fSizeSubB = pCollider->m_iCollisionReader->GetDepth() * 0.5f;
+
+				if (CollisionAxis(playerCol, posOld.x, otherCol, pCollider->m_type))	//当たり判定
 				{
-					if (collResult.collList[cnt] == pCollider->m_iCollisionReader->GetObj())
+					//重複チェック
+					bool bRegisted = false;
+					for (int cnt = 0; cnt < collResult.collList.size(); cnt++)
 					{
-						bRegisted = true;
-						break;
+						if (collResult.collList[cnt] == pCollider->m_iCollisionReader->GetObj())
+						{
+							bRegisted = true;
+							break;
+						}
+
 					}
 
-				}
-
-				if (bRegisted == false)
-				{//重複してない
-					collResult.collList.emplace_back(pCollider->m_iCollisionReader->GetObj());
-				}
-
-				collResult.bHit[0] = true;
-			}
-		}
-		pCollider = pCollider->GetNext();	//次のブロック
-	}
-
-	//Y
-	pos.y += move.y;
-	playerCol.pPosMain = &pos.y;
-	playerCol.pPosSubA = pos.x;
-	playerCol.pPosSubB = pos.z;
-	playerCol.fSizeMain = fPlayerHeight;
-	playerCol.fSizeSubA = fPlayerWidth;
-	playerCol.fSizeSubB = fPlayerDepth;
-
-	pCollider = CBoxCollider::GetTop();
-
-	while (pCollider != nullptr)
-	{
-		if (pCollider != this && pCollider->m_type != TYPE_NONE && m_aTagColl[this->m_tag][pCollider->m_tag] == true)
-		{
-			ColFloat otherCol;
-			D3DXVECTOR3 posOther = pCollider->m_iCollisionReader->GetPosOld() + pCollider->m_iCollisionReader->GetMove();
-			otherCol.pPosMain = &posOther.y;
-			otherCol.pPosSubA = posOther.x;
-			otherCol.pPosSubB = posOther.z;
-			otherCol.fSizeMain = pCollider->m_iCollisionReader->GetHeight() * 0.5f;
-			otherCol.fSizeSubA = pCollider->m_iCollisionReader->GetWidth() * 0.5f;
-			otherCol.fSizeSubB = pCollider->m_iCollisionReader->GetDepth() * 0.5f;
-
-			if (CollisionAxis(playerCol, posOld.y, otherCol, pCollider->m_type) == true)	//当たり判定
-			{//着地した
-			 //重複チェック
-				bool bRegisted = false;
-				for (int cnt = 0; cnt < collResult.collList.size(); cnt++)
-				{
-					if (collResult.collList[cnt] == pCollider->m_iCollisionReader->GetObj())
-					{
-						bRegisted = true;
-						break;
+					if (bRegisted == false)
+					{//重複してない
+						collResult.collList.emplace_back(pCollider->m_iCollisionReader->GetObj());
 					}
 
+					collResult.bHit[0] = true;
 				}
-
-				if (bRegisted == false)
-				{//重複してない
-					collResult.collList.emplace_back(pCollider->m_iCollisionReader->GetObj());
-				}
-
-				collResult.bHit[1] = true;
 			}
+			pCollider = pCollider->GetNext();	//次のブロック
 		}
-		pCollider = pCollider->GetNext();	//次のブロック
-	}
 
-	//Z
-	pos.z += move.z;
-	playerCol.pPosMain = &pos.z;
-	playerCol.pPosSubA = pos.x;
-	playerCol.pPosSubB = pos.y;
-	playerCol.fSizeMain = fPlayerDepth;
-	playerCol.fSizeSubA = fPlayerWidth;
-	playerCol.fSizeSubB = fPlayerHeight;
+		//Y
+		pos.y += move.y;
+		playerCol.pPosMain = &pos.y;
+		playerCol.pPosSubA = pos.x;
+		playerCol.pPosSubB = pos.z;
+		playerCol.fSizeMain = fPlayerHeight;
+		playerCol.fSizeSubA = fPlayerWidth;
+		playerCol.fSizeSubB = fPlayerDepth;
 
-	pCollider = CBoxCollider::GetTop();
+		pCollider = CBoxCollider::GetTop();
 
-	while (pCollider != nullptr)
-	{
-		if (pCollider != this && pCollider->m_type != TYPE_NONE && m_aTagColl[this->m_tag][pCollider->m_tag] == true)
+		while (pCollider != nullptr)
 		{
-			ColFloat otherCol;
-			D3DXVECTOR3 posOther = pCollider->m_iCollisionReader->GetPosOld() + pCollider->m_iCollisionReader->GetMove();
-			otherCol.pPosMain = &posOther.z;
-			otherCol.pPosSubA = posOther.x;
-			otherCol.pPosSubB = posOther.y;
-			otherCol.fSizeMain = pCollider->m_iCollisionReader->GetDepth() * 0.5f;
-			otherCol.fSizeSubA = pCollider->m_iCollisionReader->GetWidth() * 0.5f;
-			otherCol.fSizeSubB = pCollider->m_iCollisionReader->GetHeight() * 0.5f;
-
-			if (CollisionAxis(playerCol, posOld.z, otherCol, pCollider->m_type))	//当たり判定
+			if (pCollider != this && pCollider->m_type != TYPE_NONE && m_aTagColl[this->m_tag][pCollider->m_tag] == true)
 			{
-				//重複チェック
-				bool bRegisted = false;
-				for (int cnt = 0; cnt < collResult.collList.size(); cnt++)
-				{
-					if (collResult.collList[cnt] == pCollider->m_iCollisionReader->GetObj())
+				ColFloat otherCol;
+				D3DXVECTOR3 posOther = pCollider->m_iCollisionReader->GetPosOld() + pCollider->m_iCollisionReader->GetMove();
+				otherCol.pPosMain = &posOther.y;
+				otherCol.pPosSubA = posOther.x;
+				otherCol.pPosSubB = posOther.z;
+				otherCol.fSizeMain = pCollider->m_iCollisionReader->GetHeight() * 0.5f;
+				otherCol.fSizeSubA = pCollider->m_iCollisionReader->GetWidth() * 0.5f;
+				otherCol.fSizeSubB = pCollider->m_iCollisionReader->GetDepth() * 0.5f;
+
+				if (CollisionAxis(playerCol, posOld.y, otherCol, pCollider->m_type) == true)	//当たり判定
+				{//着地した
+				 //重複チェック
+					bool bRegisted = false;
+					for (int cnt = 0; cnt < collResult.collList.size(); cnt++)
 					{
-						bRegisted = true;
-						break;
+						if (collResult.collList[cnt] == pCollider->m_iCollisionReader->GetObj())
+						{
+							bRegisted = true;
+							break;
+						}
+
 					}
 
-				}
+					if (bRegisted == false)
+					{//重複してない
+						collResult.collList.emplace_back(pCollider->m_iCollisionReader->GetObj());
+					}
 
-				if (bRegisted == false)
-				{//重複してない
-					collResult.collList.emplace_back(pCollider->m_iCollisionReader->GetObj());
+					if (pCollider->m_type == TYPE_COLLISION)
+					{
+						collResult.bHit[1] = true;
+					}
 				}
-
-				collResult.bHit[2] = true;
 			}
+			pCollider = pCollider->GetNext();	//次のブロック
 		}
-		pCollider = pCollider->GetNext();	//次のブロック
-	}
 
-	//当たり判定後の位置設定
-	m_iCollisionReader->SetPos(pos);
+		//Z
+		pos.z += move.z;
+		playerCol.pPosMain = &pos.z;
+		playerCol.pPosSubA = pos.x;
+		playerCol.pPosSubB = pos.y;
+		playerCol.fSizeMain = fPlayerDepth;
+		playerCol.fSizeSubA = fPlayerWidth;
+		playerCol.fSizeSubB = fPlayerHeight;
+
+		pCollider = CBoxCollider::GetTop();
+
+		while (pCollider != nullptr)
+		{
+			if (pCollider != this && pCollider->m_type != TYPE_NONE && m_aTagColl[this->m_tag][pCollider->m_tag] == true)
+			{
+				ColFloat otherCol;
+				D3DXVECTOR3 posOther = pCollider->m_iCollisionReader->GetPosOld() + pCollider->m_iCollisionReader->GetMove();
+				otherCol.pPosMain = &posOther.z;
+				otherCol.pPosSubA = posOther.x;
+				otherCol.pPosSubB = posOther.y;
+				otherCol.fSizeMain = pCollider->m_iCollisionReader->GetDepth() * 0.5f;
+				otherCol.fSizeSubA = pCollider->m_iCollisionReader->GetWidth() * 0.5f;
+				otherCol.fSizeSubB = pCollider->m_iCollisionReader->GetHeight() * 0.5f;
+
+				if (CollisionAxis(playerCol, posOld.z, otherCol, pCollider->m_type))	//当たり判定
+				{
+					//重複チェック
+					bool bRegisted = false;
+					for (int cnt = 0; cnt < collResult.collList.size(); cnt++)
+					{
+						if (collResult.collList[cnt] == pCollider->m_iCollisionReader->GetObj())
+						{
+							bRegisted = true;
+							break;
+						}
+
+					}
+
+					if (bRegisted == false)
+					{//重複してない
+						collResult.collList.emplace_back(pCollider->m_iCollisionReader->GetObj());
+					}
+
+					collResult.bHit[2] = true;
+				}
+			}
+			pCollider = pCollider->GetNext();	//次のブロック
+		}
+
+		//当たり判定後の位置設定
+		m_iCollisionReader->SetPos(pos);
+
+	}
 
 	m_collisionResult = collResult;
 }
@@ -383,24 +391,27 @@ bool CBoxCollider::CollisionAxis(ColFloat source, const float fPosMainOld, ColFl
 		source.pPosSubB - source.fSizeSubB < dest.pPosSubB + dest.fSizeSubB &&
 		source.pPosSubB + source.fSizeSubB > dest.pPosSubB - dest.fSizeSubB)
 	{
-		if (fPosMainOld + source.fSizeMain <= *dest.pPosMain - dest.fSizeMain &&
-			*source.pPosMain + source.fSizeMain > *dest.pPosMain - dest.fSizeMain)
-		{
-			if (this->m_type == TYPE_COLLISION && otherType == TYPE_COLLISION)
+		if (this->m_type == TYPE_COLLISION && otherType == TYPE_COLLISION)
+		{//両方ぶつかる
+			if (fPosMainOld + source.fSizeMain <= *dest.pPosMain - dest.fSizeMain &&
+				*source.pPosMain + source.fSizeMain > *dest.pPosMain - dest.fSizeMain)
 			{
 				*source.pPosMain = *dest.pPosMain - dest.fSizeMain - source.fSizeMain;
+				bCollision = true;
 			}
-			bCollision = true;
-		}
-		else if (fPosMainOld - source.fSizeMain >= *dest.pPosMain + dest.fSizeMain &&
-			*source.pPosMain - source.fSizeMain < *dest.pPosMain + dest.fSizeMain)
-		{
-			if (this->m_type == TYPE_COLLISION && otherType == TYPE_COLLISION)
+			else if (fPosMainOld - source.fSizeMain >= *dest.pPosMain + dest.fSizeMain &&
+				*source.pPosMain - source.fSizeMain < *dest.pPosMain + dest.fSizeMain)
 			{
 				*source.pPosMain = *dest.pPosMain + dest.fSizeMain + source.fSizeMain;
+				bCollision = true;
 			}
+		}
+		else if(*source.pPosMain - source.fSizeMain < *dest.pPosMain + dest.fSizeMain &&
+			*source.pPosMain + source.fSizeMain > *dest.pPosMain - dest.fSizeMain)
+		{//どちらか重なる設定なのは確定なので重なっているか確認
 			bCollision = true;
 		}
+		
 	}
 
 	return bCollision;

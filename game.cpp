@@ -40,9 +40,6 @@
 //仮
 #include "goal.h"
 
-//静的メンバ変数
-const int CGame::CDSTART_TIME = MAX_FPS;
-
 //=================================
 //コンストラクタ
 //=================================
@@ -194,9 +191,9 @@ void CGame::Update(void)
 		pCamera->SetPosV(posV);
 		pCamera->SetPosR(posR);
 
-		if (lenXHalf * 1.5f >= 900.0f)
+		if (lenXHalf * 2.0f >= 900.0f)
 		{//仮
-			pCamera->SetLength(lenXHalf * 1.5f);
+			pCamera->SetLength(lenXHalf * 2.0f);
 		}
 		else
 		{

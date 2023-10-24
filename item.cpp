@@ -15,6 +15,7 @@ int CItem::m_nNumAll = 0;
 IScoreSetter* CItem::m_pScoreInterface = nullptr;
 CItem* CItem::m_pTop = nullptr;	//リストの最初
 CItem* CItem::m_pCur = nullptr;	//リストの終端
+const int CItem::GET_SCORE = 1000;
 
 //************************************************
 //アイテム弾クラス
@@ -98,7 +99,7 @@ CItem* CItem::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot)
 		pItem->Init();
 
 		//データ設定
-		pItem->m_nScore = 100;	//仮
+		pItem->m_nScore = GET_SCORE;
 		pItem->SetPos(pos);
 		pItem->SetRot(rot);
 

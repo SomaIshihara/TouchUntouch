@@ -17,6 +17,7 @@
 #include "goal.h"
 #include "item.h"
 #include "teleport.h"
+#include "tutorialobj.h"
 
 //静的メンバ変数
 const int CObjLoader::STR_LENGTH = 256;
@@ -159,6 +160,11 @@ CObjLoader::LOADRESULT CObjLoader::LoadData(const char * pPath)
 					else if (nType == OBJTYPE_TELEPORT_POS)
 					{
 						CTeleportPos::Create(pObject->GetPos(), nSubType);	//新しいオブジェクト配置
+						pObject->Uninit();									//仮オブジェクト破棄
+					}
+					else if (nType == OBJTYPE_TUTORIALOBJ)
+					{
+						CTutorialObj::Create(pObject->GetPos(), nSubType);	//新しいオブジェクト配置
 						pObject->Uninit();									//仮オブジェクト破棄
 					}
 				}

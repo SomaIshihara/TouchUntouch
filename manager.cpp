@@ -18,6 +18,7 @@
 
 //ÉVÅ[Éì
 #include "title.h"
+#include "tutorial.h"
 #include "game.h"
 #include "ranking.h"
 
@@ -361,6 +362,9 @@ CScene* CScene::Create(MODE mode)
 		{
 		case MODE_TITLE:
 			pScene = new CTitle;
+			break;
+		case MODE_TUTORIAL:
+			pScene = new CTutorial;
 			break;
 		case MODE_GAME:
 			pScene = new CGame;
