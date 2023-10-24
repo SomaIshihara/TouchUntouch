@@ -107,9 +107,10 @@ CFade* CFade::Create(CScene::MODE sceneNext)
 
 		//‰Šú‰»
 		pFade->Init();
+		pFade->BindTexture(-1);
 
 		//‚¿‚©‚¿‚©–hŽ~
-		pFade->SetCol(D3DXCOLOR(0.0f, 0.0f, 0.0f,0.0f));
+		pFade->SetCol(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
 
 		//ŽŸ‚ÌƒV[ƒ“Ý’è
 		pFade->SetNext(sceneNext);

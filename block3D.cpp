@@ -83,11 +83,11 @@ void CBlock3D::Update(void)
 			this->GetCollider()->SetType(CBoxCollider::TYPE_COLLISION);
 			if (m_type == TYPE_GIMMICK_01)
 			{//Ž‡
-				SetColor(true, D3DXCOLOR(0xffab7fc7));
+				SetColor(true, D3DCOLOR(0xffab7fc7));
 			}
 			else if (m_type == TYPE_GIMMICK_02)
 			{//‰©F
-				SetColor(true, D3DXCOLOR(0xfff7ea31));
+				SetColor(true, D3DCOLOR(0xfff7ea31));
 			}
 		}
 		else
@@ -95,11 +95,11 @@ void CBlock3D::Update(void)
 			this->GetCollider()->SetType(CBoxCollider::TYPE_NONE);
 			if (m_type == TYPE_GIMMICK_01)
 			{//Ž‡
-				SetColor(true, D3DXCOLOR(0x66ab7fc7));
+				SetColor(true, D3DCOLOR(0x66ab7fc7));
 			}
 			else if (m_type == TYPE_GIMMICK_02)
 			{//‰©F
-				SetColor(true, D3DXCOLOR(0x66f7ea31));
+				SetColor(true, D3DCOLOR(0x66f7ea31));
 			}
 		}
 	}
@@ -136,12 +136,12 @@ CBlock3D* CBlock3D::Create(const D3DXVECTOR3 pos, const TYPE type)
 		if (type == TYPE_A)
 		{
 			pBlock->GetCollider()->SetTag(CBoxCollider::TAG_TYPE_A);
-			pBlock->SetColor(true, D3DXCOLOR(0x66f39aac));
+			pBlock->SetColor(true, D3DCOLOR(0x66f39aac));
 		}
 		else if (type == TYPE_B)
 		{
 			pBlock->GetCollider()->SetTag(CBoxCollider::TAG_TYPE_B);
-			pBlock->SetColor(true, D3DXCOLOR(0x6668c7ec));
+			pBlock->SetColor(true, D3DCOLOR(0x6668c7ec));
 		}
 		else
 		{
@@ -149,11 +149,11 @@ CBlock3D* CBlock3D::Create(const D3DXVECTOR3 pos, const TYPE type)
 
 			if (type == TYPE_GIMMICK_01)
 			{//Ž‡
-				pBlock->SetColor(true, D3DXCOLOR(0x66ab7fc7));
+				pBlock->SetColor(true, D3DCOLOR(0x66ab7fc7));
 			}
 			else if (type == TYPE_GIMMICK_02)
 			{//‰©F
-				pBlock->SetColor(true, D3DXCOLOR(0x66f7ea31));
+				pBlock->SetColor(true, D3DCOLOR(0x66f7ea31));
 			}
 		}
 

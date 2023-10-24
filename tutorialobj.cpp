@@ -95,11 +95,11 @@ void CTutorialObj::Draw(void)
 	//チュートリアル表示設定
 	if (m_bPopup == true)
 	{
-		m_pTutorial->SetCol(D3DXCOLOR(0xffffffff));
+		m_pTutorial->SetCol(D3DCOLOR(0xffffffff));
 	}
 	else
 	{
-		m_pTutorial->SetCol(D3DXCOLOR(0x00ffffff));
+		m_pTutorial->SetCol(D3DCOLOR(0x00ffffff));
 	}
 }
 

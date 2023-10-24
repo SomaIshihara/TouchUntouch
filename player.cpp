@@ -8,6 +8,7 @@
 #include "manager.h"
 #include "input.h"
 #include "camera.h"
+#include "sound.h"
 
 //=================================
 //コンストラクタ
@@ -64,12 +65,25 @@ void CPlayer::Update(void)
 		}
 
 		//ジャンプ
-		m_bPressJump = (pKeyboard->GetTrigger(DIK_SPACE) == true) ? true : false;
+		if (pKeyboard->GetTrigger(DIK_S) == true)
+		{
+			m_bPressJump = true;
+
+			//BGM再生
+			CManager::GetInstance()->GetSound()->Play(CSound::SOUND_LABEL_SE_JUMP);
+		}
+		else
+		{
+			m_bPressJump = false;
+		}
 
 		//キャラ切替
 		if (pKeyboard->GetTrigger(DIK_S) == true)
 		{
 			m_controllType = (m_controllType == CCharacter::TYPE_A) ? CCharacter::TYPE_B : CCharacter::TYPE_A;
+
+			//SE再生
+			CManager::GetInstance()->GetSound()->Play(CSound::SOUND_LABEL_SE_CHANGE);
 		}
 	}
 	else
@@ -110,7 +124,4 @@ void CPlayer::Move(void)
 		move.x += sinf(rot.y) * CAMERA_MOVE_SPEED;
 		move.z += -cosf(rot.y) * CAMERA_MOVE_SPEED;
 	}
-
-	//移動
-	
 }

@@ -9,6 +9,7 @@
 #include "texture.h"
 #include "item.h"
 #include "xmodel.h"
+#include "sound.h"
 
 //Ã“Iƒƒ“ƒo•Ï”
 int CItem::m_nNumAll = 0;
@@ -126,6 +127,9 @@ void CItem::Get(void)
 	if (m_pScoreInterface != nullptr)
 	{
 		m_pScoreInterface->Add(m_nScore);
+
+		//SEÄ¶
+		CManager::GetInstance()->GetSound()->Play(CSound::SOUND_LABEL_SE_ITEM);
 	}
 	CItem::Uninit();
 }

@@ -10,6 +10,7 @@
 #include "fade.h"
 #include "object2D.h"
 #include "score.h"
+#include "sound.h"
 
 //Ã“Iƒƒ“ƒo•Ï”
 const int CRanking::MAX_RANK = 5;
@@ -92,6 +93,9 @@ void CRanking::Update(void)
 		if (pGamePad->GetTrigger(XINPUT_GAMEPAD_A) == true && m_pFade == nullptr)
 		{
 			m_pFade = CFade::Create(CScene::MODE_TITLE);
+
+			//SEÄ¶
+			CManager::GetInstance()->GetSound()->Play(CSound::SOUND_LABEL_SE_SELECT);
 		}
 	}
 	else
@@ -101,6 +105,9 @@ void CRanking::Update(void)
 		if (pKeyboard->GetTrigger(DIK_SPACE) == true && m_pFade == nullptr)
 		{
 			m_pFade = CFade::Create(CScene::MODE_TITLE);
+
+			//SEÄ¶
+			CManager::GetInstance()->GetSound()->Play(CSound::SOUND_LABEL_SE_SELECT);
 		}
 	}
 }

@@ -54,7 +54,8 @@ public:
 	virtual void Draw(void) = 0;
 
 	//全オブジェクト系
-	static void ReleaseAll(void);
+	static void ReleaseAll(void);					//すべて
+	static void ReleaseAll(const int nPriority);	//優先度別
 	static void UpdateAll(void);
 	static void DrawAll(void);
 
@@ -63,13 +64,6 @@ public:
 	TYPE GetType(void) { return m_Type; }
 	static CObject* GetTop(const int nPriority) { return m_apTop[nPriority]; }
 	CObject* GetNext(void) { return m_pNext; }
-
-	//純粋仮想取得
-	//virtual D3DXVECTOR3 GetPos(void) = 0;
-	//virtual D3DXVECTOR3 GetRot(void) = 0;
-	//virtual float GetWidth(void) = 0;
-	//virtual float GetHeight(void) = 0;
-	//virtual float GetDepth(void) = 0;
 
 	//除外（リスト実装ありの場合）
 	virtual void Exclusion(void) = 0;

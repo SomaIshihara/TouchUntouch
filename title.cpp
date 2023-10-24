@@ -42,6 +42,9 @@ HRESULT CTitle::Init(void)
 	m_pStart = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 600.0f, 0.0f), CManager::VEC3_ZERO, 560.0f, 48.0f, CObject::PRIORITY_UI);
 	m_pStart->BindTexture(CTexture::PRELOAD_01_STARTKB);
 
+	//BGM再生
+	CManager::GetInstance()->GetSound()->Play(CSound::SOUND_LABEL_BGM_OUT);
+
 	return S_OK;
 }
 
@@ -50,7 +53,15 @@ HRESULT CTitle::Init(void)
 //=================================
 void CTitle::Uninit(void)
 {
-	CObject::ReleaseAll();
+	//音停止
+	CManager::GetInstance()->GetSound()->Stop();
+
+	//オブジェ全破棄
+	for (int cnt = 0; cnt < CObject::PRIORITY_FADE; cnt++)
+	{
+		CObject::ReleaseAll(cnt);
+	}
+
 }
 
 //=================================
@@ -73,6 +84,9 @@ void CTitle::Update(void)
 	if (m_pFade == nullptr && CManager::GetInstance()->GetInputKeyboard()->GetTrigger(DIK_SPACE))
 	{//スペース押された
 		m_pFade = CFade::Create(CScene::MODE_TUTORIAL);
+
+		//SE再生
+		CManager::GetInstance()->GetSound()->Play(CSound::SOUND_LABEL_SE_SELECT);
 	}
 }
 

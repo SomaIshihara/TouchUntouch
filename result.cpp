@@ -12,6 +12,7 @@
 #include "fade.h"
 #include "input.h"
 #include "texture.h"
+#include "sound.h"
 
 //静的メンバ変数
 
@@ -97,11 +98,17 @@ void CResult::Update(void)
 	{//時間を減らしてボーナス加算
 		m_pTimer->Add(-1);
 		m_pBonus->Add(100);
+
+		//SE再生
+		CManager::GetInstance()->GetSound()->Play(CSound::SOUND_LABEL_SE_ITEM);
 	}//↓は時間が0になったら実行
 	else if (m_pBonus->GetScore() > 0)
 	{//ボーナスから最終スコアに移動
 		m_pBonus->Add(-100);
 		m_pScore->Add(100);
+
+		//SE再生
+		CManager::GetInstance()->GetSound()->Play(CSound::SOUND_LABEL_SE_ITEM);
 	}//下はボーナス移動完了後実行
 	else
 	{//移動しきった
@@ -111,6 +118,9 @@ void CResult::Update(void)
 			{
 				CRanking::Set(m_pScore->GetScore());
 				m_pFade = CFade::Create(CScene::MODE_RANKING);
+
+				//SE再生
+				CManager::GetInstance()->GetSound()->Play(CSound::SOUND_LABEL_SE_SELECT);
 			}
 		}
 		else
@@ -119,6 +129,9 @@ void CResult::Update(void)
 			{
 				CRanking::Set(m_pScore->GetScore());
 				m_pFade = CFade::Create(CScene::MODE_RANKING);
+
+				//SE再生
+				CManager::GetInstance()->GetSound()->Play(CSound::SOUND_LABEL_SE_SELECT);
 			}
 		}
 	}

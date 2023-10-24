@@ -75,7 +75,7 @@ HRESULT CTutorial::Init(void)
 void CTutorial::Uninit(void)
 {
 	CObject::ReleaseAll();
-	//CManager::GetInstance()->GetSound()->Stop();
+	CManager::GetInstance()->GetSound()->Stop();
 
 	if (m_pPlayer != nullptr)
 	{
@@ -120,7 +120,11 @@ void CTutorial::Update(void)
 		m_pPlayer->SetControll(false);
 		if (m_pFade == nullptr)
 		{
+			//フェード出す
 			m_pFade = CFade::Create(CScene::MODE_GAME);
+
+			//BGM再生
+			CManager::GetInstance()->GetSound()->Play(CSound::SOUND_LABEL_BGM_OUT);
 		}
 	}
 	else
