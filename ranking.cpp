@@ -75,7 +75,11 @@ HRESULT CRanking::Init(void)
 //=================================
 void CRanking::Uninit(void)
 {
-	CObject::ReleaseAll();
+	//オブジェ全破棄
+	for (int cnt = 0; cnt < CObject::PRIORITY_FADE; cnt++)
+	{
+		CObject::ReleaseAll(cnt);
+	}
 }
 
 //=================================

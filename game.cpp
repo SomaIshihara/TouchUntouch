@@ -29,6 +29,7 @@
 #include "objloader.h"
 #include "switchmanager.h"
 #include "block3D.h"
+#include "object3D.h"
 
 //シーン系
 #include "result.h"
@@ -103,6 +104,10 @@ HRESULT CGame::Init(void)
 	CCharacter::Create(D3DXVECTOR3(100.0f,150.0f,0.0f),CCharacter::TYPE_A, m_pPlayer);
 	CCharacter::Create(D3DXVECTOR3(0.0f, 150.0f, 0.0f),CCharacter::TYPE_B, m_pPlayer);
 
+	//背景
+	CObject3D* pObj3D = CObject3D::Create(D3DXVECTOR3(0.0f,300.0f,700.0f), D3DXVECTOR3(-0.5f * D3DX_PI, 0.0f, 0.0f), 7200.0f, 4404.0f,CObject::PRIORITY_BG);
+	pObj3D->BindTexture(CManager::GetInstance()->GetTexture()->Regist("data\\TEXTURE\\tex_bg.png"));
+
 	//BGM再生
 	CManager::GetInstance()->GetSound()->Play(CSound::SOUND_LABEL_BGM_IN);
 	return S_OK;
@@ -113,7 +118,12 @@ HRESULT CGame::Init(void)
 //=================================
 void CGame::Uninit(void)
 {
-	CObject::ReleaseAll();
+	//オブジェ全破棄
+	for (int cnt = 0; cnt < CObject::PRIORITY_FADE; cnt++)
+	{
+		CObject::ReleaseAll(cnt);
+	}
+
 	CManager::GetInstance()->GetSound()->Stop();
 
 	if (m_pPlayer != nullptr)

@@ -65,17 +65,7 @@ void CPlayer::Update(void)
 		}
 
 		//ƒWƒƒƒ“ƒv
-		if (pKeyboard->GetTrigger(DIK_S) == true)
-		{
-			m_bPressJump = true;
-
-			//BGMÄ¶
-			CManager::GetInstance()->GetSound()->Play(CSound::SOUND_LABEL_SE_JUMP);
-		}
-		else
-		{
-			m_bPressJump = false;
-		}
+		m_bPressJump = (pKeyboard->GetTrigger(DIK_SPACE) == true) ? true : false;
 
 		//ƒLƒƒƒ‰Ø‘Ö
 		if (pKeyboard->GetTrigger(DIK_S) == true)

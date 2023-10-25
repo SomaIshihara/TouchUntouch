@@ -69,20 +69,20 @@ HRESULT CGoal::Init(void)
 //=================================
 void CGoal::Uninit(void)
 {
-	if (m_pBase != nullptr)
+	/*if (m_pBase != nullptr)
 	{
 		m_pBase->Uninit();
 		m_pBase = nullptr;
-	}
+	}*/
 
-	for (int cnt = 0; cnt < CCharacter::TYPE_MAX; cnt++)
+	/*for (int cnt = 0; cnt < CCharacter::TYPE_MAX; cnt++)
 	{
 		if (m_aSwitch[cnt] != nullptr)
 		{
 			m_aSwitch[cnt]->Uninit();
 			m_aSwitch[cnt] = nullptr;
 		}
-	}
+	}*/
 	Release();
 }
 

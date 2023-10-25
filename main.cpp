@@ -10,7 +10,7 @@
 #include "manager.h"
 
 //マクロ定義
-#define WINDOW_NAME			"TouchUntouch"
+#define WINDOW_NAME			"Touch/Untouch"
 #define FPS_SPEED			(500)	//FPS計測時間
 
 //プロトタイプ宣言
@@ -31,12 +31,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR lpCmdLine
 		0,									//使用しない
 		0,									//使用しない
 		hInstance,							//インスタンスハンドル
-		LoadIcon(nullptr,IDI_APPLICATION),		//タスクバーのアイコン
-		LoadCursor(nullptr,IDC_ARROW),			//マウスカーソル
+		LoadIcon(nullptr,IDI_APPLICATION),	//タスクバーのアイコン
+		LoadCursor(nullptr,IDC_ARROW),		//マウスカーソル
 		(HBRUSH)(COLOR_WINDOW + 1),			//クライアント領域の背景色
-		nullptr,								//メニューバー
+		nullptr,							//メニューバー
 		CLASS_NAME,							//クラスの名前
-		LoadIcon(nullptr,IDI_APPLICATION)		//アプリケーションのアイコン
+		LoadIcon(nullptr,IDI_APPLICATION)	//アプリケーションのアイコン
 	};
 
 	HWND hWnd;	//ウィンドウハンドル

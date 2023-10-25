@@ -74,7 +74,12 @@ HRESULT CTutorial::Init(void)
 //=================================
 void CTutorial::Uninit(void)
 {
-	CObject::ReleaseAll();
+	//オブジェ全破棄
+	for (int cnt = 0; cnt < CObject::PRIORITY_FADE; cnt++)
+	{
+		CObject::ReleaseAll(cnt);
+	}
+
 	CManager::GetInstance()->GetSound()->Stop();
 
 	if (m_pPlayer != nullptr)

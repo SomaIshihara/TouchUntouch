@@ -6,6 +6,7 @@
 //======================================================
 #include "character.h"
 #include "manager.h"
+#include "sound.h"
 #include "renderer.h"
 #include "input.h"
 #include "model.h"
@@ -199,18 +200,17 @@ void CCharacter::Update(void)
 		m_nCounterJumpTime = 0;
 		m_fJumpPower = 0.0f;
 		m_posLastLanding = m_pos;
-	}
-	else
-	{
-		m_bJump = true;
-	}
-	
-	//ジャンプ
-	if (m_bJump == false && m_controllInterface->GetType() == m_type && m_controllInterface->IsJump() == true)
-	{//ジャンプ処理
-		m_bJump = true;
-		m_nCounterJumpTime = 0;
-		m_fJumpPower = CHARA_JUMP_POW;
+
+		//ジャンプ
+		if (m_bJump == false && m_controllInterface->GetType() == m_type && m_controllInterface->IsJump() == true)
+		{//ジャンプ処理
+			m_bJump = true;
+			m_nCounterJumpTime = 0;
+			m_fJumpPower = CHARA_JUMP_POW;
+
+			//BGM再生
+			CManager::GetInstance()->GetSound()->Play(CSound::SOUND_LABEL_SE_JUMP);
+		}
 	}
 
 	//リスポーン判定
@@ -218,6 +218,10 @@ void CCharacter::Update(void)
 	{
 		m_pos = m_posLastLanding;
 		m_pos.y += 30.0f;
+		m_bJump = true;
+		m_nCounterJumpTime = 0;
+		m_fJumpPower = 0.0f;
+
 	}
 
 	//移動量減衰

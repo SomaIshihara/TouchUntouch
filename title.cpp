@@ -61,7 +61,6 @@ void CTitle::Uninit(void)
 	{
 		CObject::ReleaseAll(cnt);
 	}
-
 }
 
 //=================================
