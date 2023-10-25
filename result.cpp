@@ -92,7 +92,7 @@ void CResult::Uninit(void)
 void CResult::Update(void)
 {
 	CInputKeyboard* pKeyboard = CManager::GetInstance()->GetInputKeyboard();
-	CInputGamePad* pGamePad = CManager::GetInstance()->GetInputGamePad();
+	CInputGamePad* pGamepad = CManager::GetInstance()->GetInputGamePad();
 
 	if (m_pTimer->GetTime() > 0)
 	{//時間を減らしてボーナス加算
@@ -112,31 +112,30 @@ void CResult::Update(void)
 	}//下はボーナス移動完了後実行
 	else
 	{//移動しきった
-		if (pGamePad != nullptr && pGamePad->IsConnect() == true)
+		bool bPush = false;
+		if (pGamepad != nullptr && pGamepad->IsConnect() == true)
 		{//ゲームパッド操作
-			if (pGamePad->GetTrigger(XINPUT_GAMEPAD_A) == true && m_pFade == nullptr)
+			if (pGamepad->GetTrigger(XINPUT_GAMEPAD_A) == true)
 			{
-				CRanking::Set(m_pScore->GetScore());
-				m_pFade = CFade::Create(CScene::MODE_RANKING);
-
-				//SE再生
-				CManager::GetInstance()->GetSound()->Play(CSound::SOUND_LABEL_SE_SELECT);
+				bPush = true;
 			}
 		}
-		else
+		else if (pKeyboard->GetTrigger(DIK_RETURN) == true)
 		{//キーボード操作
-			if (pKeyboard->GetTrigger(DIK_SPACE) == true && m_pFade == nullptr)
-			{
-				CRanking::Set(m_pScore->GetScore());
-				m_pFade = CFade::Create(CScene::MODE_RANKING);
+			bPush = true;
+		}
 
-				//SE再生
-				CManager::GetInstance()->GetSound()->Play(CSound::SOUND_LABEL_SE_SELECT);
-			}
+		if (bPush == true && m_pFade == nullptr)
+		{
+			CRanking::Set(m_pScore->GetScore());
+			m_pFade = CFade::Create(CScene::MODE_RANKING);
+
+			//SE再生
+			CManager::GetInstance()->GetSound()->Play(CSound::SOUND_LABEL_SE_SELECT);
 		}
 	}
 
-	if (pGamePad != nullptr && pGamePad->IsConnect() == true)
+	if (pGamepad != nullptr && pGamepad->IsConnect() == true)
 	{//ゲームパッド文字切替
 		m_pPress->BindTexture(CTexture::PRELOAD_08_SCENERANKGP);
 	}

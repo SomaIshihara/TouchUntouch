@@ -56,6 +56,7 @@ CManager::CManager()
 	m_pLight = nullptr;
 	m_pTexture = nullptr;
 	m_pScene = nullptr;
+	m_bEnableUpdate = true;
 
 	m_nFPS = 0;
 	m_dwFrameCount = 0;
@@ -244,7 +245,10 @@ void CManager::Update(void)
 	m_pInputPad->Update();
 
 	//•`‰æŒn
-	m_pRenderer->Update();
+	if (m_bEnableUpdate == true)
+	{
+		m_pRenderer->Update();
+	}
 
 	//3DŒn
 	m_pCamera->Update();

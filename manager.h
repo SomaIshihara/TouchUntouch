@@ -98,6 +98,10 @@ public:
 	CScene::MODE GetMode(void) { return m_pScene->GetMode(); }
 	CScene* GetScene(void) { return m_pScene; }
 
+	//更新設定・取得
+	void SetEnableUpdate(const bool bEnable) { m_bEnableUpdate = bEnable; }
+	bool GetEnableUpdate(void) { return m_bEnableUpdate; }
+
 private:
 	//変数
 	static CManager* m_pManager;			//マネージャ（シングルトン）
@@ -114,6 +118,7 @@ private:
 	int m_nFPS;								//FPS
 	DWORD m_dwFrameCount;					//回したフレーム数
 	CScene* m_pScene;						//シーン
+	bool m_bEnableUpdate;					//オブジェ更新するか
 };
 
 #endif

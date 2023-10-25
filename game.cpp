@@ -49,6 +49,8 @@ CGame::CGame()
 	m_pPlayer = nullptr;
 	m_pTimer = nullptr;
 	m_pScore = nullptr;
+	m_pPause = nullptr;
+	m_bStart = false;
 }
 
 //=================================
@@ -95,7 +97,7 @@ HRESULT CGame::Init(void)
 	m_pTimer = CTimer::Create(D3DXVECTOR3(264.0f, 32.0f, 0.0f), CManager::VEC3_ZERO, 32.0f, 48.0f);
 	m_pTimer->BindTexture(CTexture::PRELOAD_03_NUMBER);
 	m_pTimer->Set(120, CTimer::COUNT_DOWN);
-	m_pTimer->Start();
+	m_bStart = false;
 
 	//UI-------------------------------------------
 	CObjLoader::LoadData("data\\tut_mapdata_game.ismd");
@@ -139,54 +141,96 @@ void CGame::Uninit(void)
 //=================================
 void CGame::Update(void)
 {
+	CManager* pManager = CManager::GetInstance();
 	CInputKeyboard* pKeyboard = CManager::GetInstance()->GetInputKeyboard();	//キーボード取得
+	CInputGamePad* pGamepad = CManager::GetInstance()->GetInputGamePad();		//ゲームパッド取得
 	CGoal* pGoal = CGoal::GetTop();
 	CCamera* pCamera = CManager::GetInstance()->GetCamera();
 	bool bGoal = false;
 
-	//時間管理と終了判定
-	if (m_pTimer->GetTime() <= 0)
-	{//糸冬
-		bGoal = true;
-	}
-	else if (pGoal != nullptr)
+	//フェードがなくなったら開始
+	CObject* pFade = CObject::GetTop(CObject::PRIORITY_FADE);
+	if (pFade == nullptr)
 	{
-		while (pGoal != nullptr)
+		if (m_bStart == false)
 		{
-			if (pGoal->IsGoal() == true)
-			{//糸冬
-				bGoal = true;
-				break;
-			}
-			pGoal = pGoal->GetNext();
+			m_pTimer->Start();
+			m_bStart = true;
 		}
-	}
 
-	if (bGoal == true)
-	{//ゴールした
-		m_pPlayer->SetControll(false);
-		if (m_pResult == nullptr)
+		//時間管理と終了判定
+		if (m_pTimer->GetTime() <= 0)
+		{//糸冬
+			bGoal = true;
+		}
+		else if (pGoal != nullptr)
 		{
-			m_pTimer->Stop();
-			m_pResult = CResult::Create(m_pTimer->GetTime(), m_pScore->GetScore());
+			while (pGoal != nullptr)
+			{
+				if (pGoal->IsGoal() == true)
+				{//糸冬
+					bGoal = true;
+					break;
+				}
+				pGoal = pGoal->GetNext();
+			}
+		}
 
-			//SE再生
-			CManager::GetInstance()->GetSound()->Play(CSound::SOUND_LABEL_SE_SELECT);
+		if (bGoal == true)
+		{//ゴールした
+			m_pPlayer->SetControll(false);
+			if (m_pResult == nullptr)
+			{
+				m_pTimer->Stop();
+				m_pResult = CResult::Create(m_pTimer->GetTime(), m_pScore->GetScore());
+
+				//SE再生
+				pManager->GetSound()->Play(CSound::SOUND_LABEL_SE_SELECT);
+			}
+			else
+			{
+				m_pResult->Update();
+			}
 		}
 		else
-		{
-			m_pResult->Update();
-		}
-	}
-	else
-	{//ゴールしてない
-		m_pPlayer->SetControll(true);
-	}
+		{//ゴールしてない
+			m_pPlayer->SetControll(true);
 
-	//とりあえず回す（有効・無効は上でやる）
-	if (m_pPlayer != nullptr)
-	{
-		m_pPlayer->Update();
+			//ポーズ処理
+			if (pKeyboard != nullptr && pKeyboard->GetTrigger(DIK_P) == true)
+			{
+				pManager->SetEnableUpdate(!pManager->GetEnableUpdate());
+			}
+			else if (pGamepad != nullptr && pGamepad->IsConnect() == true && pGamepad->GetTrigger(XINPUT_GAMEPAD_START) == true)
+			{
+				pManager->SetEnableUpdate(!pManager->GetEnableUpdate());
+			}
+
+			if (pManager->GetEnableUpdate() == false)
+			{//更新停止（ポーズ中）
+				if (m_pPause == nullptr)
+				{
+					m_pPause = new CPause;
+					m_pPause->Init();
+				}
+				m_pPause->Update();
+			}
+			else
+			{
+				if (m_pPause != nullptr)
+				{
+					m_pPause->Uninit();
+					delete m_pPause;
+					m_pPause = nullptr;
+				}
+			}
+		}
+
+		//とりあえず回す（有効・無効は上でやる）
+		if (m_pPlayer != nullptr)
+		{
+			m_pPlayer->Update();
+		}
 	}
 
 	if (pCamera != nullptr)

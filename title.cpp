@@ -69,18 +69,30 @@ void CTitle::Uninit(void)
 void CTitle::Update(void)
 {
 	CManager* pIns = CManager::GetInstance();
+	CInputKeyboard* pKeyboard = pIns->GetInputKeyboard();
 	CInputGamePad* pGamepad = pIns->GetInputGamePad();
+	bool bPush = false;
 
 	if (pGamepad != nullptr && pGamepad->IsConnect() == true)
 	{//ゲームパッド接続
 		m_pStart->BindTexture(CTexture::PRELOAD_02_STARTGP);
+
+		if (pGamepad->GetTrigger(XINPUT_GAMEPAD_A))
+		{
+			bPush = true;
+		}
 	}
 	else
 	{//未接続
 		m_pStart->BindTexture(CTexture::PRELOAD_01_STARTKB);
+
+		if (pKeyboard->GetTrigger(DIK_RETURN))
+		{
+			bPush = true;
+		}
 	}
 
-	if (m_pFade == nullptr && CManager::GetInstance()->GetInputKeyboard()->GetTrigger(DIK_SPACE))
+	if (m_pFade == nullptr && bPush == true)
 	{//スペース押された
 		m_pFade = CFade::Create(CScene::MODE_TUTORIAL);
 

@@ -11,6 +11,7 @@
 #include "interface.h"
 
 //前方宣言
+class CInputGamePad;
 
 //プレイヤークラス
 class CPlayer : public IControllStat
@@ -34,14 +35,11 @@ public:
 	void SetControll(const bool bEnable) { m_bControlled = bEnable; }
 
 private:
-	//関数
-	void Move(void);					//カメラ移動処理
-
 	//変数
-	CCharacter::TYPE m_controllType;	//操作中のキャラのタイプ
-	int m_nPressMove;					//押されている移動使用ボタン
-	bool m_bPressJump;					//ジャンプボタンが押されているか
-	bool m_bControlled;					//操作できるか
+	CCharacter::TYPE m_controllType;				//操作中のキャラのタイプ
+	int m_nPressMove;								//押されている移動使用ボタン
+	bool m_bPressJump;								//ジャンプボタンが押されているか
+	bool m_bControlled;								//操作できるか
 };
 
 #endif

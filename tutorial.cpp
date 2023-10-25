@@ -96,6 +96,7 @@ void CTutorial::Uninit(void)
 void CTutorial::Update(void)
 {
 	CInputKeyboard* pKeyboard = CManager::GetInstance()->GetInputKeyboard();	//キーボード取得
+	CInputGamePad* pGamepad = CManager::GetInstance()->GetInputGamePad();
 	CGoal* pGoal = CGoal::GetTop();
 	CCamera* pCamera = CManager::GetInstance()->GetCamera();
 	bool bGoal = false;
@@ -115,7 +116,11 @@ void CTutorial::Update(void)
 	}
 
 	//チュートリアルスキップ
-	if (pKeyboard->GetTrigger(DIK_P) == true)
+	if (pKeyboard != nullptr && pKeyboard->GetTrigger(DIK_P) == true)
+	{
+		bGoal = true;
+	}
+	else if(pGamepad != nullptr && pGamepad->IsConnect() == true && pGamepad->GetTrigger(XINPUT_GAMEPAD_START))
 	{
 		bGoal = true;
 	}
