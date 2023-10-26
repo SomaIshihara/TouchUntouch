@@ -17,7 +17,6 @@
 #include "switch.h"
 #include "item.h"
 #include "collision.h"
-#include "teleport.h"
 #include "tutorialobj.h"
 #include "debugproc.h"
 
@@ -164,19 +163,6 @@ void CCharacter::Update(void)
 					break;
 				}
 				pItem = pItem->GetNext();
-			}
-		}
-		if (m_pCollider->GetResult().collList[cnt]->GetType() == CObject::TYPE_TELEPORT)
-		{
-			CTeleportCollision* pTeleport = CTeleportCollision::GetTop();
-			while (pTeleport != nullptr)
-			{
-				if (pTeleport == m_pCollider->GetResult().collList[cnt])
-				{
-					m_pos = pTeleport->GetFromPos();
-					break;
-				}
-				pTeleport = pTeleport->GetNext();
 			}
 		}
 		if (m_pCollider->GetResult().collList[cnt]->GetType() == CObject::TYPE_TUTORIALOBJ)
