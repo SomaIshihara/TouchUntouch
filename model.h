@@ -40,6 +40,7 @@ public:
 	//ê›íË
 	void SetPosMotioned(D3DXVECTOR3 pos) { m_posMotioned = pos; }
 	void SetRotMotioned(D3DXVECTOR3 rot) { m_rotMotioned = rot; }
+	void SetPosOffset(D3DXVECTOR3 pos) { m_pos = pos; }
 
 	//ì«Ç›çûÇ›
 	HRESULT Load(const char* pPath);

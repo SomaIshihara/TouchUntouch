@@ -29,6 +29,7 @@
 #include "objloader.h"
 #include "switchmanager.h"
 #include "block3D.h"
+#include "object3D.h"
 
 //シーン系
 #include "result.h"
@@ -40,9 +41,6 @@
 //仮
 #include "goal.h"
 
-//静的メンバ変数
-const int CGame::CDSTART_TIME = MAX_FPS;
-
 //=================================
 //コンストラクタ
 //=================================
@@ -51,6 +49,8 @@ CGame::CGame()
 	m_pPlayer = nullptr;
 	m_pTimer = nullptr;
 	m_pScore = nullptr;
+	m_pPause = nullptr;
+	m_bStart = false;
 }
 
 //=================================
@@ -65,16 +65,20 @@ CGame::~CGame()
 //=================================
 HRESULT CGame::Init(void)
 {
+	//カメラリセット
+	CManager::GetInstance()->CManager::GetInstance()->GetCamera()->ResetPos();
+
+	//操作プレイヤーのクラス生成
 	if (m_pPlayer == nullptr)
 	{
 		m_pPlayer = new CPlayer;
 		m_pPlayer->Init();
 	}
 
+	//スイッチ管理オブジェ生成と設定
 	m_pSwitchManager = CSwitchManager::Create();
 	CBlock3D::SetSwitchManager(m_pSwitchManager);
 
-	CTexture* pTexture = CManager::GetInstance()->GetTexture();
 	//UI-------------------------------------------
 	//スコア（数字）
 	m_pScore = CScore::Create(D3DXVECTOR3(SCREEN_WIDTH + 8.0f, 32.0f, 0.0f), CManager::VEC3_ZERO, 32.0f, 48.0f);
@@ -93,19 +97,21 @@ HRESULT CGame::Init(void)
 	m_pTimer = CTimer::Create(D3DXVECTOR3(264.0f, 32.0f, 0.0f), CManager::VEC3_ZERO, 32.0f, 48.0f);
 	m_pTimer->BindTexture(CTexture::PRELOAD_03_NUMBER);
 	m_pTimer->Set(120, CTimer::COUNT_DOWN);
-	m_pTimer->Start();
+	m_bStart = false;
 
 	//UI-------------------------------------------
-	CObjLoader::LoadData("data\\tut_mapdata.ismd");
+	CObjLoader::LoadData("data\\tut_mapdata_game.ismd");
 	
-	//仮置き
-	CManager::GetInstance()->CManager::GetInstance()->GetCamera()->ResetPos();
-	/*CBlock3D::Create(D3DXVECTOR3(0.0f,-70.0f,0.0f), CBlock3D::TYPE_NORMAL);
-	CSwitch::Create(D3DXVECTOR3(-80.0f, -20.0f, 0.0f),CSwitch::TYPE_A);*/
-	CCharacter::Create(D3DXVECTOR3(100.0f,100.0f,0.0f),CCharacter::TYPE_A, m_pPlayer);
-	CCharacter::Create(D3DXVECTOR3(0.0f, 100.0f, 0.0f),CCharacter::TYPE_B, m_pPlayer);
-	/*m_pGoal = CGoal::Create(D3DXVECTOR3(150.0f, -20.0f, 0.0f));
-	CItem::Create(D3DXVECTOR3(150.0f, 50.0f, 0.0f), CManager::VEC3_ZERO);*/
+	//キャラ生成
+	CCharacter::Create(D3DXVECTOR3(100.0f,150.0f,0.0f),CCharacter::TYPE_A, m_pPlayer);
+	CCharacter::Create(D3DXVECTOR3(0.0f, 150.0f, 0.0f),CCharacter::TYPE_B, m_pPlayer);
+
+	//背景
+	CObject3D* pObj3D = CObject3D::Create(D3DXVECTOR3(0.0f,300.0f,700.0f), D3DXVECTOR3(-0.5f * D3DX_PI, 0.0f, 0.0f), 7200.0f, 4404.0f,CObject::PRIORITY_BG);
+	pObj3D->BindTexture(CTexture::PRELOAD_26_BG);
+
+	//BGM再生
+	CManager::GetInstance()->GetSound()->Play(CSound::SOUND_LABEL_BGM_IN);
 	return S_OK;
 }
 
@@ -114,8 +120,13 @@ HRESULT CGame::Init(void)
 //=================================
 void CGame::Uninit(void)
 {
-	CObject::ReleaseAll();
-	//CManager::GetInstance()->GetSound()->Stop();
+	//オブジェ全破棄
+	for (int cnt = 0; cnt < CObject::PRIORITY_FADE; cnt++)
+	{
+		CObject::ReleaseAll(cnt);
+	}
+
+	CManager::GetInstance()->GetSound()->Stop();
 
 	if (m_pPlayer != nullptr)
 	{
@@ -130,70 +141,119 @@ void CGame::Uninit(void)
 //=================================
 void CGame::Update(void)
 {
+	CManager* pManager = CManager::GetInstance();
 	CInputKeyboard* pKeyboard = CManager::GetInstance()->GetInputKeyboard();	//キーボード取得
+	CInputGamePad* pGamepad = CManager::GetInstance()->GetInputGamePad();		//ゲームパッド取得
 	CGoal* pGoal = CGoal::GetTop();
 	CCamera* pCamera = CManager::GetInstance()->GetCamera();
 	bool bGoal = false;
 
-	//時間管理と終了判定
-	if (m_pTimer->GetTime() <= 0)
-	{//糸冬
-		bGoal = true;
-	}
-	else if (pGoal != nullptr)
+	//フェードがなくなったら開始
+	CObject* pFade = CObject::GetTop(CObject::PRIORITY_FADE);
+	if (pFade == nullptr)
 	{
-		while (pGoal != nullptr)
+		if (m_bStart == false)
 		{
-			if (pGoal->IsGoal() == true)
-			{//糸冬
-				bGoal = true;
-				break;
-			}
-			pGoal = pGoal->GetNext();
+			m_pTimer->Start();
+			m_bStart = true;
 		}
-	}
 
-	if (bGoal == true)
-	{//ゴールした
-		m_pPlayer->SetControll(false);
-		if (m_pResult == nullptr)
+		//時間管理と終了判定
+		if (m_pTimer->GetTime() <= 0)
+		{//糸冬
+			bGoal = true;
+		}
+		else if (pGoal != nullptr)
 		{
-			m_pTimer->Stop();
-			m_pResult = CResult::Create(m_pTimer->GetTime(), m_pScore->GetScore());
+			while (pGoal != nullptr)
+			{
+				if (pGoal->IsGoal() == true)
+				{//糸冬
+					bGoal = true;
+					break;
+				}
+				pGoal = pGoal->GetNext();
+			}
+		}
+
+		if (bGoal == true)
+		{//ゴールした
+			m_pPlayer->SetControll(false);
+			if (m_pResult == nullptr)
+			{
+				m_pTimer->Stop();
+				m_pResult = CResult::Create(m_pTimer->GetTime(), m_pScore->GetScore());
+
+				//SE再生
+				pManager->GetSound()->Play(CSound::SOUND_LABEL_SE_SELECT);
+			}
+			else
+			{
+				m_pResult->Update();
+			}
 		}
 		else
-		{
-			m_pResult->Update();
-		}
-	}
-	else
-	{//ゴールしてない
-		m_pPlayer->SetControll(true);
-	}
+		{//ゴールしてない
+			m_pPlayer->SetControll(true);
 
-	//とりあえず回す（有効・無効は上でやる）
-	if (m_pPlayer != nullptr)
-	{
-		m_pPlayer->Update();
+			//ポーズ処理
+			if (pKeyboard != nullptr && pKeyboard->GetTrigger(DIK_P) == true)
+			{
+				pManager->SetEnableUpdate(!pManager->GetEnableUpdate());
+			}
+			else if (pGamepad != nullptr && pGamepad->IsConnect() == true && pGamepad->GetTrigger(XINPUT_GAMEPAD_START) == true)
+			{
+				pManager->SetEnableUpdate(!pManager->GetEnableUpdate());
+			}
+
+			if (pManager->GetEnableUpdate() == false)
+			{//更新停止（ポーズ中）
+				if (m_pPause == nullptr)
+				{
+					m_pPause = new CPause;
+					m_pPause->Init();
+				}
+				m_pPause->Update();
+			}
+			else
+			{
+				if (m_pPause != nullptr)
+				{
+					m_pPause->Uninit();
+					delete m_pPause;
+					m_pPause = nullptr;
+				}
+			}
+		}
+
+		//とりあえず回す（有効・無効は上でやる）
+		if (m_pPlayer != nullptr)
+		{
+			m_pPlayer->Update();
+		}
 	}
 
 	if (pCamera != nullptr)
-	{
+	{//カメラ移動
 		D3DXVECTOR3 posV = pCamera->GetPosV();
 		D3DXVECTOR3 posR = pCamera->GetPosR();
 		CCharacter** chara = CCharacter::GetChara();
 
 		float posXCenter = (chara[0]->GetPos().x + chara[1]->GetPos().x) * 0.5f;
 		float lenXHalf = fabsf(chara[0]->GetPos().x - chara[1]->GetPos().x) * 0.5f;
+		float posYCenter = (chara[0]->GetPos().y + chara[1]->GetPos().y) * 0.5f;
+		float lenYHalf = fabsf(chara[0]->GetPos().y - chara[1]->GetPos().y) * 0.5f;
 		posV.x = posXCenter;
 		posR.x = posXCenter;
+		posV.y = posYCenter;
+		posR.y = posYCenter;
 
 		pCamera->SetPosV(posV);
 		pCamera->SetPosR(posR);
 
-		if (lenXHalf * 1.5f >= 900.0f)
+		if (lenXHalf * 2.0f >= 900.0f)
 		{//仮
-			pCamera->SetLength(lenXHalf * 1.5f);
+			pCamera->SetLength(lenXHalf * 2.0f);
 		}
 		else
 		{

@@ -47,7 +47,7 @@ CObject::~CObject()
 //=================================
 void CObject::ReleaseAll(void)
 {
-	for (int cnt = 0; cnt < PRIORITY_FADE; cnt++)	//フェードの破棄をしないため一つ手前まで行う
+	for (int cnt = 0; cnt < PRIORITY_MAX; cnt++)
 	{
 		CObject* pObject = m_apTop[cnt];	//先頭を入れる
 
@@ -57,6 +57,24 @@ void CObject::ReleaseAll(void)
 			pObject->Uninit();		//破棄
 			pObject = pObjectNext;	//次を入れる
 		}
+	}
+
+	//殺す
+	Death();
+}
+
+//=================================
+//オブジェクト優先度別すべて破棄
+//=================================
+void CObject::ReleaseAll(const int nPriority)
+{
+	CObject* pObject = m_apTop[nPriority];	//先頭を入れる
+
+	while (pObject != nullptr)
+	{//最後尾まで回し続ける
+		CObject* pObjectNext = pObject->m_pNext;	//次のオブジェ保存
+		pObject->Uninit();		//破棄
+		pObject = pObjectNext;	//次を入れる
 	}
 
 	//殺す

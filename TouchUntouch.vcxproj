@@ -204,9 +204,12 @@
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="switch.cpp" />
     <ClCompile Include="switchmanager.cpp" />
+    <ClCompile Include="teleport.cpp" />
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="timer.cpp" />
     <ClCompile Include="title.cpp" />
+    <ClCompile Include="tutorial.cpp" />
+    <ClCompile Include="tutorialobj.cpp" />
     <ClCompile Include="userdef.cpp" />
     <ClCompile Include="xmodel.cpp" />
   </ItemGroup>
@@ -256,9 +259,12 @@
     <ClInclude Include="sound.h" />
     <ClInclude Include="switch.h" />
     <ClInclude Include="switchmanager.h" />
+    <ClInclude Include="teleport.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="timer.h" />
     <ClInclude Include="title.h" />
+    <ClInclude Include="tutorial.h" />
+    <ClInclude Include="tutorialobj.h" />
     <ClInclude Include="userdef.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="xmodel.h" />

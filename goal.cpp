@@ -69,20 +69,20 @@ HRESULT CGoal::Init(void)
 //=================================
 void CGoal::Uninit(void)
 {
-	if (m_pBase != nullptr)
+	/*if (m_pBase != nullptr)
 	{
 		m_pBase->Uninit();
 		m_pBase = nullptr;
-	}
+	}*/
 
-	for (int cnt = 0; cnt < CCharacter::TYPE_MAX; cnt++)
+	/*for (int cnt = 0; cnt < CCharacter::TYPE_MAX; cnt++)
 	{
 		if (m_aSwitch[cnt] != nullptr)
 		{
 			m_aSwitch[cnt]->Uninit();
 			m_aSwitch[cnt] = nullptr;
 		}
-	}
+	}*/
 	Release();
 }
 
@@ -132,8 +132,8 @@ CGoal* CGoal::Create(const D3DXVECTOR3 pos)
 		pGoal->m_pBase = CObjectX::Create(pGoal->m_pos, CManager::VEC3_ZERO, CXModel::Load("data\\MODEL\\Goal_Base.x"));
 
 		//スイッチ生成
-		pGoal->m_aSwitch[CCharacter::TYPE_A] = CSwitch::Create(pGoal->m_pos + D3DXVECTOR3(-55.0f, 10.0f, 0.0f), CSwitch::TYPE_A);
-		pGoal->m_aSwitch[CCharacter::TYPE_B] = CSwitch::Create(pGoal->m_pos + D3DXVECTOR3(55.0f,10.0f,0.0f), CSwitch::TYPE_B);
+		pGoal->m_aSwitch[CCharacter::TYPE_A] = CSwitch::Create(pGoal->m_pos + D3DXVECTOR3(-55.0f, 10.0f, 0.0f), CSwitch::TYPE_GOAL_A);
+		pGoal->m_aSwitch[CCharacter::TYPE_B] = CSwitch::Create(pGoal->m_pos + D3DXVECTOR3(55.0f,10.0f,0.0f), CSwitch::TYPE_GOAL_B);
 
 		return pGoal;
 	}

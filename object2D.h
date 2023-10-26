@@ -43,7 +43,6 @@ public:
 	D3DXVECTOR3 GetRot(void) { return m_rot; }
 	float GetWidth(void) { return m_fWidth; }
 	float GetHeight(void) { return m_fHeight; }
-	//float GetDepth(void) { return CManager::FLT_ZERO; }
 	float GetLength(void) { return m_fLength; }
 	int GetIdxTexture(void) { return m_nIdxTexture; }
 

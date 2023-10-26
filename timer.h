@@ -48,6 +48,7 @@ public:
 
 	//設定
 	void Set(const int nTime, COUNT type);	//タイマー設定
+	bool GetCount(void) { return m_shouldCount; }
 	void Start(void) { m_shouldCount = true; }
 	void Stop(void) { m_shouldCount = false; }
 	void Add(const int nTime) { m_nTime += nTime; }

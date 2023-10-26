@@ -17,6 +17,9 @@ class CXModel;
 class CItem : public CObjectX
 {
 public:
+	//静的const
+	static const int GET_SCORE;
+
 	//コンストラクタ・デストラクタ
 	CItem();
 	~CItem();

@@ -28,8 +28,10 @@ public:
 	//スイッチタイプ列挙
 	enum TYPE
 	{
-		TYPE_A = 0,
-		TYPE_B,
+		TYPE_A = 0,		//紫
+		TYPE_B,			//黄色
+		TYPE_GOAL_A,	//ゴール（タイプA）
+		TYPE_GOAL_B,	//ゴール（タイプB）
 		TYPE_MAX
 	};
 

@@ -35,6 +35,10 @@ HRESULT CBG::Init(void)
 		return E_FAIL;
 	}
 
+	SetPos(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, CManager::FLT_ZERO));
+	SetRot(CManager::VEC3_ZERO);
+	SetSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+
 	return S_OK;
 }
 
@@ -61,14 +65,8 @@ void CBG::Update(void)
 //=================================
 void CBG::Draw(void)
 {
-	//Zバッファを使用しない
-	CManager::GetInstance()->GetRenderer()->SetZEnable(false);
-
 	//親クラス処理
 	CObject2D::Draw();
-	
-	//Zバッファを使用する
-	CManager::GetInstance()->GetRenderer()->SetZEnable(true);
 }
 
 //=================================
@@ -85,11 +83,6 @@ CBG* CBG::Create(const int nPriority)
 
 		//初期化
 		pObjBG->Init();
-
-		//データ設定
-		pObjBG->SetPos(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, CManager::FLT_ZERO));
-		pObjBG->SetRot(CManager::VEC3_ZERO);
-		pObjBG->SetSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 		return pObjBG;
 	}

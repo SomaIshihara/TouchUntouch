@@ -220,11 +220,14 @@ HRESULT CObject3D::SetCol(const D3DXCOLOR col)
 		return E_FAIL;
 	}
 
+	//頂点カラーの変換
+	D3DCOLOR exchange = D3DCOLOR_COLORVALUE(col.r, col.g, col.b, col.a);
+
 	//頂点カラーの設定
-	pVtx[0].col = col;
-	pVtx[1].col = col;
-	pVtx[2].col = col;
-	pVtx[3].col = col;
+	pVtx[0].col = exchange;
+	pVtx[1].col = exchange;
+	pVtx[2].col = exchange;
+	pVtx[3].col = exchange;
 
 	//頂点バッファをアンロック
 	if (FAILED(m_pVtxbuff->Unlock()))

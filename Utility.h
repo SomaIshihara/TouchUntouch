@@ -11,6 +11,6 @@
 //“ü—Í‚ª‚ß‚ñ‚Ç‚­‚³‚¢‚à‚Ì‚ğÄ’è‹`
 typedef D3DXVECTOR2 Vec2;
 typedef D3DXVECTOR3 Vec3;
-typedef D3DXCOLOR XColor;
+typedef D3DCOLOR XColor;
 
 #endif // !_UTILITY_H_

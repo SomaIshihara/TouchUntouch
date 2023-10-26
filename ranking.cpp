@@ -10,6 +10,7 @@
 #include "fade.h"
 #include "object2D.h"
 #include "score.h"
+#include "sound.h"
 
 //静的メンバ変数
 const int CRanking::MAX_RANK = 5;
@@ -74,7 +75,11 @@ HRESULT CRanking::Init(void)
 //=================================
 void CRanking::Uninit(void)
 {
-	CObject::ReleaseAll();
+	//オブジェ全破棄
+	for (int cnt = 0; cnt < CObject::PRIORITY_FADE; cnt++)
+	{
+		CObject::ReleaseAll(cnt);
+	}
 }
 
 //=================================
@@ -83,25 +88,34 @@ void CRanking::Uninit(void)
 void CRanking::Update(void)
 {
 	CInputKeyboard* pKeyboard = CManager::GetInstance()->GetInputKeyboard();
-	CInputGamePad* pGamePad = CManager::GetInstance()->GetInputGamePad();
+	CInputGamePad* pGamepad = CManager::GetInstance()->GetInputGamePad();
+	bool bPush = false;
 
-	if (pGamePad != nullptr && pGamePad->IsConnect() == true)
+	if (pGamepad != nullptr && pGamepad->IsConnect() == true)
 	{//ゲームパッド接続
 		m_pPress->BindTexture(CTexture::PRELOAD_16_SCENETITLEGP);
 
-		if (pGamePad->GetTrigger(XINPUT_GAMEPAD_A) == true && m_pFade == nullptr)
+		if (pGamepad->GetTrigger(XINPUT_GAMEPAD_A) == true)
 		{
-			m_pFade = CFade::Create(CScene::MODE_TITLE);
+			bPush = true;
 		}
 	}
 	else
 	{//未接続
 		m_pPress->BindTexture(CTexture::PRELOAD_15_SCENETITLEKB);
 
-		if (pKeyboard->GetTrigger(DIK_SPACE) == true && m_pFade == nullptr)
+		if (pKeyboard->GetTrigger(DIK_RETURN) == true)
 		{
-			m_pFade = CFade::Create(CScene::MODE_TITLE);
+			bPush = true;
 		}
+	}
+
+	if(bPush == true && m_pFade == nullptr)
+	{
+		m_pFade = CFade::Create(CScene::MODE_TITLE);
+
+		//SE再生
+		CManager::GetInstance()->GetSound()->Play(CSound::SOUND_LABEL_SE_SELECT);
 	}
 }
 

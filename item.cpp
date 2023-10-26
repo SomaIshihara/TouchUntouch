@@ -9,12 +9,14 @@
 #include "texture.h"
 #include "item.h"
 #include "xmodel.h"
+#include "sound.h"
 
 //静的メンバ変数
 int CItem::m_nNumAll = 0;
 IScoreSetter* CItem::m_pScoreInterface = nullptr;
 CItem* CItem::m_pTop = nullptr;	//リストの最初
 CItem* CItem::m_pCur = nullptr;	//リストの終端
+const int CItem::GET_SCORE = 1000;
 
 //************************************************
 //アイテム弾クラス
@@ -98,13 +100,12 @@ CItem* CItem::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot)
 		pItem->Init();
 
 		//データ設定
-		pItem->m_nScore = 100;	//仮
+		pItem->m_nScore = GET_SCORE;
 		pItem->SetPos(pos);
 		pItem->SetRot(rot);
 
 		//モデル設定
-		CXModel* aaa = CXModel::Load("data\\MODEL\\OBJECT\\item.x");
-		pItem->SetModel(CXModel::Load("data\\MODEL\\OBJECT\\item.x"));
+		pItem->SetModel(CXModel::Load("data\\MODEL\\item.x"));
 
 		//当たり判定設定
 		pItem->SetCollider();
@@ -126,6 +127,9 @@ void CItem::Get(void)
 	if (m_pScoreInterface != nullptr)
 	{
 		m_pScoreInterface->Add(m_nScore);
+
+		//SE再生
+		CManager::GetInstance()->GetSound()->Play(CSound::SOUND_LABEL_SE_ITEM);
 	}
 	CItem::Uninit();
 }

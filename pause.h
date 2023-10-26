@@ -8,11 +8,23 @@
 #define _PAUSE_H_
 
 //前方宣言
+class CObject2D;
+class CBG;
 
 //タイトルクラス
 class CPause
 {
 public:
+	//選択列挙
+	enum MODE
+	{
+		MODE_RESUME = 0,
+		MODE_RESTART,
+		MODE_EXIT,
+		MODE_SCREENSHOT,
+		MODE_MAX
+	};
+
 	//コンストラクタ・デストラクタ
 	CPause();
 	~CPause();
@@ -24,7 +36,14 @@ public:
 	void Draw(void);
 
 private:
+	void Select(void);
 
+	CBG* m_pBG;							//ちょっと暗くする背景
+	CObject2D* m_pPauseStr;				//ポーズ文字
+	CObject2D* m_apSelect[MODE_MAX];	//選択するやつ
+
+	MODE m_mode;	//選択中モード
+	bool m_bScreenShot;	//スクショ中か
 };
 
 #endif // !_GAME_H_

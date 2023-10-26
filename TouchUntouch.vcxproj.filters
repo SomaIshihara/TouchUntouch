@@ -148,6 +148,15 @@
     <ClCompile Include="switchmanager.cpp">
       <Filter>Added</Filter>
     </ClCompile>
+    <ClCompile Include="teleport.cpp">
+      <Filter>Added</Filter>
+    </ClCompile>
+    <ClCompile Include="tutorialobj.cpp">
+      <Filter>Added</Filter>
+    </ClCompile>
+    <ClCompile Include="tutorial.cpp">
+      <Filter>Base\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="collision.h">
@@ -302,6 +311,15 @@
     </ClInclude>
     <ClInclude Include="switchmanager.h">
       <Filter>Added</Filter>
+    </ClInclude>
+    <ClInclude Include="teleport.h">
+      <Filter>Added</Filter>
+    </ClInclude>
+    <ClInclude Include="tutorialobj.h">
+      <Filter>Added</Filter>
+    </ClInclude>
+    <ClInclude Include="tutorial.h">
+      <Filter>Base\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

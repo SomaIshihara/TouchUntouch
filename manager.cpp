@@ -7,7 +7,7 @@
 #include "manager.h"
 #include "renderer.h"
 #include "input.h"
-//#include "sound.h"
+#include "sound.h"
 #include "debugproc.h"
 #include "camera.h"
 #include "light.h"
@@ -18,6 +18,7 @@
 
 //シーン
 #include "title.h"
+#include "tutorial.h"
 #include "game.h"
 #include "ranking.h"
 
@@ -55,6 +56,7 @@ CManager::CManager()
 	m_pLight = nullptr;
 	m_pTexture = nullptr;
 	m_pScene = nullptr;
+	m_bEnableUpdate = true;
 
 	m_nFPS = 0;
 	m_dwFrameCount = 0;
@@ -78,7 +80,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	m_pInputKeyboard = new CInputKeyboard;
 	m_pInputMouse = new CInputMouse;
 	m_pInputPad = new CInputGamePad;
-	//m_pSound = new CSound;
+	m_pSound = new CSound;
 	m_pRenderer = new CRenderer;
 	m_pDebProc = new CDebugProc;
 	m_pCamera = new CCamera;
@@ -111,10 +113,10 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	}
 
 	//サウンド初期化
-	/*if (FAILED(m_pSound->Init(hWnd)))
+	if (FAILED(m_pSound->Init(hWnd)))
 	{
 		return E_FAIL;
-	}*/
+	}
 
 	//デバッグ初期化
 	m_pDebProc->Init();
@@ -192,12 +194,12 @@ void CManager::Uninit(void)
 	}
 
 	//サウンド破棄
-	//if (m_pSound != nullptr)
-	//{//サウンド終了
-	//	m_pSound->Uninit();
-	//	delete m_pSound;
-	//	m_pSound = nullptr;
-	//}
+	if (m_pSound != nullptr)
+	{//サウンド終了
+		m_pSound->Uninit();
+		delete m_pSound;
+		m_pSound = nullptr;
+	}
 
 	//ゲームパッド破棄
 	if (m_pInputPad != nullptr)
@@ -243,7 +245,10 @@ void CManager::Update(void)
 	m_pInputPad->Update();
 
 	//描画系
-	m_pRenderer->Update();
+	if (m_bEnableUpdate == true)
+	{
+		m_pRenderer->Update();
+	}
 
 	//3D系
 	m_pCamera->Update();
@@ -313,7 +318,7 @@ HRESULT CManager::Release(void)
 void CManager::SetMode(CScene::MODE mode)
 {
 	//音止める
-	//m_pSound->Stop();
+	m_pSound->Stop();
 
 	//現在のモード破棄
 	if (m_pScene != nullptr)
@@ -361,6 +366,9 @@ CScene* CScene::Create(MODE mode)
 		{
 		case MODE_TITLE:
 			pScene = new CTitle;
+			break;
+		case MODE_TUTORIAL:
+			pScene = new CTutorial;
 			break;
 		case MODE_GAME:
 			pScene = new CGame;

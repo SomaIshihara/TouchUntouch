@@ -21,6 +21,11 @@ class CBoxCollider;
 class CCharacter : public CObject, public ICollisionReader
 {
 public:
+	//静的const
+	static const float CHARA_SPEED;				//移動速度
+	static const float CHARA_JUMP_POW;			//ジャンプ力
+	static const float CHARA_RESPAWN_HEIGHT;	//リスポーン判定の高さ
+
 	//当たり判定用float3つ
 	struct ColFloat
 	{
@@ -37,7 +42,7 @@ public:
 	};
 
 	//コンストラクタ・デストラクタ
-	CCharacter();
+	CCharacter(int nPriority = CObject::PRIORITY_DEFAULT);
 	~CCharacter();
 
 	//基本処理
@@ -72,24 +77,25 @@ private:
 
 	static CCharacter* m_aChara[TYPE_MAX];	//種類別のキャラポインタ
 
-	D3DXMATRIX m_mtxWorld;		//ワールドマトリ
-	CModel** m_ppModel;			//モデル（動的確保）
-	int m_nNumModel;			//モデル数
-	CMotion* m_pMotion;			//モーションポインタ
+	D3DXMATRIX m_mtxWorld;			//ワールドマトリ
+	CModel** m_ppModel;				//モデル（動的確保）
+	int m_nNumModel;				//モデル数
+	CMotion* m_pMotion;				//モーションポインタ
 
-	D3DXVECTOR3 m_pos;			//位置
-	D3DXVECTOR3 m_posOld;		//前の位置
-	D3DXVECTOR3 m_move;			//移動量
-	float m_fJumpPower;			//ジャンプ力
-	D3DXVECTOR3 m_rot;			//向き
+	D3DXVECTOR3 m_pos;				//位置
+	D3DXVECTOR3 m_posOld;			//前の位置
+	D3DXVECTOR3 m_posLastLanding;	//最後に着地した位置
+	D3DXVECTOR3 m_move;				//移動量
+	float m_fJumpPower;				//ジャンプ力
+	D3DXVECTOR3 m_rot;				//向き
 	float m_fWidth, m_fHeight, m_fDepth;	//サイズ
 
-	bool m_bJump;				//ジャンプ中か
-	int m_nCounterJumpTime;		//ジャンプ時間
+	bool m_bJump;					//ジャンプ中か
+	int m_nCounterJumpTime;			//ジャンプ時間
 
-	//CShadow* m_pShadow;			//影オブジェクトポインタ
-	TYPE m_type;				//種類
-	CBoxCollider* m_pCollider;	//当たり判定
+	//CShadow* m_pShadow;				//影オブジェクトポインタ
+	TYPE m_type;					//種類
+	CBoxCollider* m_pCollider;		//当たり判定
 
 	IControllStat* m_controllInterface;	//操作状況のインターフェース
 };

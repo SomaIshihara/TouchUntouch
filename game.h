@@ -14,6 +14,7 @@ class CScore;
 class CTimer;
 class CResult;
 class CSwitchManager;
+class CPause;
 
 //仮
 class CGoal;
@@ -22,9 +23,6 @@ class CGoal;
 class CGame : public CScene
 {
 public:
-	//静的const
-	static const int CDSTART_TIME;	//カウントダウン開始時間
-
 	//コンストラクタ・デストラクタ
 	CGame();
 	~CGame();
@@ -41,6 +39,8 @@ private:
 	CTimer* m_pTimer;	//タイマーポインタ
 	CResult* m_pResult;	//リザルトポインタ
 	CSwitchManager* m_pSwitchManager;	//スイッチマネ
+	CPause* m_pPause;	//ポーズ
+	bool m_bStart;		//ゲームを始めたか
 };
 
 #endif // !_GAME_H_
