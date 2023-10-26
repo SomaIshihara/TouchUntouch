@@ -108,7 +108,7 @@ HRESULT CGame::Init(void)
 
 	//”wŒi
 	CObject3D* pObj3D = CObject3D::Create(D3DXVECTOR3(0.0f,300.0f,700.0f), D3DXVECTOR3(-0.5f * D3DX_PI, 0.0f, 0.0f), 7200.0f, 4404.0f,CObject::PRIORITY_BG);
-	pObj3D->BindTexture(CManager::GetInstance()->GetTexture()->Regist("data\\TEXTURE\\tex_bg.png"));
+	pObj3D->BindTexture(CTexture::PRELOAD_26_BG);
 
 	//BGMÄ¶
 	CManager::GetInstance()->GetSound()->Play(CSound::SOUND_LABEL_BGM_IN);

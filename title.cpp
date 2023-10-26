@@ -35,6 +35,9 @@ CTitle::~CTitle()
 //=================================
 HRESULT CTitle::Init(void)
 {
+	//”wŒi
+	CBG::Create()->BindTexture(CTexture::PRELOAD_26_BG);
+
 	//ƒ^ƒCƒgƒ‹ƒƒS
 	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 300.0f, 0.0f), CManager::VEC3_ZERO, 1180.0f, 244.0f, CObject::PRIORITY_UI)->BindTexture(CTexture::PRELOAD_00_TITLELOGO);
 
