@@ -44,6 +44,9 @@ HRESULT CRanking::Init(void)
 	CObject2D* pObj2D = nullptr;
 	CScore* pScore = nullptr;
 
+	//”wŒi
+	CBG::Create()->BindTexture(CTexture::PRELOAD_27_BG_02);
+
 	//ƒ‰ƒ“ƒLƒ“ƒO•¶Žš
 	pObj2D = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 108.0f, 0.0f), CManager::VEC3_ZERO, 400.0f, 96.0f, CObject::PRIORITY_05);
 	pObj2D->BindTexture(CTexture::PRELOAD_09_RANKSTR);
