@@ -43,23 +43,23 @@ CPause::~CPause()
 HRESULT CPause::Init(void)
 {
 	//背景
-	m_pBG = CBG::Create(CObject::PRIORITY_UI);
+	m_pBG = CBG::Create(CObject::PRIORITY_05);
 	m_pBG->SetCol(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.5f));
 	m_pBG->BindTexture(-1);
 
 	//文字
-	m_pPauseStr = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 90.0f, 0.0f), CManager::VEC3_ZERO, 608.0f, 162.0f, CObject::PRIORITY_UI);
+	m_pPauseStr = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 90.0f, 0.0f), CManager::VEC3_ZERO, 608.0f, 162.0f, CObject::PRIORITY_05);
 	m_pPauseStr->BindTexture(CTexture::PRELOAD_21_PAUSE_STR);
 
 	//選択部
 	for (int cnt = 0; cnt < MODE_MAX - 1; cnt++)
 	{
-		m_apSelect[cnt] = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 270.0f + (180.0f * cnt), 0.0f), CManager::VEC3_ZERO, 584.0f, 126.0f, CObject::PRIORITY_UI);
+		m_apSelect[cnt] = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 270.0f + (180.0f * cnt), 0.0f), CManager::VEC3_ZERO, 584.0f, 126.0f, CObject::PRIORITY_05);
 		m_apSelect[cnt]->BindTexture(CTexture::PRELOAD_22_PAUSE_RESUME + cnt);
 	}
 
 	//スクショ部のみ別のところに置く
-	m_apSelect[MODE_SCREENSHOT] = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH - 131.0f, 114.0f, 0.0f), CManager::VEC3_ZERO, 132.5f, 100.0f, CObject::PRIORITY_UI);
+	m_apSelect[MODE_SCREENSHOT] = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH - 131.0f, 114.0f, 0.0f), CManager::VEC3_ZERO, 132.5f, 100.0f, CObject::PRIORITY_05);
 	m_apSelect[MODE_SCREENSHOT]->BindTexture(CTexture::PRELOAD_25_PAUSE_SCREENSHOT);
 
 	return S_OK;

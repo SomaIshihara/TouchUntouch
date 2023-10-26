@@ -24,6 +24,7 @@ public:
 		SOUND_LABEL_SE_JUMP,		//ジャンプ
 		SOUND_LABEL_SE_ITEM,		//アイテム獲得
 		SOUND_LABEL_SE_CHANGE,		//キャラ切替
+		SOUND_LABEL_SE_MOVE,		//歩行
 		SOUND_LABEL_MAX,
 	} SOUND_LABEL;
 	//*****************************************************************************
@@ -42,6 +43,9 @@ public:
 	void Stop(void);					//全部止める
 	void Pause(SOUND_LABEL label);		//ポーズ
 	void Restart(SOUND_LABEL label);	//再開
+	
+	//状態取得
+	bool IsPlay(SOUND_LABEL label);		//流しているか
 private:
 	IXAudio2 *m_pXAudio2;									// XAudio2オブジェクトへのインターフェイス
 	IXAudio2MasteringVoice *m_pMasteringVoice;				// マスターボイス

@@ -14,7 +14,7 @@ class CButton3D : public CObject3D
 {
 public:
 	//コンストラクタ・デストラクタ
-	CButton3D(int nPriority = PRIORITY_UI);
+	CButton3D(int nPriority = PRIORITY_05);
 	~CButton3D();
 
 	//基本処理

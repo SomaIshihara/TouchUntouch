@@ -14,7 +14,7 @@ class CSwitchManager : public CObject
 {
 public:
 	//コンストラクタ・デストラクタ
-	CSwitchManager(int nPriority = PRIORITY_04);
+	CSwitchManager(int nPriority = PRIORITY_05);
 	~CSwitchManager();
 
 	//生成

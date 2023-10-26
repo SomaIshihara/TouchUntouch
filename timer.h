@@ -25,7 +25,7 @@ public:
 	} COUNT;
 
 	//コンストラクタ・デストラクタ
-	CTimer(int nPriority = PRIORITY_UI);	//デフォルト
+	CTimer(int nPriority = PRIORITY_05);	//デフォルト
 	~CTimer();
 
 	//基本処理

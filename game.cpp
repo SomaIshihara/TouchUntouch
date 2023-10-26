@@ -86,11 +86,11 @@ HRESULT CGame::Init(void)
 	CItem::SetScoreInterface(m_pScore);
 
 	//スコア（文字）
-	CObject2D* pObj2D = CObject2D::Create(D3DXVECTOR3(988.0f, 32.0f, 0.0f), CManager::VEC3_ZERO, 168.0f, 48.0f, CObject::PRIORITY_UI);
+	CObject2D* pObj2D = CObject2D::Create(D3DXVECTOR3(988.0f, 32.0f, 0.0f), CManager::VEC3_ZERO, 168.0f, 48.0f, CObject::PRIORITY_05);
 	pObj2D->BindTexture(CTexture::PRELOAD_05_SCORESTR);
 
 	//タイマー文字
-	pObj2D = CObject2D::Create(D3DXVECTOR3(68.0f, 32.0f, 0.0f), CManager::VEC3_ZERO, 168.0f, 48.0f, CObject::PRIORITY_UI);
+	pObj2D = CObject2D::Create(D3DXVECTOR3(68.0f, 32.0f, 0.0f), CManager::VEC3_ZERO, 168.0f, 48.0f, CObject::PRIORITY_05);
 	pObj2D->BindTexture(CTexture::PRELOAD_04_TIMERSTR);
 
 	//タイマー（数字）

@@ -24,7 +24,7 @@ public:
 	void Draw(void);
 
 	//¶¬
-	static CButton2D* Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, const float fWidth, const float fHeight, int nPriority = PRIORITY_UI);
+	static CButton2D* Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, const float fWidth, const float fHeight, int nPriority = PRIORITY_05);
 
 	//ó‘Ôæ“¾ˆ—
 	bool IsHold(void) { return m_bHold; }

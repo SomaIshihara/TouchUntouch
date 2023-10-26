@@ -42,7 +42,7 @@ CResult::~CResult()
 HRESULT CResult::Init(void)
 {
 	//文字背景（投げっぱなし）
-	CObject2D* pObj = CObject2D::Create(CManager::SCREEN_CENTER, CManager::VEC3_ZERO, 570.0f, 336.0f, CObject::PRIORITY_UI);
+	CObject2D* pObj = CObject2D::Create(CManager::SCREEN_CENTER, CManager::VEC3_ZERO, 570.0f, 336.0f, CObject::PRIORITY_05);
 	pObj->SetCol(D3DXCOLOR(0.66f, 0.5f, 0.75f, 1.0f));
 	pObj->BindTexture(-1);
 
@@ -52,7 +52,7 @@ HRESULT CResult::Init(void)
 	m_pTimer->Stop();
 	m_pTimer->BindTexture(CTexture::PRELOAD_03_NUMBER);
 	//時間（文字）
-	pObj = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 74.0f, 240.0f, 0.0f), CManager::VEC3_ZERO, 168.0f, 48.0f, CObject::PRIORITY_UI);
+	pObj = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 74.0f, 240.0f, 0.0f), CManager::VEC3_ZERO, 168.0f, 48.0f, CObject::PRIORITY_05);
 	pObj->BindTexture(CTexture::PRELOAD_04_TIMERSTR);
 
 	//ボーナス（数字）
@@ -60,7 +60,7 @@ HRESULT CResult::Init(void)
 	m_pBonus->Set(0);
 	m_pBonus->BindTexture(CTexture::PRELOAD_03_NUMBER);
 	//ボーナス（文字）
-	pObj = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 108.0f, 288.0f, 0.0f), CManager::VEC3_ZERO, 168.0f, 48.0f, CObject::PRIORITY_UI);
+	pObj = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 108.0f, 288.0f, 0.0f), CManager::VEC3_ZERO, 168.0f, 48.0f, CObject::PRIORITY_05);
 	pObj->BindTexture(CTexture::PRELOAD_06_BONUSSTR);
 
 	//最終スコア（数字）
@@ -68,11 +68,11 @@ HRESULT CResult::Init(void)
 	m_pScore->Set(0);	//初期値だが、Createで変更がされる
 	m_pScore->BindTexture(CTexture::PRELOAD_03_NUMBER);
 	//最終スコア（文字）
-	pObj = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 108.0f, 384.0f, 0.0f), CManager::VEC3_ZERO, 168.0f, 48.0f, CObject::PRIORITY_UI);
+	pObj = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 108.0f, 384.0f, 0.0f), CManager::VEC3_ZERO, 168.0f, 48.0f, CObject::PRIORITY_05);
 	pObj->BindTexture(CTexture::PRELOAD_05_SCORESTR);
 
 	//遷移文字
-	m_pPress = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 480.0f, 0.0f), CManager::VEC3_ZERO, 560.0f, 48.0f, CObject::PRIORITY_UI);
+	m_pPress = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 480.0f, 0.0f), CManager::VEC3_ZERO, 560.0f, 48.0f, CObject::PRIORITY_05);
 	m_pPress->BindTexture(CTexture::PRELOAD_07_SCENERANKKB);
 
 	return S_OK;

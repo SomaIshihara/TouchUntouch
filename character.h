@@ -42,7 +42,7 @@ public:
 	};
 
 	//コンストラクタ・デストラクタ
-	CCharacter(int nPriority = CObject::PRIORITY_DEFAULT);
+	CCharacter(int nPriority = CObject::PRIORITY_02);
 	~CCharacter();
 
 	//基本処理

@@ -111,6 +111,8 @@ void CCharacter::Uninit(void)
 //=================================
 void CCharacter::Update(void)
 {
+	CManager* pManager = CManager::GetInstance();
+	CSound* pSound = pManager->GetSound();
 	CInputKeyboard* pKeyboard = CManager::GetInstance()->GetInputKeyboard();
 
 	m_posOld = m_pos;	//‘O‚ÌˆÊ’uÝ’è
@@ -120,10 +122,22 @@ void CCharacter::Update(void)
 		if (m_controllInterface->GetPress() == DIK_A)
 		{
 			m_move.x -= CHARA_SPEED;
+			if (pSound->IsPlay(CSound::SOUND_LABEL_SE_MOVE) == false)
+			{
+				pSound->Play(CSound::SOUND_LABEL_SE_MOVE);
+			}
 		}
 		else if (m_controllInterface->GetPress() == DIK_D)
 		{
 			m_move.x += CHARA_SPEED;
+			if (pSound->IsPlay(CSound::SOUND_LABEL_SE_MOVE) == false)
+			{
+				pSound->Play(CSound::SOUND_LABEL_SE_MOVE);
+			}
+		}
+		else if (pSound->IsPlay(CSound::SOUND_LABEL_SE_MOVE) == true)
+		{
+			pSound->Stop(CSound::SOUND_LABEL_SE_MOVE);
 		}
 	}
 
@@ -195,7 +209,7 @@ void CCharacter::Update(void)
 			m_fJumpPower = CHARA_JUMP_POW;
 
 			//BGMÄ¶
-			CManager::GetInstance()->GetSound()->Play(CSound::SOUND_LABEL_SE_JUMP);
+			pSound->Play(CSound::SOUND_LABEL_SE_JUMP);
 		}
 	}
 
