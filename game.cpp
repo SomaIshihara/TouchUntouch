@@ -86,11 +86,11 @@ HRESULT CGame::Init(void)
 	CItem::SetScoreInterface(m_pScore);
 
 	//スコア（文字）
-	CObject2D* pObj2D = CObject2D::Create(D3DXVECTOR3(988.0f, 32.0f, 0.0f), CManager::VEC3_ZERO, 168.0f, 48.0f, CObject::PRIORITY_UI);
+	CObject2D* pObj2D = CObject2D::Create(D3DXVECTOR3(988.0f, 32.0f, 0.0f), CManager::VEC3_ZERO, 168.0f, 48.0f, CObject::PRIORITY_05);
 	pObj2D->BindTexture(CTexture::PRELOAD_05_SCORESTR);
 
 	//タイマー文字
-	pObj2D = CObject2D::Create(D3DXVECTOR3(68.0f, 32.0f, 0.0f), CManager::VEC3_ZERO, 168.0f, 48.0f, CObject::PRIORITY_UI);
+	pObj2D = CObject2D::Create(D3DXVECTOR3(68.0f, 32.0f, 0.0f), CManager::VEC3_ZERO, 168.0f, 48.0f, CObject::PRIORITY_05);
 	pObj2D->BindTexture(CTexture::PRELOAD_04_TIMERSTR);
 
 	//タイマー（数字）
@@ -108,7 +108,7 @@ HRESULT CGame::Init(void)
 
 	//背景
 	CObject3D* pObj3D = CObject3D::Create(D3DXVECTOR3(0.0f,300.0f,700.0f), D3DXVECTOR3(-0.5f * D3DX_PI, 0.0f, 0.0f), 7200.0f, 4404.0f,CObject::PRIORITY_BG);
-	pObj3D->BindTexture(CTexture::PRELOAD_26_BG);
+	pObj3D->BindTexture(CTexture::PRELOAD_27_BG_02);
 
 	//BGM再生
 	CManager::GetInstance()->GetSound()->Play(CSound::SOUND_LABEL_BGM_IN);

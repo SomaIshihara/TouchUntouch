@@ -42,8 +42,9 @@ private:
 	CObject2D* m_pPauseStr;				//ポーズ文字
 	CObject2D* m_apSelect[MODE_MAX];	//選択するやつ
 
-	MODE m_mode;	//選択中モード
-	bool m_bScreenShot;	//スクショ中か
+	MODE m_mode;			//選択中モード
+	bool m_bScreenShot;		//スクショ中か
+	int m_aStickFrag[2];	//スティックがどちら側に倒されているか（XY両方格納）
 };
 
 #endif // !_GAME_H_

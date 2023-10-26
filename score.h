@@ -19,7 +19,7 @@ class CScore : public CObject, public IScoreSetter
 {
 public:
 	//コンストラクタ・デストラクタ
-	CScore(int nPriority = PRIORITY_UI);	//デフォルト
+	CScore(int nPriority = PRIORITY_05);	//デフォルト
 	~CScore();
 
 	//基本処理

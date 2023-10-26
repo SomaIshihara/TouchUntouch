@@ -18,6 +18,9 @@ class CXModel;
 class CSwitch : public CObject
 {
 public:
+	//静的const
+	static const float MOVE_DEF_HEIGHT;
+
 	//当たり判定用float3つ
 	struct ColFloat
 	{
@@ -36,7 +39,7 @@ public:
 	};
 
 	//コンストラクタ・デストラクタ
-	CSwitch(int nPriority = PRIORITY_02);
+	CSwitch(int nPriority = PRIORITY_DEFAULT);
 	~CSwitch();
 
 	//基本処理
@@ -64,7 +67,8 @@ public:
 	void Exclusion(void);
 
 	//スイッチを押す
-	void Push(void) { m_bPush = true; }
+	void Push(void) { m_bPush = true; }	//キャラが使う押す操作
+	void Pull(void) { m_bPush = false; }//スイッチマネが使う引っ張る操作
 
 private:
 	//モデル

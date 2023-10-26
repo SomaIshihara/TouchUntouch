@@ -17,9 +17,6 @@ CTutorialObj* CTutorialObj::m_pTop = nullptr;
 CTutorialObj* CTutorialObj::m_pCur = nullptr;
 int CTutorialObj::m_nNumAll = 0;
 
-//*********************************
-//テレポート当たり判定クラス
-//*********************************
 //=================================
 //コンストラクタ
 //=================================
@@ -131,7 +128,7 @@ CTutorialObj* CTutorialObj::Create(const D3DXVECTOR3 pos, const int nNumber)
 		pTutorialObj->m_pCollider->SetType(CBoxCollider::TYPE_TRIGGER);
 
 		//表示用オブジェ生成
-		pTutorialObj->m_pTutorial = CObject3D::Create(pos + D3DXVECTOR3(0.0f, 200.0f, 50.0f), D3DXVECTOR3(-0.5f * D3DX_PI,0.0f,0.0f), 231.0f, 131.0f, PRIORITY_UI);
+		pTutorialObj->m_pTutorial = CObject3D::Create(pos + D3DXVECTOR3(0.0f, 200.0f, 50.0f), D3DXVECTOR3(-0.5f * D3DX_PI,0.0f,0.0f), 231.0f, 131.0f, PRIORITY_05);
 		pTutorialObj->m_pTutorial->BindTexture(CTexture::PRELOAD_17_TUTORIAL_01 + nNumber);
 		pTutorialObj->m_pObj = CObjectX::Create(pos + D3DXVECTOR3(0.0f, 0.0f, 50.0f), CManager::VEC3_ZERO, CXModel::Load("data\\MODEL\\tutorialobj.x"));
 

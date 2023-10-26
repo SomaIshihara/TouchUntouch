@@ -50,9 +50,12 @@ void CSwitchManager::Update(void)
 	while (pSwitch != nullptr)
 	{
 		if (pSwitch->IsPush() == true)
-		{
+		{//押されてたらそのグループのスイッチをonにする
 			m_aPush[pSwitch->GetType()] = true;
 		}
+
+		//いったん引っ張る
+		pSwitch->Pull();
 
 		pSwitch = pSwitch->GetNext();
 	}

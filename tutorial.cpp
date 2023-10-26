@@ -16,6 +16,7 @@
 #include "objloader.h"
 #include "switchmanager.h"
 #include "block3D.h"
+#include "object3D.h"
 
 //ƒV[ƒ“Œn
 #include "result.h"
@@ -62,6 +63,10 @@ HRESULT CTutorial::Init(void)
 	m_pSwitchManager = CSwitchManager::Create();
 	CBlock3D::SetSwitchManager(m_pSwitchManager);
 	CObjLoader::LoadData("data\\tut_mapdata_tutorial.ismd");
+
+	//”wŒi
+	CObject3D* pObj3D = CObject3D::Create(D3DXVECTOR3(0.0f, 300.0f, 700.0f), D3DXVECTOR3(-0.5f * D3DX_PI, 0.0f, 0.0f), 7200.0f, 4404.0f, CObject::PRIORITY_BG);
+	pObj3D->BindTexture(CTexture::PRELOAD_26_BG_01);
 	
 	//ƒLƒƒƒ‰¶¬
 	CCharacter::Create(D3DXVECTOR3(100.0f,150.0f,0.0f),CCharacter::TYPE_A, m_pPlayer);

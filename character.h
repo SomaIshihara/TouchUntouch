@@ -42,7 +42,7 @@ public:
 	};
 
 	//コンストラクタ・デストラクタ
-	CCharacter(int nPriority = CObject::PRIORITY_DEFAULT);
+	CCharacter(int nPriority = CObject::PRIORITY_02);
 	~CCharacter();
 
 	//基本処理
@@ -81,6 +81,7 @@ private:
 	CModel** m_ppModel;				//モデル（動的確保）
 	int m_nNumModel;				//モデル数
 	CMotion* m_pMotion;				//モーションポインタ
+	CShadow* m_pShadow;				//影
 
 	D3DXVECTOR3 m_pos;				//位置
 	D3DXVECTOR3 m_posOld;			//前の位置

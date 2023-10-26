@@ -43,7 +43,8 @@ public:
 		PRELOAD_23_PAUSE_RESTART,	//再スタート
 		PRELOAD_24_PAUSE_EXIT,		//タイトルに戻る
 		PRELOAD_25_PAUSE_SCREENSHOT,//スクショ
-		PRELOAD_26_BG,				//背景
+		PRELOAD_26_BG_01,			//背景1
+		PRELOAD_27_BG_02,			//背景2
 		PRELOAD_MAX
 	};
 

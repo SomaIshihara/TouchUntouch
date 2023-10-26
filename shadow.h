@@ -15,7 +15,7 @@ class CShadow : public CObject3D
 {
 public:
 	//コンストラクタ・デストラクタ
-	CShadow();
+	CShadow(int nPriority = CObject::PRIORITY_04);
 	~CShadow();
 
 	//基本処理
@@ -31,7 +31,7 @@ public:
 	void Release(void);
 
 	//設定
-	void Set(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot);
+	void Set(D3DXVECTOR3 pos, const D3DXVECTOR3 rot);
 
 	//除外
 	void Exclusion(void) { CObject3D::Exclusion(); }

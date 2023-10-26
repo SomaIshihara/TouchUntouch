@@ -37,7 +37,7 @@ public:
 		PRIORITY_02,		//未定義
 		PRIORITY_DEFAULT,		//デフォルト
 		PRIORITY_04,		//未定義
-		PRIORITY_UI,			//UI
+		PRIORITY_05,			//UI向け
 		PRIORITY_PAUSE,			//ポーズ
 		PRIORITY_FADE,			//フェード
 		PRIORITY_MAX			//最大優先順位（これで足りるらしい）

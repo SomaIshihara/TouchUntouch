@@ -22,7 +22,7 @@ class CTutorialObj : public CObject, public ICollisionReader
 {
 public:
 	//コンストラクタ・デストラクタ
-	CTutorialObj(int nPriority = CObject::PRIORITY_DEFAULT);
+	CTutorialObj(int nPriority = CObject::PRIORITY_01);
 	~CTutorialObj();
 
 	//基本処理

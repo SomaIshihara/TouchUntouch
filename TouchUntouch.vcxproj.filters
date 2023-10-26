@@ -148,9 +148,6 @@
     <ClCompile Include="switchmanager.cpp">
       <Filter>Added</Filter>
     </ClCompile>
-    <ClCompile Include="teleport.cpp">
-      <Filter>Added</Filter>
-    </ClCompile>
     <ClCompile Include="tutorialobj.cpp">
       <Filter>Added</Filter>
     </ClCompile>
@@ -310,9 +307,6 @@
       <Filter>Added</Filter>
     </ClInclude>
     <ClInclude Include="switchmanager.h">
-      <Filter>Added</Filter>
-    </ClInclude>
-    <ClInclude Include="teleport.h">
       <Filter>Added</Filter>
     </ClInclude>
     <ClInclude Include="tutorialobj.h">

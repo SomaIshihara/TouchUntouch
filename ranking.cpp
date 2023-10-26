@@ -44,15 +44,18 @@ HRESULT CRanking::Init(void)
 	CObject2D* pObj2D = nullptr;
 	CScore* pScore = nullptr;
 
+	//背景
+	CBG::Create()->BindTexture(CTexture::PRELOAD_27_BG_02);
+
 	//ランキング文字
-	pObj2D = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 108.0f, 0.0f), CManager::VEC3_ZERO, 400.0f, 96.0f, CObject::PRIORITY_UI);
+	pObj2D = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 108.0f, 0.0f), CManager::VEC3_ZERO, 400.0f, 96.0f, CObject::PRIORITY_05);
 	pObj2D->BindTexture(CTexture::PRELOAD_09_RANKSTR);
 
 	//順位
 	for (int cnt = 0; cnt < MAX_RANK; cnt++)
 	{
 		//文字
-		pObj2D = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 104.0f, 240.0f + (72.0f * cnt), 0.0f), CManager::VEC3_ZERO, 104.0f, 48.0f, CObject::PRIORITY_UI);
+		pObj2D = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 104.0f, 240.0f + (72.0f * cnt), 0.0f), CManager::VEC3_ZERO, 104.0f, 48.0f, CObject::PRIORITY_05);
 		pObj2D->BindTexture(CTexture::PRELOAD_10_RANK_01 + cnt);
 
 		//数字
@@ -62,7 +65,7 @@ HRESULT CRanking::Init(void)
 	}
 
 	//戻る文字
-	m_pPress = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 636.0f, 0.0f), CManager::VEC3_ZERO, 560.0f, 48.0f, CObject::PRIORITY_UI);
+	m_pPress = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 636.0f, 0.0f), CManager::VEC3_ZERO, 560.0f, 48.0f, CObject::PRIORITY_05);
 	m_pPress->BindTexture(CTexture::PRELOAD_15_SCENETITLEKB);
 
 	delete[] pRankScore;	//スコア破棄

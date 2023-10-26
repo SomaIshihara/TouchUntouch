@@ -31,6 +31,7 @@ SOUNDINFO g_aSoundInfo[CSound::SOUND_LABEL_MAX] =
 	{ "data/SE/tut_jump.wav",		0.7f, 0 },	// ジャンプ
 	{ "data/SE/tut_item.wav",		0.7f, 0 },	// アイテム獲得
 	{ "data/SE/tut_change.wav",		0.7f, 0 },	// キャラ切替
+	{ "data/SE/tut_move.wav",		0.7f, -1 },	// 歩行
 };
 
 //=============================================================================
@@ -340,6 +341,23 @@ void CSound::Restart(SOUND_LABEL label)
 	 // 再生
 		m_apSourceVoice[label]->Start(0);
 	}
+}
+
+//=============================================================================
+// 流れているか確認(ラベル指定)
+//=============================================================================
+bool CSound::IsPlay(SOUND_LABEL label)
+{
+	XAUDIO2_VOICE_STATE xa2state;
+
+	// 状態取得
+	m_apSourceVoice[label]->GetState(&xa2state);
+	if (xa2state.BuffersQueued != 0)
+	{// 再生中
+		return true;
+	}
+
+	return false;
 }
 
 //=============================================================================

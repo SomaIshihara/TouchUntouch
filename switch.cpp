@@ -16,6 +16,7 @@ CXModel* CSwitch::m_pModelMove = nullptr;
 CSwitch* CSwitch::m_pTop = nullptr;
 CSwitch* CSwitch::m_pCur = nullptr;
 int CSwitch::m_nNumAll = 0;
+const float CSwitch::MOVE_DEF_HEIGHT = 10.0f;
 
 //=================================
 //コンストラクタ
@@ -89,7 +90,26 @@ void CSwitch::Uninit(void)
 //=================================
 void CSwitch::Update(void)
 {
-	m_bPush = false;	//いったん押されていない状態にする（状況に応じてキャラクターが押す）
+	if (m_bPush == true)
+	{
+		m_move.y = -0.1f;	//仮
+	}
+	else
+	{
+		m_move.y = 0.1f;	//仮
+	}
+
+	m_pObjMove->SetPos(m_pObjMove->GetPos() + m_move);
+
+	//上がり下がりすぎたら位置戻す
+	if (m_pObjMove->GetPos().y < m_pos.y + 1.0f)
+	{
+		m_pObjMove->SetPos(m_pos + D3DXVECTOR3(0.0f, 1.0f, 0.0f));
+	}
+	else if (m_pObjMove->GetPos().y > m_pos.y + MOVE_DEF_HEIGHT)
+	{
+		m_pObjMove->SetPos(m_pos + D3DXVECTOR3(0.0f, MOVE_DEF_HEIGHT, 0.0f));
+	}
 }
 
 //=================================
@@ -135,7 +155,7 @@ CSwitch* CSwitch::Create(const D3DXVECTOR3 pos, const TYPE type)
 		pSwitch->m_pObjBase->GetCollider()->SetType(CBoxCollider::TYPE_COLLISION);
 		pSwitch->m_pObjBase->SetType(TYPE_SWITCH);
 
-		pSwitch->m_pObjMove = CObjectX::Create(pSwitch->m_pos + D3DXVECTOR3(0.0f, 10.0f, 0.0f), CManager::VEC3_ZERO, m_pModelMove);
+		pSwitch->m_pObjMove = CObjectX::Create(pSwitch->m_pos + D3DXVECTOR3(0.0f, MOVE_DEF_HEIGHT, 0.0f), CManager::VEC3_ZERO, m_pModelMove);
 		pSwitch->m_pObjMove->SetCollider();
 		pSwitch->m_pObjMove->GetCollider()->SetType(CBoxCollider::TYPE_COLLISION);
 		pSwitch->m_pObjMove->SetType(TYPE_SWITCH);

@@ -17,8 +17,8 @@
 #include "switch.h"
 #include "item.h"
 #include "collision.h"
-#include "teleport.h"
 #include "tutorialobj.h"
+#include "shadow.h"
 #include "debugproc.h"
 
 //静的メンバ変数
@@ -33,6 +33,7 @@ const float CCharacter::CHARA_RESPAWN_HEIGHT = -500.0f;
 CCharacter::CCharacter(int nPriority) : CObject(nPriority)
 {
 	m_ppModel = nullptr;
+	m_pShadow = nullptr;
 	m_nNumModel = CManager::INT_ZERO;
 	m_pos = CManager::VEC3_ZERO;
 	m_posOld = CManager::VEC3_ZERO;
@@ -64,8 +65,12 @@ HRESULT CCharacter::Init(void)
 	SetModel();
 	SetType(TYPE_CHARACTER);
 	m_posOld = m_pos;
+
 	m_pCollider = CBoxCollider::Create(this);
 	m_pCollider->SetType(CBoxCollider::TYPE_COLLISION);
+
+	m_pShadow = CShadow::Create();
+	m_pShadow->Set(m_pos, m_rot);
 	return S_OK;
 }
 
@@ -112,6 +117,8 @@ void CCharacter::Uninit(void)
 //=================================
 void CCharacter::Update(void)
 {
+	CManager* pManager = CManager::GetInstance();
+	CSound* pSound = pManager->GetSound();
 	CInputKeyboard* pKeyboard = CManager::GetInstance()->GetInputKeyboard();
 
 	m_posOld = m_pos;	//前の位置設定
@@ -121,10 +128,22 @@ void CCharacter::Update(void)
 		if (m_controllInterface->GetPress() == DIK_A)
 		{
 			m_move.x -= CHARA_SPEED;
+			if (pSound->IsPlay(CSound::SOUND_LABEL_SE_MOVE) == false)
+			{
+				pSound->Play(CSound::SOUND_LABEL_SE_MOVE);
+			}
 		}
 		else if (m_controllInterface->GetPress() == DIK_D)
 		{
 			m_move.x += CHARA_SPEED;
+			if (pSound->IsPlay(CSound::SOUND_LABEL_SE_MOVE) == false)
+			{
+				pSound->Play(CSound::SOUND_LABEL_SE_MOVE);
+			}
+		}
+		else if (pSound->IsPlay(CSound::SOUND_LABEL_SE_MOVE) == true)
+		{
+			pSound->Stop(CSound::SOUND_LABEL_SE_MOVE);
 		}
 	}
 
@@ -166,19 +185,6 @@ void CCharacter::Update(void)
 				pItem = pItem->GetNext();
 			}
 		}
-		if (m_pCollider->GetResult().collList[cnt]->GetType() == CObject::TYPE_TELEPORT)
-		{
-			CTeleportCollision* pTeleport = CTeleportCollision::GetTop();
-			while (pTeleport != nullptr)
-			{
-				if (pTeleport == m_pCollider->GetResult().collList[cnt])
-				{
-					m_pos = pTeleport->GetFromPos();
-					break;
-				}
-				pTeleport = pTeleport->GetNext();
-			}
-		}
 		if (m_pCollider->GetResult().collList[cnt]->GetType() == CObject::TYPE_TUTORIALOBJ)
 		{
 			CTutorialObj* pTutorialObj = CTutorialObj::GetTop();
@@ -209,7 +215,7 @@ void CCharacter::Update(void)
 			m_fJumpPower = CHARA_JUMP_POW;
 
 			//BGM再生
-			CManager::GetInstance()->GetSound()->Play(CSound::SOUND_LABEL_SE_JUMP);
+			pSound->Play(CSound::SOUND_LABEL_SE_JUMP);
 		}
 	}
 
@@ -223,6 +229,9 @@ void CCharacter::Update(void)
 		m_fJumpPower = 0.0f;
 
 	}
+
+	//影設定
+	m_pShadow->Set(m_pos - D3DXVECTOR3(0.0f, m_fHeight * 0.5f, 0.0f), m_rot);
 
 	//移動量減衰
 	m_move.x = CManager::FLT_ZERO;

@@ -13,7 +13,7 @@ class CNumber : public CObject2D
 {
 public:
 	//コンストラクタ・デストラクタ
-	CNumber(int nPriority = PRIORITY_UI);	//デフォルト
+	CNumber(int nPriority = PRIORITY_05);	//デフォルト
 	~CNumber();
 
 	//基本処理

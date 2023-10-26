@@ -36,13 +36,13 @@ CTitle::~CTitle()
 HRESULT CTitle::Init(void)
 {
 	//背景
-	CBG::Create()->BindTexture(CTexture::PRELOAD_26_BG);
+	CBG::Create()->BindTexture(CTexture::PRELOAD_26_BG_01);
 
 	//タイトルロゴ
-	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 300.0f, 0.0f), CManager::VEC3_ZERO, 1180.0f, 244.0f, CObject::PRIORITY_UI)->BindTexture(CTexture::PRELOAD_00_TITLELOGO);
+	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 300.0f, 0.0f), CManager::VEC3_ZERO, 1180.0f, 244.0f, CObject::PRIORITY_05)->BindTexture(CTexture::PRELOAD_00_TITLELOGO);
 
 	//スタート文字
-	m_pStart = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 600.0f, 0.0f), CManager::VEC3_ZERO, 560.0f, 48.0f, CObject::PRIORITY_UI);
+	m_pStart = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 600.0f, 0.0f), CManager::VEC3_ZERO, 560.0f, 48.0f, CObject::PRIORITY_05);
 	m_pStart->BindTexture(CTexture::PRELOAD_01_STARTKB);
 
 	//BGM再生
