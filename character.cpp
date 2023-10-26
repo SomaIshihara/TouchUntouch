@@ -18,6 +18,7 @@
 #include "item.h"
 #include "collision.h"
 #include "tutorialobj.h"
+#include "shadow.h"
 #include "debugproc.h"
 
 //Ã“Iƒƒ“ƒo•Ï”
@@ -32,6 +33,7 @@ const float CCharacter::CHARA_RESPAWN_HEIGHT = -500.0f;
 CCharacter::CCharacter(int nPriority) : CObject(nPriority)
 {
 	m_ppModel = nullptr;
+	m_pShadow = nullptr;
 	m_nNumModel = CManager::INT_ZERO;
 	m_pos = CManager::VEC3_ZERO;
 	m_posOld = CManager::VEC3_ZERO;
@@ -63,8 +65,12 @@ HRESULT CCharacter::Init(void)
 	SetModel();
 	SetType(TYPE_CHARACTER);
 	m_posOld = m_pos;
+
 	m_pCollider = CBoxCollider::Create(this);
 	m_pCollider->SetType(CBoxCollider::TYPE_COLLISION);
+
+	m_pShadow = CShadow::Create();
+	m_pShadow->Set(m_pos, m_rot);
 	return S_OK;
 }
 
@@ -223,6 +229,9 @@ void CCharacter::Update(void)
 		m_fJumpPower = 0.0f;
 
 	}
+
+	//‰eİ’è
+	m_pShadow->Set(m_pos - D3DXVECTOR3(0.0f, m_fHeight * 0.5f, 0.0f), m_rot);
 
 	//ˆÚ“®—ÊŒ¸Š
 	m_move.x = CManager::FLT_ZERO;

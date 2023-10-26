@@ -89,6 +89,7 @@ public:
 
 	//æ“¾
 	CollisionResult GetResult(void) { return m_collisionResult; }
+	static bool GetTagColl(TAG myTag, TAG otherTag) { return m_aTagColl[myTag][otherTag]; }
 
 	//ƒŠƒXƒgæ“¾
 	static CBoxCollider* GetTop(void) { return m_pTop; }

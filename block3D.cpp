@@ -83,11 +83,11 @@ void CBlock3D::Update(void)
 			this->GetCollider()->SetType(CBoxCollider::TYPE_COLLISION);
 			if (m_type == TYPE_GIMMICK_01)
 			{//éá
-				SetColor(true, D3DCOLOR(0xffab7fc7));
+				SetColor(true, D3DCOLOR(0xaaab7fc7));
 			}
 			else if (m_type == TYPE_GIMMICK_02)
 			{//â©êF
-				SetColor(true, D3DCOLOR(0xfff7ea31));
+				SetColor(true, D3DCOLOR(0xaaf7ea31));
 			}
 		}
 		else
