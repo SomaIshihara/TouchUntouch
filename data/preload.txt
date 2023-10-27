@@ -137,6 +137,30 @@ START_LOAD		#20:チュートリアル04（ゴール）
 	PATTERN_HEIGHT = 1
 END_LOAD
 
+START_LOAD		#28:チュートリアル05（移動：KB）
+	TEXTURE_NAME = data\\TEXTURE\\tex_tutorial_popup_05_01.png
+	PATTERN_WIDTH = 1
+	PATTERN_HEIGHT = 1
+END_LOAD
+
+START_LOAD		#29:チュートリアル06（切替：KB）
+	TEXTURE_NAME = data\\TEXTURE\\tex_tutorial_popup_06_01.png
+	PATTERN_WIDTH = 1
+	PATTERN_HEIGHT = 1
+END_LOAD
+
+START_LOAD		#30:チュートリアル05（移動：GP）
+	TEXTURE_NAME = data\\TEXTURE\\tex_tutorial_popup_05_02.png
+	PATTERN_WIDTH = 1
+	PATTERN_HEIGHT = 1
+END_LOAD
+
+START_LOAD		#31:チュートリアル06（切替：GP）
+	TEXTURE_NAME = data\\TEXTURE\\tex_tutorial_popup_06_02.png
+	PATTERN_WIDTH = 1
+	PATTERN_HEIGHT = 1
+END_LOAD
+
 #ポーズ
 START_LOAD		#21:ポーズ文字
 	TEXTURE_NAME = data\\TEXTURE\\tex_pause_00.png
@@ -176,6 +200,13 @@ END_LOAD
 
 START_LOAD		#27:背景2
 	TEXTURE_NAME = data\\TEXTURE\\tex_bg_02.png
+	PATTERN_WIDTH = 1
+	PATTERN_HEIGHT = 1
+END_LOAD
+
+#ゲーム用
+START_LOAD		#32:操作中ポイント
+	TEXTURE_NAME = data\\TEXTURE\\tex_point.png
 	PATTERN_WIDTH = 1
 	PATTERN_HEIGHT = 1
 END_LOAD

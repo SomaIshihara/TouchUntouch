@@ -16,6 +16,7 @@ class CModel;
 class CShadow;
 class CMotion;
 class CBoxCollider;
+class CObject3D;
 
 //キャラクタークラス
 class CCharacter : public CObject, public ICollisionReader
@@ -40,6 +41,16 @@ public:
 		TYPE_B,
 		TYPE_MAX
 	};
+
+	//モーション種類
+	typedef enum
+	{
+		MOTIONTYPE_NEUTRAL = 0,
+		MOTIONTYPE_MOVE,
+		MOTIONTYPE_ACTION,	//未実装
+		MOTIONTYPE_JUMP,
+		MOTIONTYPE_LAND,
+	} MOTIONTYPE;
 
 	//コンストラクタ・デストラクタ
 	CCharacter(int nPriority = CObject::PRIORITY_02);
@@ -82,6 +93,7 @@ private:
 	int m_nNumModel;				//モデル数
 	CMotion* m_pMotion;				//モーションポインタ
 	CShadow* m_pShadow;				//影
+	CObject3D* m_pPoint;			//操作中表示
 
 	D3DXVECTOR3 m_pos;				//位置
 	D3DXVECTOR3 m_posOld;			//前の位置
