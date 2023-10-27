@@ -17,6 +17,7 @@
 #include "switchmanager.h"
 #include "block3D.h"
 #include "object3D.h"
+#include "tutorialobj.h"
 
 //シーン系
 #include "result.h"
@@ -27,6 +28,10 @@
 //仮
 #include "goal.h"
 
+//静的メンバ変数
+const int CTutorial::TUTORIAL_MOVE = 4;		//移動説明の番号
+const int CTutorial::TUTORIAL_CHANGE = 5;	//切替説明の番号
+
 //=================================
 //コンストラクタ
 //=================================
@@ -35,6 +40,8 @@ CTutorial::CTutorial()
 	m_pPlayer = nullptr;
 	m_pSwitchManager = nullptr;
 	m_pFade = nullptr;
+	m_pMoveTutorial = nullptr;
+	m_pChangeTutorial = nullptr;
 }
 
 //=================================
@@ -63,6 +70,22 @@ HRESULT CTutorial::Init(void)
 	m_pSwitchManager = CSwitchManager::Create();
 	CBlock3D::SetSwitchManager(m_pSwitchManager);
 	CObjLoader::LoadData("data\\tut_mapdata_tutorial.ismd");
+
+	//テクスチャ変えたいチュートリアルオブジェクトを取得
+	CTutorialObj* pTutorialObj = CTutorialObj::GetTop();
+
+	while (pTutorialObj != nullptr)
+	{
+		if (pTutorialObj->GetNumber() == TUTORIAL_MOVE)
+		{
+			m_pMoveTutorial = pTutorialObj;
+		}
+		else if (pTutorialObj->GetNumber() == TUTORIAL_CHANGE)
+		{
+			m_pChangeTutorial = pTutorialObj;
+		}
+		pTutorialObj = pTutorialObj->GetNext();
+	}
 
 	//背景
 	CObject3D* pObj3D = CObject3D::Create(D3DXVECTOR3(0.0f, 300.0f, 700.0f), D3DXVECTOR3(-0.5f * D3DX_PI, 0.0f, 0.0f), 7200.0f, 4404.0f, CObject::PRIORITY_BG);
@@ -105,6 +128,30 @@ void CTutorial::Update(void)
 	CGoal* pGoal = CGoal::GetTop();
 	CCamera* pCamera = CManager::GetInstance()->GetCamera();
 	bool bGoal = false;
+
+	//ゲームパッド使用取得
+	if (pGamepad != nullptr && pGamepad->IsConnect() == true)
+	{//使用中
+		if (m_pMoveTutorial != nullptr)
+		{
+			m_pMoveTutorial->GetTutorialStr()->BindTexture(CTexture::PRELOAD_30_TUTORIAL_05_GP);
+		}
+		if (m_pChangeTutorial != nullptr)
+		{
+			m_pChangeTutorial->GetTutorialStr()->BindTexture(CTexture::PRELOAD_31_TUTORIAL_06_GP);
+		}
+	}
+	else
+	{//未使用
+		if (m_pMoveTutorial != nullptr)
+		{
+			m_pMoveTutorial->GetTutorialStr()->BindTexture(CTexture::PRELOAD_28_TUTORIAL_05_KB);
+		}
+		if (m_pChangeTutorial != nullptr)
+		{
+			m_pChangeTutorial->GetTutorialStr()->BindTexture(CTexture::PRELOAD_29_TUTORIAL_06_KB);
+		}
+	}
 
 	//終了判定
 	if (pGoal != nullptr)

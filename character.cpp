@@ -6,6 +6,7 @@
 //======================================================
 #include "character.h"
 #include "manager.h"
+#include "texture.h"
 #include "sound.h"
 #include "renderer.h"
 #include "input.h"
@@ -24,7 +25,7 @@
 //静的メンバ変数
 CCharacter* CCharacter::m_aChara[] = { nullptr,nullptr };
 const float CCharacter::CHARA_SPEED = 3.7f;
-const float CCharacter::CHARA_JUMP_POW = 6.0f;
+const float CCharacter::CHARA_JUMP_POW = 9.0f;
 const float CCharacter::CHARA_RESPAWN_HEIGHT = -500.0f;
 
 //=================================
@@ -34,6 +35,7 @@ CCharacter::CCharacter(int nPriority) : CObject(nPriority)
 {
 	m_ppModel = nullptr;
 	m_pShadow = nullptr;
+	m_pPoint = nullptr;
 	m_nNumModel = CManager::INT_ZERO;
 	m_pos = CManager::VEC3_ZERO;
 	m_posOld = CManager::VEC3_ZERO;
@@ -71,6 +73,11 @@ HRESULT CCharacter::Init(void)
 
 	m_pShadow = CShadow::Create();
 	m_pShadow->Set(m_pos, m_rot);
+
+	m_pPoint = CObject3D::Create(m_pos, D3DXVECTOR3(-0.5f * D3DX_PI,0.0f,0.0f), 20.0f, 20.0f);
+	m_pPoint->BindTexture(CTexture::PRELOAD_32_POINT);
+	m_pPoint->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
+
 	return S_OK;
 }
 
@@ -125,12 +132,25 @@ void CCharacter::Update(void)
 
 	if (m_controllInterface->GetType() == m_type)
 	{
+		//操作中ポイントを見えるようにする
+		m_pPoint->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+
 		if (m_controllInterface->GetPress() == DIK_A)
 		{
 			m_move.x -= CHARA_SPEED;
 			if (pSound->IsPlay(CSound::SOUND_LABEL_SE_MOVE) == false)
 			{
 				pSound->Play(CSound::SOUND_LABEL_SE_MOVE);
+			}
+			int nType = m_pMotion->GetType();
+			if (nType != MOTIONTYPE_MOVE && nType != MOTIONTYPE_JUMP)
+			{
+				m_pMotion->Set(MOTIONTYPE_MOVE);
+			}
+			m_rot.y += 0.1f * D3DX_PI;
+			if (m_rot.y >= 0.5f * D3DX_PI)
+			{
+				m_rot.y = 0.5f * D3DX_PI;
 			}
 		}
 		else if (m_controllInterface->GetPress() == DIK_D)
@@ -140,10 +160,35 @@ void CCharacter::Update(void)
 			{
 				pSound->Play(CSound::SOUND_LABEL_SE_MOVE);
 			}
+			int nType = m_pMotion->GetType();
+			if (nType != MOTIONTYPE_MOVE && nType != MOTIONTYPE_JUMP)
+			{
+				m_pMotion->Set(MOTIONTYPE_MOVE);
+			}
+			m_rot.y -= 0.1f * D3DX_PI;
+			if (m_rot.y <= -0.5f * D3DX_PI)
+			{
+				m_rot.y = -0.5f * D3DX_PI;
+			}
 		}
 		else if (pSound->IsPlay(CSound::SOUND_LABEL_SE_MOVE) == true)
 		{
 			pSound->Stop(CSound::SOUND_LABEL_SE_MOVE);
+
+			if (m_pMotion->GetType() != MOTIONTYPE_NEUTRAL)
+			{
+				m_pMotion->Set(MOTIONTYPE_NEUTRAL);
+			}
+		}
+	}
+	else
+	{
+		//操作中ポイントを見えないようにする
+		m_pPoint->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
+
+		if (m_pMotion->GetType() != MOTIONTYPE_NEUTRAL)
+		{
+			m_pMotion->Set(MOTIONTYPE_NEUTRAL);
 		}
 	}
 
@@ -151,7 +196,7 @@ void CCharacter::Update(void)
 	m_nCounterJumpTime++;
 
 	//重力加速度によるYの移動量変更
-	m_move.y = m_fJumpPower - (ACCELERATION_GRAVITY * m_nCounterJumpTime / MAX_FPS);
+	m_move.y = m_fJumpPower - (ACCELERATION_GRAVITY * 2.0f * m_nCounterJumpTime / MAX_FPS);
 
 	//当たり判定
 	m_pCollider->CollisionCheck();
@@ -202,6 +247,14 @@ void CCharacter::Update(void)
 
 	if (m_pCollider->GetResult().bHit[1] == true)
 	{//着地した
+		if (m_bJump == true)
+		{
+			if (m_pMotion->GetType() != MOTIONTYPE_LAND)
+			{
+				m_pMotion->Set(MOTIONTYPE_LAND);
+			}
+		}
+
 		m_bJump = false;
 		m_nCounterJumpTime = 0;
 		m_fJumpPower = 0.0f;
@@ -213,6 +266,12 @@ void CCharacter::Update(void)
 			m_bJump = true;
 			m_nCounterJumpTime = 0;
 			m_fJumpPower = CHARA_JUMP_POW;
+
+			int nType = m_pMotion->GetType();
+			if (nType != MOTIONTYPE_JUMP)
+			{
+				m_pMotion->Set(MOTIONTYPE_JUMP);
+			}
 
 			//BGM再生
 			pSound->Play(CSound::SOUND_LABEL_SE_JUMP);
@@ -255,6 +314,15 @@ void CCharacter::Update(void)
 		//モーション更新
 		m_pMotion->Update();
 	}
+
+	//モーション終了した
+	if (m_pMotion->IsFinish() == true && m_pMotion->GetType() == MOTIONTYPE_LAND)
+	{
+		m_pMotion->Set(MOTIONTYPE_NEUTRAL);
+	}
+
+	//ポイントが見えようが見えまいが移動する
+	m_pPoint->SetPos(m_pos + D3DXVECTOR3(0.0f, 100.0f, 0.0f));
 }
 
 //=================================

@@ -12,6 +12,7 @@
 class CPlayer;
 class CSwitchManager;
 class CFade;
+class CTutorialObj;
 
 //仮
 class CGoal;
@@ -21,7 +22,8 @@ class CTutorial : public CScene
 {
 public:
 	//静的const
-	static const int CDSTART_TIME;	//カウントダウン開始時間
+	static const int TUTORIAL_MOVE;		//移動説明の番号
+	static const int TUTORIAL_CHANGE;	//切替説明の番号
 
 	//コンストラクタ・デストラクタ
 	CTutorial();
@@ -37,6 +39,8 @@ private:
 	CPlayer* m_pPlayer;	//プレイヤーポインタ
 	CSwitchManager* m_pSwitchManager;	//スイッチマネ
 	CFade* m_pFade;		//フェード
+	CTutorialObj* m_pMoveTutorial;	//移動説明のオブジェクト（テクスチャ変えたい）
+	CTutorialObj* m_pChangeTutorial;	//切替説明のオブジェクト（テクスチャ変えたい）
 };
 
 #endif // !_TUTORIAL_H_

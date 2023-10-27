@@ -47,6 +47,8 @@ public:
 	float GetHeight(void) { return m_fHeight; }
 	float GetDepth(void) { return m_fDepth; }
 	CObject* GetObj(void) { return this; }
+	int GetNumber(void) { return m_nNumAll; }
+	CObject3D* GetTutorialStr(void) { return m_pTutorial; }
 
 	//œŠO
 	void Exclusion(void);
