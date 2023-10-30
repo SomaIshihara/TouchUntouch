@@ -43,6 +43,7 @@ public:
 
 	//スコアインターフェース設定
 	static void SetScoreInterface(IScoreSetter* pInterface) { m_pScoreInterface = pInterface; }
+	static void UnsetScoreInterface(void) { m_pScoreInterface = nullptr; }
 
 private:
 	//リスト

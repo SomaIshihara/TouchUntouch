@@ -9,6 +9,7 @@
 
 //必要なもののインクルード
 #include "object3D.h"
+#include "character.h"
 
 //影クラス
 class CShadow : public CObject3D
@@ -31,12 +32,14 @@ public:
 	void Release(void);
 
 	//設定
-	void Set(D3DXVECTOR3 pos, const D3DXVECTOR3 rot);
+	void Set(D3DXVECTOR3 pos, const D3DXVECTOR3 rot, const CCharacter::TYPE type);
 
 	//除外
 	void Exclusion(void) { CObject3D::Exclusion(); }
 
 private:
+	float ConpareLength(const float fNear, const float fLength);
+
 	int m_nIdxTexture;	//テクスチャ番号
 };
 

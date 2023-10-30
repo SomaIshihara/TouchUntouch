@@ -75,35 +75,6 @@ void CBlock3D::Uninit(void)
 //=================================
 void CBlock3D::Update(void)
 {
-	//スイッチに応じた当たり判定
-	if (m_type == TYPE_GIMMICK_01 || m_type == TYPE_GIMMICK_02)
-	{//ギミック系の場合行う
-		if (m_pSwitchManager->IsPush()[m_type - 1] == true)
-		{
-			this->GetCollider()->SetType(CBoxCollider::TYPE_COLLISION);
-			if (m_type == TYPE_GIMMICK_01)
-			{//紫
-				SetColor(true, D3DCOLOR(0xccab7fc7));
-			}
-			else if (m_type == TYPE_GIMMICK_02)
-			{//黄色
-				SetColor(true, D3DCOLOR(0xccf7ea31));
-			}
-		}
-		else
-		{
-			this->GetCollider()->SetType(CBoxCollider::TYPE_NONE);
-			if (m_type == TYPE_GIMMICK_01)
-			{//紫
-				SetColor(true, D3DCOLOR(0x66ab7fc7));
-			}
-			else if (m_type == TYPE_GIMMICK_02)
-			{//黄色
-				SetColor(true, D3DCOLOR(0x66f7ea31));
-			}
-		}
-	}
-
 	CObjectX::Update();
 }
 
@@ -111,8 +82,15 @@ void CBlock3D::Update(void)
 //描画
 //=================================
 void CBlock3D::Draw(void)
-{
+{	
+	//アルファテスト有効化
+	CRenderer* pRenderer = CManager::GetInstance()->GetRenderer();
+	pRenderer->SetEnableAlplaTest(true);
+
 	CObjectX::Draw();
+
+	//アルファテスト無効化
+	pRenderer->SetEnableAlplaTest(false);
 }
 
 //=================================
@@ -133,15 +111,16 @@ CBlock3D* CBlock3D::Create(const D3DXVECTOR3 pos, const TYPE type)
 		//データ設定
 		pBlock->SetPos(pos);
 		pBlock->m_type = type;
+
 		if (type == TYPE_A)
 		{
+			pBlock->SetColor(true, D3DCOLOR(0xfff39aac));
 			pBlock->GetCollider()->SetTag(CBoxCollider::TAG_TYPE_A);
-			pBlock->SetColor(true, D3DCOLOR(0x66f39aac));
 		}
 		else if (type == TYPE_B)
 		{
+			pBlock->SetColor(true, D3DCOLOR(0xff68c7ec));
 			pBlock->GetCollider()->SetTag(CBoxCollider::TAG_TYPE_B);
-			pBlock->SetColor(true, D3DCOLOR(0x6668c7ec));
 		}
 		else
 		{
@@ -149,14 +128,15 @@ CBlock3D* CBlock3D::Create(const D3DXVECTOR3 pos, const TYPE type)
 
 			if (type == TYPE_GIMMICK_01)
 			{//紫
-				pBlock->SetColor(true, D3DCOLOR(0x66ab7fc7));
+				pBlock->SetColor(true, D3DCOLOR(0xffab7fc7));
 			}
 			else if (type == TYPE_GIMMICK_02)
 			{//黄色
-				pBlock->SetColor(true, D3DCOLOR(0x66f7ea31));
+				pBlock->SetColor(true, D3DCOLOR(0xfff7ea31));
 			}
 		}
 
+		//仮モデル設定
 		pBlock->SetModel(CXModel::Load("data\\MODEL\\block_univ.x"));
 
 		return pBlock;

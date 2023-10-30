@@ -15,18 +15,18 @@
 #include "player.h"
 #include "objloader.h"
 #include "switchmanager.h"
+#include "blockmanager.h"
 #include "block3D.h"
 #include "object3D.h"
 #include "tutorialobj.h"
+#include "goal.h"
+#include "item.h"
 
 //シーン系
 #include "result.h"
 
 //UI系
 #include "fade.h"
-
-//仮
-#include "goal.h"
 
 //静的メンバ変数
 const int CTutorial::TUTORIAL_MOVE = 4;		//移動説明の番号
@@ -71,6 +71,9 @@ HRESULT CTutorial::Init(void)
 	CBlock3D::SetSwitchManager(m_pSwitchManager);
 	CObjLoader::LoadData("data\\tut_mapdata_tutorial.ismd");
 
+	//ブロックマネ生成
+	m_pBlockManager = CBlockManager::Create(m_pSwitchManager, m_pPlayer);
+
 	//テクスチャ変えたいチュートリアルオブジェクトを取得
 	CTutorialObj* pTutorialObj = CTutorialObj::GetTop();
 
@@ -108,7 +111,11 @@ void CTutorial::Uninit(void)
 		CObject::ReleaseAll(cnt);
 	}
 
+	//音止める
 	CManager::GetInstance()->GetSound()->Stop();
+
+	//スコア用インターフェースポインタ消す
+	CItem::UnsetScoreInterface();
 
 	if (m_pPlayer != nullptr)
 	{

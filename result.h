@@ -17,6 +17,9 @@ class CFade;
 class CResult
 {
 public:
+	//静的const
+	static const int PLAYSOUND_COUNTER;	//音鳴らす間隔
+
 	//コンストラクタ・デストラクタ
 	CResult();
 	~CResult();
@@ -36,6 +39,7 @@ private:
 	CScore* m_pScore;	//最終スコア用スコア（文字は投げっぱなし）
 	CObject2D* m_pPress;//遷移文字用オブジェ（接続で切替）
 	CFade* m_pFade;		//フェードオブジェクト
+	int m_nConter;		//音再生カウンター
 };
 
 #endif // !_RESULT_H_

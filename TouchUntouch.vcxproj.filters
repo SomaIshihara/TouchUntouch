@@ -154,6 +154,9 @@
     <ClCompile Include="tutorial.cpp">
       <Filter>Base\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="blockmanager.cpp">
+      <Filter>Added</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="collision.h">
@@ -314,6 +317,9 @@
     </ClInclude>
     <ClInclude Include="tutorial.h">
       <Filter>Base\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="blockmanager.h">
+      <Filter>Added</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

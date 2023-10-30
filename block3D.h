@@ -50,6 +50,7 @@ public:
 	static CBlock3D* GetTop(void) { return m_pTop; }
 	CBlock3D* GetNext(void) { return m_pNext; }
 	TYPE GetType(void) { return m_type; }
+	static CSwitchManager* GetSwitchManager(void) { return m_pSwitchManager; }
 
 	//ê›íË
 	static void SetSwitchManager(CSwitchManager* pManager) { m_pSwitchManager = pManager; }

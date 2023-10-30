@@ -14,14 +14,14 @@ NUM_MODEL = 8
 #------------------------------------------------------------------------------
 # モデルファイル名
 #------------------------------------------------------------------------------
-MODEL_FILENAME = data/MODEL/tut_chara/01_Body.x				# [0]体
-MODEL_FILENAME = data/MODEL/tut_chara/02_Head_Kei.x			# [1]頭(個別)
-MODEL_FILENAME = data/MODEL/tut_chara/03_Left_Arm.x			# [2]左手
-MODEL_FILENAME = data/MODEL/tut_chara/04_Right_Arm.x		# [3]右手
-MODEL_FILENAME = data/MODEL/tut_chara/07_Right_Leg.x		# [4]右足
-MODEL_FILENAME = data/MODEL/tut_chara/08_Right_Shoes.x		# [5]右靴
-MODEL_FILENAME = data/MODEL/tut_chara/05_Left_Leg.x			# [6]左足
-MODEL_FILENAME = data/MODEL/tut_chara/06_Left_Shoes.x		# [7]左靴
+MODEL_FILENAME = data/MODEL/TUT_Chara/01_Body.x				# [0]体
+MODEL_FILENAME = data/MODEL/TUT_Chara/02_Head_Kei.x			# [1]頭(個別)
+MODEL_FILENAME = data/MODEL/TUT_Chara/03_Left_Arm.x			# [2]左手
+MODEL_FILENAME = data/MODEL/TUT_Chara/04_Right_Arm.x		# [3]右手
+MODEL_FILENAME = data/MODEL/TUT_Chara/06_Right_Leg.x		# [4]右足
+MODEL_FILENAME = data/MODEL/TUT_Chara/08_Right_Shoes.x		# [5]右靴
+MODEL_FILENAME = data/MODEL/TUT_Chara/05_Left_Leg.x			# [6]左足
+MODEL_FILENAME = data/MODEL/TUT_Chara/07_Left_Shoes.x		# [7]左靴
 
 #------------------------------------------------------------------------------
 # キャラクター情報
@@ -32,61 +32,60 @@ CHARACTERSET
 	PARTSSET						# [0]体
 		INDEX = 0
 		PARENT = -1					# (親)NULL
-		POS = 0.0 97.0 0.0
+		POS = 0.0 100.0 0.0
 		ROT = 0.0 0.0 0.0
 	END_PARTSSET
 
 	PARTSSET						# [1]頭
 		INDEX = 1
 		PARENT = 0					# (親)体
-		POS = 0.0 40.8 2.0
+		POS = 0.0 36.0 3.0
 		ROT = 0.0 0.0 0.0
 	END_PARTSSET
 
 	PARTSSET						# [2]左手
 		INDEX = 2
 		PARENT = 0					# (親)体
-		POS = -10.5 28.0 -2.0
+		POS = -10.0 25.0 1.0
 		ROT = 0.0 0.0 0.0
 	END_PARTSSET
 
 	PARTSSET						# [3]右手
 		INDEX = 3
 		PARENT = 0					# (親)体
-		POS = 11.0 28.5 -0.4
+		POS = 10.0 25.0 1.0
 		ROT = 0.0 0.0 0.0
 	END_PARTSSET
 	
 	PARTSSET						# [4]左足
 		INDEX = 4
 		PARENT = 0					# (親)体
-		POS = 6.0 -30.0 0.0
+		POS = 8.5 -20.0 0.0
 		ROT = 0.0 0.0 0.0
 	END_PARTSSET
 
 	PARTSSET						# [5]左靴
 		INDEX = 5
 		PARENT = 4					# (親)左足
-		POS = -0.5 -62.0 5.0
+		POS = -0.9 -67.4 3.2
 		ROT = 0.0 0.0 0.0
 	END_PARTSSET
 	
 	PARTSSET						# [6]右足
 		INDEX = 6
 		PARENT = 0					# (親)体
-		POS = -6.0 -30.0 0.0
+		POS = -8.5 -20.0 0.0
 		ROT = 0.0 0.0 0.0
 	END_PARTSSET
 	
 	PARTSSET						# [7]右靴
 		INDEX = 7
 		PARENT = 6					# (親)右足
-		POS = 1.0 -62.0 5.0
+		POS = 0.9 -67.4 3.2
 		ROT = 0.0 0.0 0.0
 	END_PARTSSET
 END_CHARACTERSET
 
-#↓↓↓↓↓以降は後日やる↓↓↓↓↓
 #------------------------------------------------------------------------------
 # モーション情報
 #------------------------------------------------------------------------------
@@ -184,7 +183,9 @@ MOTIONSET
 	END_KEYSET
 END_MOTIONSET
 
-#歩行モーション
+#---------------------------------------
+# 歩行モーション
+#---------------------------------------
 MOTIONSET
 	LOOP = 1		# ループするかどうか[0:ループしない / 1:ループする]
 	NUM_KEY = 4		# キー数

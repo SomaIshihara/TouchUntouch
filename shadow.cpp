@@ -10,6 +10,7 @@
 #include "block3D.h"
 #include "switch.h"
 #include "switchmanager.h"
+#include "character.h"
 
 //=================================
 //コンストラクタ
@@ -125,7 +126,7 @@ void CShadow::Release(void)
 //========================
 //位置向き設定処理
 //========================
-void CShadow::Set(D3DXVECTOR3 pos, const D3DXVECTOR3 rot)
+void CShadow::Set(D3DXVECTOR3 pos, const D3DXVECTOR3 rot, const CCharacter::TYPE type)
 {
 	//高さ調整（ブロックとスイッチのみ測定）
 	float fLengthNear = FLT_MAX;
@@ -139,19 +140,36 @@ void CShadow::Set(D3DXVECTOR3 pos, const D3DXVECTOR3 rot)
 		float fWidthBlockHalf = pBlock->GetWidth() * 0.5f;
 		float fDepthBlockHalf = pBlock->GetDepth() * 0.5f;
 
-		if (pos.x < posBlock.x + fWidthBlockHalf && pos.x > posBlock.x - fWidthBlockHalf &&
-			pos.z < posBlock.z + fDepthBlockHalf && pos.z > posBlock.z - fDepthBlockHalf)
+		if (pos.x <= posBlock.x + fWidthBlockHalf && pos.x >= posBlock.x - fWidthBlockHalf &&
+			pos.z <= posBlock.z + fDepthBlockHalf && pos.z >= posBlock.z - fDepthBlockHalf)
 		{//ブロックの真上にいる
 			//ブロックの種類が通常かonのギミック類
-			CBlock3D::TYPE type = pBlock->GetType();
-			if (type == CBlock3D::TYPE_NORMAL)
-			{
+			CBlock3D::TYPE blocktype = pBlock->GetType();
+			if (blocktype == CBlock3D::TYPE_NORMAL)
+			{//通常
 				float fHeightBlockHalf = pBlock->GetHeight() * 0.5f;
 				float fLength = pos.y - posBlock.y - fHeightBlockHalf;
 
-				if (fLength >= 0 && fLengthNear > fLength)
+				fLengthNear = ConpareLength(fLengthNear, fLength);
+			}
+			else if (blocktype == CBlock3D::TYPE_GIMMICK_01 || blocktype == CBlock3D::TYPE_GIMMICK_02)
+			{//ギミック
+				if (CBlock3D::GetSwitchManager()->IsPush()[blocktype - CBlock3D::TYPE_GIMMICK_01] == true)
 				{
-					fLengthNear = fLength;	//最短距離入れる
+					float fHeightBlockHalf = pBlock->GetHeight() * 0.5f;
+					float fLength = pos.y - posBlock.y - fHeightBlockHalf;
+
+					fLengthNear = ConpareLength(fLengthNear, fLength);
+				}
+			}
+			else if (blocktype == CBlock3D::TYPE_A || blocktype == CBlock3D::TYPE_B)
+			{//色
+				if (type == blocktype)
+				{
+					float fHeightBlockHalf = pBlock->GetHeight() * 0.5f;
+					float fLength = pos.y - posBlock.y - fHeightBlockHalf;
+
+					fLengthNear = ConpareLength(fLengthNear, fLength);
 				}
 			}
 		}
@@ -174,7 +192,7 @@ void CShadow::Set(D3DXVECTOR3 pos, const D3DXVECTOR3 rot)
 			float fHeightSwitchHalf = pSwitch->GetMove()->GetHeight() * 0.5f;
 			float fLength = pos.y - posSwitch.y + fHeightSwitchHalf;
 
-			if (fLengthNear > fLength)
+			if (fLength >= 0.0f && fLengthNear > fLength)
 			{
 				fLengthNear = fLength;	//最短距離入れる
 			}
@@ -189,4 +207,19 @@ void CShadow::Set(D3DXVECTOR3 pos, const D3DXVECTOR3 rot)
 	//位置向き設定
 	SetPos(pos);
 	SetRot(rot);
+}
+
+//========================
+//長さ比較
+//========================
+float CShadow::ConpareLength(const float fNear, const float fLength)
+{
+	if (fLength >= 0.0f && fNear > fLength)
+	{
+		return fLength;
+	}
+	else
+	{
+		return fNear;
+	}
 }

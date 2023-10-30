@@ -14,6 +14,7 @@ class CScore;
 class CTimer;
 class CResult;
 class CSwitchManager;
+class CBlockManager;
 class CPause;
 
 //仮
@@ -39,6 +40,7 @@ private:
 	CTimer* m_pTimer;	//タイマーポインタ
 	CResult* m_pResult;	//リザルトポインタ
 	CSwitchManager* m_pSwitchManager;	//スイッチマネ
+	CBlockManager* m_pBlockManager;		//ブロックマネ
 	CPause* m_pPause;	//ポーズ
 	bool m_bStart;		//ゲームを始めたか
 };
