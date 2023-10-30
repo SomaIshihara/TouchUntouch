@@ -130,7 +130,11 @@ void CGame::Uninit(void)
 		CObject::ReleaseAll(cnt);
 	}
 
+	//音止める
 	CManager::GetInstance()->GetSound()->Stop();
+
+	//スコア用インターフェースポインタ消す
+	CItem::UnsetScoreInterface();
 
 	if (m_pPlayer != nullptr)
 	{
@@ -187,9 +191,6 @@ void CGame::Update(void)
 			{
 				m_pTimer->Stop();
 				m_pResult = CResult::Create(m_pTimer->GetTime(), m_pScore->GetScore());
-
-				//SE再生
-				pManager->GetSound()->Play(CSound::SOUND_LABEL_SE_SELECT);
 			}
 			else
 			{

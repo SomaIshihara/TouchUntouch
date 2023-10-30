@@ -15,7 +15,7 @@
 #include "sound.h"
 
 //静的メンバ変数
-
+const int CResult::PLAYSOUND_COUNTER = 4;
 
 //=================================
 //コンストラクタ
@@ -27,6 +27,7 @@ CResult::CResult()
 	m_pScore = nullptr;
 	m_pPress = nullptr;
 	m_pFade = nullptr;
+	m_nConter = 0;
 }
 
 //=================================
@@ -94,21 +95,31 @@ void CResult::Update(void)
 	CInputKeyboard* pKeyboard = CManager::GetInstance()->GetInputKeyboard();
 	CInputGamePad* pGamepad = CManager::GetInstance()->GetInputGamePad();
 
+	m_nConter++;
+	
 	if (m_pTimer->GetTime() > 0)
 	{//時間を減らしてボーナス加算
 		m_pTimer->Add(-1);
 		m_pBonus->Add(100);
 
-		//SE再生
-		CManager::GetInstance()->GetSound()->Play(CSound::SOUND_LABEL_SE_ITEM);
+		if (m_nConter >= PLAYSOUND_COUNTER)
+		{
+			m_nConter = 0;
+			//SE再生
+			CManager::GetInstance()->GetSound()->Play(CSound::SOUND_LABEL_SE_ITEM);
+		}
 	}//↓は時間が0になったら実行
 	else if (m_pBonus->GetScore() > 0)
 	{//ボーナスから最終スコアに移動
 		m_pBonus->Add(-100);
 		m_pScore->Add(100);
 
-		//SE再生
-		CManager::GetInstance()->GetSound()->Play(CSound::SOUND_LABEL_SE_ITEM);
+		if (m_nConter >= PLAYSOUND_COUNTER)
+		{
+			m_nConter = 0;
+			//SE再生
+			CManager::GetInstance()->GetSound()->Play(CSound::SOUND_LABEL_SE_ITEM);
+		}
 	}//下はボーナス移動完了後実行
 	else
 	{//移動しきった

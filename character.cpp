@@ -72,7 +72,7 @@ HRESULT CCharacter::Init(void)
 	m_pCollider->SetType(CBoxCollider::TYPE_COLLISION);
 
 	m_pShadow = CShadow::Create();
-	m_pShadow->Set(m_pos, m_rot);
+	m_pShadow->Set(m_pos, m_rot,m_type);
 
 	m_pPoint = CObject3D::Create(m_pos, D3DXVECTOR3(-0.5f * D3DX_PI,0.0f,0.0f), 20.0f, 20.0f);
 	m_pPoint->BindTexture(CTexture::PRELOAD_32_POINT);
@@ -290,7 +290,7 @@ void CCharacter::Update(void)
 	}
 
 	//‰eİ’è
-	m_pShadow->Set(m_pos - D3DXVECTOR3(0.0f, m_fHeight * 0.5f, 0.0f), m_rot);
+	m_pShadow->Set(m_pos - D3DXVECTOR3(0.0f, m_fHeight * 0.5f, 0.0f), m_rot,m_type);
 
 	//ˆÚ“®—ÊŒ¸Š
 	m_move.x = CManager::FLT_ZERO;

@@ -19,15 +19,14 @@
 #include "block3D.h"
 #include "object3D.h"
 #include "tutorialobj.h"
+#include "goal.h"
+#include "item.h"
 
 //シーン系
 #include "result.h"
 
 //UI系
 #include "fade.h"
-
-//仮
-#include "goal.h"
 
 //静的メンバ変数
 const int CTutorial::TUTORIAL_MOVE = 4;		//移動説明の番号
@@ -112,7 +111,11 @@ void CTutorial::Uninit(void)
 		CObject::ReleaseAll(cnt);
 	}
 
+	//音止める
 	CManager::GetInstance()->GetSound()->Stop();
+
+	//スコア用インターフェースポインタ消す
+	CItem::UnsetScoreInterface();
 
 	if (m_pPlayer != nullptr)
 	{
