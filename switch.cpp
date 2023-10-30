@@ -154,40 +154,34 @@ CSwitch* CSwitch::Create(const D3DXVECTOR3 pos, const TYPE type)
 		pSwitch->m_pObjBase->SetCollider();
 		pSwitch->m_pObjBase->GetCollider()->SetType(CBoxCollider::TYPE_COLLISION);
 		pSwitch->m_pObjBase->SetType(TYPE_SWITCH);
+		pSwitch->m_pObjBase->GetCollider()->SetTag(CBoxCollider::TAG_UNIV);
 
 		pSwitch->m_pObjMove = CObjectX::Create(pSwitch->m_pos + D3DXVECTOR3(0.0f, MOVE_DEF_HEIGHT, 0.0f), CManager::VEC3_ZERO, m_pModelMove);
 		pSwitch->m_pObjMove->SetCollider();
 		pSwitch->m_pObjMove->GetCollider()->SetType(CBoxCollider::TYPE_COLLISION);
 		pSwitch->m_pObjMove->SetType(TYPE_SWITCH);
+		pSwitch->m_pObjMove->GetCollider()->SetTag(CBoxCollider::TAG_UNIV);
 
 		//色変え
 		if (type == TYPE_A)
 		{//紫
 			pSwitch->m_pObjBase->SetColor(true, D3DCOLOR(0xffab7fc7));
 			pSwitch->m_pObjMove->SetColor(true, D3DCOLOR(0xffab7fc7));
-			pSwitch->m_pObjBase->GetCollider()->SetTag(CBoxCollider::TAG_UNIV);
-			pSwitch->m_pObjMove->GetCollider()->SetTag(CBoxCollider::TAG_UNIV);
 		}
 		else if(type == TYPE_B)
 		{//黄色
 			pSwitch->m_pObjBase->SetColor(true, D3DCOLOR(0xfff7ea31));
 			pSwitch->m_pObjMove->SetColor(true, D3DCOLOR(0xfff7ea31));
-			pSwitch->m_pObjBase->GetCollider()->SetTag(CBoxCollider::TAG_UNIV);
-			pSwitch->m_pObjMove->GetCollider()->SetTag(CBoxCollider::TAG_UNIV);
 		}
 		else if (type == TYPE_GOAL_A)
 		{//ゴール用（タイプA）
 			pSwitch->m_pObjBase->SetColor(true, D3DCOLOR(0xfff39aac));
 			pSwitch->m_pObjMove->SetColor(true, D3DCOLOR(0xfff39aac));
-			pSwitch->m_pObjBase->GetCollider()->SetTag(CBoxCollider::TAG_TYPE_A);
-			pSwitch->m_pObjMove->GetCollider()->SetTag(CBoxCollider::TAG_TYPE_A);
 		}
 		else if (type == TYPE_GOAL_B)
 		{//ゴール用（タイプB）
 			pSwitch->m_pObjBase->SetColor(true, D3DCOLOR(0xff68c7ec));
 			pSwitch->m_pObjMove->SetColor(true, D3DCOLOR(0xff68c7ec));
-			pSwitch->m_pObjBase->GetCollider()->SetTag(CBoxCollider::TAG_TYPE_B);
-			pSwitch->m_pObjMove->GetCollider()->SetTag(CBoxCollider::TAG_TYPE_B);
 		}
 
 		return pSwitch;

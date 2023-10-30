@@ -15,6 +15,7 @@
 #include "player.h"
 #include "objloader.h"
 #include "switchmanager.h"
+#include "blockmanager.h"
 #include "block3D.h"
 #include "object3D.h"
 #include "tutorialobj.h"
@@ -70,6 +71,9 @@ HRESULT CTutorial::Init(void)
 	m_pSwitchManager = CSwitchManager::Create();
 	CBlock3D::SetSwitchManager(m_pSwitchManager);
 	CObjLoader::LoadData("data\\tut_mapdata_tutorial.ismd");
+
+	//ブロックマネ生成
+	m_pBlockManager = CBlockManager::Create(m_pSwitchManager, m_pPlayer);
 
 	//テクスチャ変えたいチュートリアルオブジェクトを取得
 	CTutorialObj* pTutorialObj = CTutorialObj::GetTop();

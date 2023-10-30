@@ -11,6 +11,7 @@
 //前方宣言
 class CPlayer;
 class CSwitchManager;
+class CBlockManager;
 class CFade;
 class CTutorialObj;
 
@@ -36,10 +37,11 @@ public:
 	void Draw(void);
 
 private:
-	CPlayer* m_pPlayer;	//プレイヤーポインタ
+	CPlayer* m_pPlayer;					//プレイヤーポインタ
 	CSwitchManager* m_pSwitchManager;	//スイッチマネ
-	CFade* m_pFade;		//フェード
-	CTutorialObj* m_pMoveTutorial;	//移動説明のオブジェクト（テクスチャ変えたい）
+	CBlockManager* m_pBlockManager;		//ブロックマネ
+	CFade* m_pFade;						//フェード
+	CTutorialObj* m_pMoveTutorial;		//移動説明のオブジェクト（テクスチャ変えたい）
 	CTutorialObj* m_pChangeTutorial;	//切替説明のオブジェクト（テクスチャ変えたい）
 };
 

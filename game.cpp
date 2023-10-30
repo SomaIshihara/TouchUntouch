@@ -28,6 +28,7 @@
 #include "item.h"
 #include "objloader.h"
 #include "switchmanager.h"
+#include "blockmanager.h"
 #include "block3D.h"
 #include "object3D.h"
 
@@ -78,6 +79,9 @@ HRESULT CGame::Init(void)
 	//スイッチ管理オブジェ生成と設定
 	m_pSwitchManager = CSwitchManager::Create();
 	CBlock3D::SetSwitchManager(m_pSwitchManager);
+
+	//ブロックマネ生成
+	m_pBlockManager = CBlockManager::Create(m_pSwitchManager, m_pPlayer);
 
 	//UI-------------------------------------------
 	//スコア（数字）

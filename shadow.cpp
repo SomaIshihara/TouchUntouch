@@ -139,8 +139,8 @@ void CShadow::Set(D3DXVECTOR3 pos, const D3DXVECTOR3 rot)
 		float fWidthBlockHalf = pBlock->GetWidth() * 0.5f;
 		float fDepthBlockHalf = pBlock->GetDepth() * 0.5f;
 
-		if (pos.x < posBlock.x + fWidthBlockHalf && pos.x > posBlock.x - fWidthBlockHalf &&
-			pos.z < posBlock.z + fDepthBlockHalf && pos.z > posBlock.z - fDepthBlockHalf)
+		if (pos.x <= posBlock.x + fWidthBlockHalf && pos.x >= posBlock.x - fWidthBlockHalf &&
+			pos.z <= posBlock.z + fDepthBlockHalf && pos.z >= posBlock.z - fDepthBlockHalf)
 		{//ブロックの真上にいる
 			//ブロックの種類が通常かonのギミック類
 			CBlock3D::TYPE type = pBlock->GetType();
